@@ -1,24 +1,19 @@
-﻿using GameData;
+﻿using AIGraph;
+using GameData;
+using GTFO.CustomObjectives.Extensions;
+using GTFO.CustomObjectives.Inject.Global;
+using GTFO.CustomObjectives.Utils;
 using LevelGeneration;
+using SNetwork;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using GTFO.CustomObjectives.Extensions;
-using AIGraph;
-using ChainedPuzzles;
-using UnityEngine;
 using UnhollowerBaseLib;
-using GTFO.CustomObjectives.Utils;
-using GTFO.CustomObjectives.Inject;
-using GTFO.CustomObjectives.Inject.Global;
-using SNetwork;
-using UnhollowerRuntimeLib;
+using UnityEngine;
 
 namespace GTFO.CustomObjectives
 {
-    public abstract class CustomObjectiveHandler
+    public abstract class CustomObjectiveHandlerBase
     {
         public Action OnSetupEvent;
         public Action OnUnloadEvent;
@@ -77,7 +72,7 @@ namespace GTFO.CustomObjectives
             ObjectiveData = objectiveData;
 
             var activeExpedition = RundownManager.ActiveExpedition;
-            switch(LayerType)
+            switch (LayerType)
             {
                 case LG_LayerType.MainLayer:
                     ObjectiveLayerData = activeExpedition.MainLayerData.ObjectiveData;
@@ -128,7 +123,7 @@ namespace GTFO.CustomObjectives
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="item"></param>
         public void RegisterObjectiveItem(iWardenObjectiveItem item)
@@ -151,7 +146,7 @@ namespace GTFO.CustomObjectives
 
         public void RegisterUpdateEvent(Action update = null, Action fixedUpdate = null)
         {
-            if(update != null)
+            if (update != null)
             {
                 GlobalMessage.OnUpdate += update;
 
@@ -166,7 +161,7 @@ namespace GTFO.CustomObjectives
                 OnUnloadEvent += cleanupHandler;
             }
 
-            if(fixedUpdate != null)
+            if (fixedUpdate != null)
             {
                 GlobalMessage.OnFixedUpdate += fixedUpdate;
 
@@ -256,7 +251,7 @@ namespace GTFO.CustomObjectives
 
         public void ForceFail()
         {
-            if(SNet.IsMaster)
+            if (SNet.IsMaster)
             {
                 GameStateManager.ChangeState(eGameStateName.ExpeditionFail);
             }
@@ -269,10 +264,25 @@ namespace GTFO.CustomObjectives
 
         //Forwards
         public abstract void OnSetup();
-        public virtual void OnBuildDone() { }
-        public virtual void OnElevatorArrive() { }
-        public virtual void OnExpeditionSuccess() { }
-        public virtual void OnExpeditionFail() { }
-        public virtual void OnUnload() { }
+
+        public virtual void OnBuildDone()
+        {
+        }
+
+        public virtual void OnElevatorArrive()
+        {
+        }
+
+        public virtual void OnExpeditionSuccess()
+        {
+        }
+
+        public virtual void OnExpeditionFail()
+        {
+        }
+
+        public virtual void OnUnload()
+        {
+        }
     }
 }

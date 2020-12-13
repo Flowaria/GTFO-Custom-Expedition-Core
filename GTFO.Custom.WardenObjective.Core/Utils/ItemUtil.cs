@@ -4,9 +4,6 @@ using GTFO.CustomObjectives.Inject.Global;
 using LevelGeneration;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace GTFO.CustomObjectives.Utils
@@ -23,13 +20,8 @@ namespace GTFO.CustomObjectives.Utils
 
             GlobalMessage.OnLevelCleanup += () =>
             {
-                Clear();
+                _ItemBuilderDict.Clear();
             };
-        }
-
-        public static void Clear()
-        {
-            _ItemBuilderDict.Clear();
         }
 
         public static BuilderInfo FindInfoByGUID(string guid)
@@ -40,7 +32,7 @@ namespace GTFO.CustomObjectives.Utils
         public static BuilderInfo FindInfoByItem(LG_DistributeItem item)
         {
             var guid = GetGUID(item);
-            if(guid == null)
+            if (guid == null)
             {
                 return null;
             }
@@ -78,7 +70,7 @@ namespace GTFO.CustomObjectives.Utils
             if (string.IsNullOrEmpty(guid))
                 guid = Guid.NewGuid().ToString();
 
-            if(TryGetGUIDData(item.m_localTerminalLogFiles, out var existingGuid))
+            if (TryGetGUIDData(item.m_localTerminalLogFiles, out var existingGuid))
             {
                 existingGuid.FileContent = guid;
             }
@@ -114,7 +106,7 @@ namespace GTFO.CustomObjectives.Utils
             {
                 foreach (var log in logs)
                 {
-                    if(log.FileName.Equals("!PLUGIN_REVERVED_SPECIAL_GUID"))
+                    if (log.FileName.Equals("!PLUGIN_REVERVED_SPECIAL_GUID"))
                     {
                         guidData = log;
                         return true;

@@ -13,7 +13,7 @@ namespace CustomObjective.DoorMultipleWaves.PuzzleContext
 
         public override void OnSolved()
         {
-            DoorWaveManager.StartSearchingPhase();
+            //DoorWaveManager.StartSearchingPhase();
         }
     }
 }

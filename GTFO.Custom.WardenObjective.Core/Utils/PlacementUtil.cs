@@ -2,16 +2,12 @@
 using GameData;
 using LevelGeneration;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GTFO.CustomObjectives.Utils
 {
     public static class PlacementUtil
     {
-        public static bool TryGetRandomPlaceSingleZone(CustomObjectiveHandler handlerContext, out LG_Zone zone, out ZonePlacementWeights weight)
+        public static bool TryGetRandomPlaceSingleZone(CustomObjectiveHandlerBase handlerContext, out LG_Zone zone, out ZonePlacementWeights weight)
         {
             return LG_DistributionJobUtils.TryGetRandomPlacementZone(handlerContext.Layer, handlerContext.ObjectiveLayerData.ZonePlacementDatas, out zone, out weight);
         }
@@ -20,7 +16,7 @@ namespace GTFO.CustomObjectives.Utils
         {
             float rand = Builder.SessionSeedRandom.Value("LG_Distribute_WardenObjective");
             var exist = LG_DistributionJobUtils.TryGetExistingZoneFunctionDistribution(zone, function, rand, weight, out distItem, out distNode);
-            if(!exist && createNew)
+            if (!exist && createNew)
             {
                 var randNode = LG_DistributionJobUtils.GetRandomNodeFromZoneForFunction(zone, function, Builder.BuildSeedRandom.Value("FindFunctionMarkerAndUseAsWardenObjective"), 1f);
                 var newDistItem = new LG_DistributeItem()
@@ -39,7 +35,7 @@ namespace GTFO.CustomObjectives.Utils
 
         public static LG_Zone GetZone(LG_LayerType layer, eLocalZoneIndex index)
         {
-            if(Builder.Current.m_currentFloor.TryGetZoneByLocalIndex(layer, index, out var zone))
+            if (Builder.Current.m_currentFloor.TryGetZoneByLocalIndex(layer, index, out var zone))
             {
                 return zone;
             }

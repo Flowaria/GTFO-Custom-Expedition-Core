@@ -3,19 +3,14 @@ using LevelGeneration;
 using SNetwork;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnhollowerRuntimeLib;
 using UnityEngine;
 
 namespace GTFO.CustomObjectives.Inject.CustomReplicators
 {
-    using ComplexReplicator = SNet_StateReplicator<pDoorState, pDoorInteraction>;
     using ComplexProvider = iSNet_StateReplicatorProvider<pDoorState, pDoorInteraction>;
-
-    using StateChangedAction = Action<pDoorState, pDoorState, bool>;
+    using ComplexReplicator = SNet_StateReplicator<pDoorState, pDoorInteraction>;
     using ProviderDict = Dictionary<string, Action<pDoorState, pDoorState, bool>>;
+    using StateChangedAction = Action<pDoorState, pDoorState, bool>;
 
     internal static class ProviderManager
     {
@@ -35,9 +30,9 @@ namespace GTFO.CustomObjectives.Inject.CustomReplicators
 
         public static bool Contains(string guid, out StateChangedAction action)
         {
-            if(!PersistentReplicator.TryGetValue(guid, out action))
+            if (!PersistentReplicator.TryGetValue(guid, out action))
             {
-                if(!InstanceReplicator.TryGetValue(guid, out action))
+                if (!InstanceReplicator.TryGetValue(guid, out action))
                 {
                     return false;
                 }
@@ -46,7 +41,6 @@ namespace GTFO.CustomObjectives.Inject.CustomReplicators
             return true;
         }
     }
-
 
     public abstract class CustomReplicatorProvider<S, I> where S : StateWrapperBase, new() where I : InteractionWrapperBase, new()
     {
@@ -84,7 +78,7 @@ namespace GTFO.CustomObjectives.Inject.CustomReplicators
             if (!_HasSetup)
                 return;
 
-            if(ShouldInteract(interaction, out var state))
+            if (ShouldInteract(interaction, out var state))
             {
                 _ProviderSync.m_stateReplicator.InteractWithState(state.ToOriginal(), interaction.ToOriginal());
             }
@@ -102,6 +96,7 @@ namespace GTFO.CustomObjectives.Inject.CustomReplicators
         }
 
         public abstract bool ShouldInteract(I interaction, out S state);
+
         public abstract void OnStateChange(S oldState, S newState, bool isRecall);
     }
 }

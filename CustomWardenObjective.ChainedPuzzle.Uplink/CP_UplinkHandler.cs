@@ -12,7 +12,7 @@ using UnityEngine;
 
 namespace CustomWardenObjective.ChainedPuzzle.Uplink
 {
-    public class CP_UplinkHandler : CustomObjectiveHandler
+    public class CP_UplinkHandler : CustomObjectiveHandlerBase
     {
         public string UplinkIP;
 

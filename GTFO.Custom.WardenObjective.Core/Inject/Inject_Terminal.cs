@@ -3,9 +3,6 @@ using Harmony;
 using LevelGeneration;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GTFO.CustomObjectives.Inject
 {
@@ -45,7 +42,7 @@ namespace GTFO.CustomObjectives.Inject
         {
             var newCmdText = cmdText.ToLower();
 
-            if(_handlerDict.ContainsKey(newCmdText))
+            if (_handlerDict.ContainsKey(newCmdText))
             {
                 _handlerDict[newCmdText] += handler;
             }
@@ -62,7 +59,5 @@ namespace GTFO.CustomObjectives.Inject
                 _handlerDict[cmdText] = null;
             }
         }
-
-        
     }
 }

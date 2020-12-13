@@ -1,13 +1,5 @@
-﻿using GTFO.CustomObjectives.Extensions;
-using MelonLoader;
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
+﻿using MelonLoader;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnhollowerRuntimeLib;
 
 //TODO: Fix Json of this shit
 namespace GTFO.CustomObjectives.Utils
@@ -20,7 +12,7 @@ namespace GTFO.CustomObjectives.Utils
         {
             BasePath = Path.Combine(MelonLoaderBase.UserDataPath, "CustomObjective");
 
-            if(!Directory.Exists(BasePath))
+            if (!Directory.Exists(BasePath))
             {
                 Directory.CreateDirectory(BasePath);
             }
@@ -28,7 +20,6 @@ namespace GTFO.CustomObjectives.Utils
 
         public static string GetConfigFilePath(string name, string extension = ".json")
         {
-            
             return Path.Combine(BasePath, $"{name}{extension}");
         }
     }

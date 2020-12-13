@@ -57,7 +57,8 @@ namespace CustomObjective.DoorMultipleWaves.DoorWaves
 
         public override void OnStateChange(DoorWaveSWrapper oldState, DoorWaveSWrapper newState, bool isRecall)
         {
-            Console.WriteLine("State Changed: {0} {1}", newState.State, isRecall);
+            MelonLoader.MelonLogger.Log(string.Format("State Changed: {0} {1} {2}", newState.State, newState.Value1, isRecall));
+            Console.WriteLine();
             CurrentState = newState.State;
         }
 
@@ -94,14 +95,16 @@ namespace CustomObjective.DoorMultipleWaves.DoorWaves
             {
                 state = new DoorWaveSWrapper()
                 {
-                    State = DoorWaveState.Unlocked
+                    State = DoorWaveState.Unlocked,
+                    Value1 = 5.0f
                 };
             }
             else
             {
                 state = new DoorWaveSWrapper()
                 {
-                    State = DoorWaveState.Idle
+                    State = DoorWaveState.Idle,
+                    Value1 = 32.0f
                 };
             }
 

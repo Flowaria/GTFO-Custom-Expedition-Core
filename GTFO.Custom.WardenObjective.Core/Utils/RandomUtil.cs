@@ -1,9 +1,5 @@
 ﻿using LevelGeneration;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GTFO.CustomObjectives.Utils
 {
@@ -18,7 +14,7 @@ namespace GTFO.CustomObjectives.Utils
     {
         public static SeedRandom GetSeeder(SeederType type)
         {
-            switch(type)
+            switch (type)
             {
                 case SeederType.Build: return Builder.BuildSeedRandom;
                 case SeederType.Session: return Builder.SessionSeedRandom;

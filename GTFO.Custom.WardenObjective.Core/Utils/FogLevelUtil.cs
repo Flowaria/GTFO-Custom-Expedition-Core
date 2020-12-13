@@ -1,10 +1,6 @@
 ﻿using GameData;
 using GTFO.CustomObjectives.Inject.Global;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GTFO.CustomObjectives.Utils
 {
@@ -26,7 +22,7 @@ namespace GTFO.CustomObjectives.Utils
         {
             _FogSettings = new List<FogLevelSetting>();
 
-            GlobalMessage.OnUpdate += OnUpdate;
+            GlobalMessage.OnBuildDone += OnUpdate;
             GlobalMessage.OnLevelCleanup += () =>
             {
                 GlobalMessage.OnUpdate -= OnUpdate;
@@ -42,20 +38,18 @@ namespace GTFO.CustomObjectives.Utils
 
             LocalPlayerAgentSettings.Current.UpdateBlendTowardsTargetFogSetting(percent, true);
 
-            if(percent >= 1.0f)
+            if (percent >= 1.0f)
             {
-
             }
         }
 
         public static void Setup()
         {
-
         }
 
         public static void SetLevel(int level)
         {
-            if(!(0 <= level && level < LevelCount))
+            if (!(0 <= level && level < LevelCount))
             {
                 return;
             }

@@ -3,14 +3,11 @@ using GTFO.CustomObjectives.Inject.Global;
 using LevelGeneration;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GTFO.CustomObjectives
 {
-    using HandlerList = List<CustomObjectiveHandler>;
     using HandlerDict = Dictionary<byte, Type>;
+    using HandlerList = List<CustomObjectiveHandlerBase>;
     using HandlerTypeList = List<Type>;
 
     public static class CustomObjectiveManager
@@ -35,14 +32,14 @@ namespace GTFO.CustomObjectives
         /// Register Global CustomObjective Handler to Manager
         /// </summary>
         /// <typeparam name="T">Type of Handler (derived from CustomObjecitveHandler)</typeparam>
-        public static void AddGlobalHandler<T>() where T : CustomObjectiveHandler, new()
+        public static void AddGlobalHandler<T>() where T : CustomObjectiveHandlerBase, new()
         {
             var type = typeof(T);
 
             if (type.IsAbstract)
                 throw new ArgumentException("You can't use base handler class directly, Use derived class instead.");
 
-            if(_GlobalHandlers.Contains(type))
+            if (_GlobalHandlers.Contains(type))
                 throw new ArgumentException($"You can't add same type of handler multiple times\n- type: {type.Name}");
 
             _GlobalHandlers.Add(type);
@@ -53,7 +50,7 @@ namespace GTFO.CustomObjectives
         /// </summary>
         /// <typeparam name="T">Type of Handler (derived from CustomObjecitveHandler)</typeparam>
         /// <param name="typeID">Type ID of Handler</param>
-        public static void AddHandler<T>(byte typeID) where T : CustomObjectiveHandler, new()
+        public static void AddHandler<T>(byte typeID) where T : CustomObjectiveHandlerBase, new()
         {
             var type = typeof(T);
 
@@ -72,11 +69,11 @@ namespace GTFO.CustomObjectives
             _Handlers.Add(typeID, type);
         }
 
-        internal static CustomObjectiveHandler[] FireAllGlobalHandler(LG_Layer layer, WardenObjectiveDataBlock objectiveData)
+        internal static CustomObjectiveHandlerBase[] FireAllGlobalHandler(LG_Layer layer, WardenObjectiveDataBlock objectiveData)
         {
             var handlerList = new HandlerList();
 
-            foreach(var handler in _GlobalHandlers)
+            foreach (var handler in _GlobalHandlers)
             {
                 handlerList.Add(FireHandlerByType(handler, layer, objectiveData));
             }
@@ -84,11 +81,11 @@ namespace GTFO.CustomObjectives
             return handlerList.ToArray();
         }
 
-        internal static CustomObjectiveHandler FireHandler(byte typeID, LG_Layer layer, WardenObjectiveDataBlock objectiveData)
+        internal static CustomObjectiveHandlerBase FireHandler(byte typeID, LG_Layer layer, WardenObjectiveDataBlock objectiveData)
         {
             if (_Handlers.ContainsKey(typeID))
             {
-                var type =  _Handlers[typeID];
+                var type = _Handlers[typeID];
 
                 return FireHandlerByType(type, layer, objectiveData);
             }
@@ -98,9 +95,9 @@ namespace GTFO.CustomObjectives
             }
         }
 
-        private static CustomObjectiveHandler FireHandlerByType(Type type, LG_Layer layer, WardenObjectiveDataBlock objectiveData)
+        private static CustomObjectiveHandlerBase FireHandlerByType(Type type, LG_Layer layer, WardenObjectiveDataBlock objectiveData)
         {
-            var handler = Activator.CreateInstance(type) as CustomObjectiveHandler;
+            var handler = Activator.CreateInstance(type) as CustomObjectiveHandlerBase;
             handler.Setup(layer, objectiveData);
 
             _ActiveHandlers.Add(handler);
@@ -110,7 +107,7 @@ namespace GTFO.CustomObjectives
 
         internal static void UnloadAllHandler()
         {
-            foreach(var handler in _ActiveHandlers)
+            foreach (var handler in _ActiveHandlers)
             {
                 handler.Unload();
             }
@@ -118,9 +115,9 @@ namespace GTFO.CustomObjectives
             _ActiveHandlers.Clear();
         }
 
-        internal static void UnloadHandler(CustomObjectiveHandler handler)
+        internal static void UnloadHandler(CustomObjectiveHandlerBase handler)
         {
-            if(_ActiveHandlers.Contains(handler))
+            if (_ActiveHandlers.Contains(handler))
                 _ActiveHandlers.Remove(handler);
 
             handler.Unload();

@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace GTFO.CustomObjectives.GlobalHandlers
+﻿namespace GTFO.CustomObjectives.GlobalHandlers.FogControlTerminals
 {
-    class FogControlTerminalHandler
+    internal class FogControlTerminalHandler
     {
     }
 }

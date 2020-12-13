@@ -1,16 +1,10 @@
-﻿using GTFO.CustomObjectives.Extensions;
-using GTFO.CustomObjectives.Inject.Global;
-using GTFO.CustomObjectives.Utils;
+﻿using GTFO.CustomObjectives.Utils;
 using LevelGeneration;
 using MelonLoader;
 using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnhollowerBaseLib;
 
 namespace GTFO.CustomObjectives.GlobalHandlers.TimedObjectives
 {
@@ -40,11 +34,12 @@ namespace GTFO.CustomObjectives.GlobalHandlers.TimedObjectives
         public EndEventType EndType;
     }
 
-
-    public class TimedObjectiveHandler : CustomObjectiveHandler
+    public class TimedObjectiveHandler : CustomObjectiveHandlerBase
     {
-        bool IsCountdownMission = false;
-        bool IsCountdownEnable {
+        private bool IsCountdownMission = false;
+
+        private bool IsCountdownEnable
+        {
             get
             {
                 return _isCountdownEnable;
@@ -58,17 +53,15 @@ namespace GTFO.CustomObjectives.GlobalHandlers.TimedObjectives
             }
         }
 
-        bool _isCountdownEnable = false;
-        
+        private bool _isCountdownEnable = false;
 
-        StartEventType StartType = StartEventType.ElevatorArrive;
-        EndEventType EndType = EndEventType.OnGotoWin;
+        private StartEventType StartType = StartEventType.ElevatorArrive;
+        private EndEventType EndType = EndEventType.OnGotoWin;
 
-        float TimeUntilFail = 120.0f;
-        float Timer = 0.0f;
+        private float TimeUntilFail = 120.0f;
+        private float Timer = 0.0f;
 
-        string BaseMessage = "";
-
+        private string BaseMessage = "";
 
         public override void OnSetup()
         {
@@ -97,7 +90,7 @@ namespace GTFO.CustomObjectives.GlobalHandlers.TimedObjectives
         private bool TryGetConfig(uint id)
         {
             var file = ConfigUtil.GetConfigFilePath("TimedObjective");
-            if(File.Exists(file))
+            if (File.Exists(file))
             {
                 var content = File.ReadAllText(file);
                 var config = JsonConvert.DeserializeObject<TimedObjectiveConfigDTO>(content);
@@ -143,11 +136,9 @@ namespace GTFO.CustomObjectives.GlobalHandlers.TimedObjectives
 
         public override void OnElevatorArrive()
         {
-            MelonLogger.Log($"Elevator Called");
             if (IsCountdownMission)
             {
                 RegisterUpdateEvent(OnUpdate);
-                MelonLogger.Log($"Event Registered");
 
                 if (StartType == StartEventType.ElevatorArrive)
                 {
@@ -156,7 +147,7 @@ namespace GTFO.CustomObjectives.GlobalHandlers.TimedObjectives
             }
         }
 
-        void OnUpdate()
+        private void OnUpdate()
         {
             if (ObjectiveStatus == eWardenObjectiveStatus.WardenObjectiveItemSolved)
             {
@@ -165,7 +156,7 @@ namespace GTFO.CustomObjectives.GlobalHandlers.TimedObjectives
                     IsCountdownEnable = false;
                 }
 
-                if(StartType == StartEventType.OnGotoWin)
+                if (StartType == StartEventType.OnGotoWin)
                 {
                     IsCountdownEnable = true;
                 }
@@ -179,14 +170,14 @@ namespace GTFO.CustomObjectives.GlobalHandlers.TimedObjectives
                 GUIUtil.SetMessage(message);
                 GUIUtil.SetTimer(Timer / TimeUntilFail);
 
-                if(Timer >= TimeUntilFail)
+                if (Timer >= TimeUntilFail)
                 {
                     ForceFail();
                 }
             }
         }
 
-        string TimerFormat(float remainingTime)
+        private string TimerFormat(float remainingTime)
         {
             int min = (int)remainingTime / 60;
             int sec = (int)remainingTime % 60;

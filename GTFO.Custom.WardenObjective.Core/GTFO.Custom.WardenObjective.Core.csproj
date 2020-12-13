@@ -114,7 +114,7 @@
   <ItemGroup>
     <Compile Include="ChainedPuzzleContext.cs" />
     <Compile Include="CustomObjectiveManager.cs" />
-    <Compile Include="CustomObjectiveHandler.cs" />
+    <Compile Include="CustomObjectiveHandlerBase.cs" />
     <Compile Include="Extensions\Il2CppObjectBaseExtension.cs" />
     <Compile Include="GlobalHandlers\FogControlTerminals\FogControlTerminalHandler.cs" />
     <Compile Include="Inject\CustomReplicators\CustomReplicator.cs" />

@@ -10,13 +10,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
 
 namespace CustomObjective.DoorMultipleWaves
 {
-    public class MainHandler : CustomObjectiveHandler
+    public class MainHandler : CustomObjectiveHandlerBase
     {
         public override void OnSetup()
         {
+            if(this.LayerType != LG_LayerType.MainLayer)
+            {
+                UnloadSelf();
+                return;
+            }
+
             DoorWaveManager.Setup();
 
             var manager = DoorWaveManager.Current;
@@ -46,11 +53,25 @@ namespace CustomObjective.DoorMultipleWaves
                 };
             }
 
-            RegisterUpdateEvent(DoorWaveManager.OnUpdate);
+            RegisterUpdateEvent(update);
+        }
+
+        public void update()
+        {
+            if(Input.GetKeyDown(KeyCode.F1))
+            {
+                DoorWaveManager.Current.AttemptInteract(DoorWaveInteractionType.Complete);
+            }
+
+            if(Input.GetKeyDown(KeyCode.F2))
+            {
+                DoorWaveManager.Current.AttemptInteract(DoorWaveInteractionType.FailedVerify);
+            }
         }
 
         public override void OnBuildDone()
         {
+            /*
             int count = DoorWaveManager.Waves.Length;
 
             var doorZone = PlacementUtil.GetZone(LayerType, DoorWaveManager.MainZone);
@@ -81,10 +102,12 @@ namespace CustomObjective.DoorMultipleWaves
 
             if (SNet.IsMaster)
                 DoorWaveManager.Current.AttemptInteract(DoorWaveInteractionType.Startup);
+            */
         }
 
         public void DoorCommandHandler(LG_ComputerTerminal terminal, string param1, string param2)
         {
+            /*
             var cmd = terminal.m_command;
             if (string.IsNullOrEmpty(param1))
             {
@@ -160,6 +183,7 @@ namespace CustomObjective.DoorMultipleWaves
                 cmd.AddOutput($"There is no such file named: '{param2.ToUpper()}'", true);
                 return;
             }
+            */
         }
 
         public void OnPushSuccess()

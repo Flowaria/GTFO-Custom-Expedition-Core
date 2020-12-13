@@ -1,21 +1,21 @@
-﻿using BepInEx;
-using BepInEx.IL2CPP;
+﻿using CustomObjective.DoorMultipleWaves;
 using GTFO.CustomObjectives;
+using MelonLoader;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+[assembly: MelonInfo(typeof(Entry), "TestPlugin", "1.0", "Flowaria")]
+[assembly: MelonGame("10 Chambers Collective", "GTFO")]
 namespace CustomObjective.DoorMultipleWaves
 {
-    [BepInDependency("GTFO.CustomObjective.Core", BepInDependency.DependencyFlags.HardDependency)]
-    [BepInPlugin("GTFO.CO.MultiPuzzleDoor", "(WardenObjective) Multiple Wave Security Door", "1.0")]
-    public class Entry : BasePlugin
+    public class Entry : MelonMod
     {
-        public override void Load()
+        public override void OnApplicationStart()
         {
-            CustomObjectiveManager.AddHandler<MainHandler>(51);
+            CustomObjectiveManager.AddGlobalHandler<MainHandler>();
         }
     }
 }

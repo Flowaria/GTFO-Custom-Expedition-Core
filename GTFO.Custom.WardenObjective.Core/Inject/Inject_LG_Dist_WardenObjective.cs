@@ -1,10 +1,6 @@
 ﻿using Harmony;
 using LevelGeneration;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GTFO.CustomObjectives.Inject
 {
@@ -13,14 +9,14 @@ namespace GTFO.CustomObjectives.Inject
     {
         public static void Postfix(LG_Distribute_WardenObjective __instance)
         {
-            if(__instance.m_dataBlockData == null)
+            if (__instance.m_dataBlockData == null)
             {
                 //We don't have datablock data, Can't do anything :(
                 return;
             }
 
             var type = (byte)__instance.m_dataBlockData.Type;
-            if(!Enum.IsDefined(typeof(eWardenObjectiveType), type))
+            if (!Enum.IsDefined(typeof(eWardenObjectiveType), type))
             {
                 //Custom Handler!
                 CustomObjectiveManager.FireHandler(type, __instance.m_layer, __instance.m_dataBlockData);

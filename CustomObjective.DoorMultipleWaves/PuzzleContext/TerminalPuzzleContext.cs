@@ -17,7 +17,7 @@ namespace CustomObjective.DoorMultipleWaves.PuzzleContext
         public override void OnSolved()
         {
             Terminal.m_command.AddOutput("SUCCESS! Master Door's Security Scan will be resume in few moment...");
-            DoorWaveManager.JumpToNextWave();
+            //DoorWaveManager.JumpToNextWave();
         }
     }
 }
