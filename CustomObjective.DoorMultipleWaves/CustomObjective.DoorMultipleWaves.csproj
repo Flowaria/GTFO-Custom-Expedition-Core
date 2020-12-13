@@ -98,12 +98,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DoorWaveData.cs" />
-    <Compile Include="DoorWaveManager.cs" />
+    <Compile Include="DoorWaves\DoorWaveData.cs" />
+    <Compile Include="DoorWaves\DoorWaveManager.cs" />
+    <Compile Include="DoorWaves\ReplicatorWrappers.cs" />
     <Compile Include="Entry.cs" />
     <Compile Include="MainHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RelayDoorPuzzleContext.cs" />
+    <Compile Include="PuzzleContext\RelayDoorPuzzleContext.cs" />
+    <Compile Include="PuzzleContext\TerminalPuzzleContext.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

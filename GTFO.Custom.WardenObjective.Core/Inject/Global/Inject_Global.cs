@@ -1,5 +1,6 @@
 ﻿using Globals;
-using HarmonyLib;
+using Harmony;
+using MelonLoader;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,21 +9,24 @@ using System.Threading.Tasks;
 
 namespace GTFO.CustomObjectives.Inject.Global
 {
-    [HarmonyPatch]
-    internal static class Inject_Global
+    [HarmonyPatch(typeof(Globals.Global), "OnLevelCleanup")]
+    internal static class Inject_Global_LevelCleanup
     {
-        [HarmonyPatch(typeof(Globals.Global), "OnLevelCleanup")]
-        [HarmonyPostfix]
-        internal static void Post_LevelCleanup()
+        
+        internal static void Postfix()
         {
+            MelonLogger.Log("Global: OnLevelCleanup");
             GlobalMessage.OnLevelCleanup?.Invoke();
         }
+    }
 
-        [HarmonyPatch(typeof(Globals.Global), "OnResetSession")]
-        [HarmonyPostfix]
-        internal static void Post_ResetSession()
+    [HarmonyPatch(typeof(Globals.Global), "OnResetSession")]
+    internal static class Inject_Global_ResetSession
+    {
+        internal static void Postfix()
         {
-            GlobalMessage.OnLevelCleanup?.Invoke();
+            MelonLogger.Log("Global: OnResetSession");
+            GlobalMessage.OnResetSession?.Invoke();
         }
     }
 }

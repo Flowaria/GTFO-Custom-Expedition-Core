@@ -1,7 +1,10 @@
-﻿using GameData;
+﻿using CustomObjective.DoorMultipleWaves.DoorWaves;
+using CustomObjective.DoorMultipleWaves.PuzzleContext;
+using GameData;
 using GTFO.CustomObjectives;
 using GTFO.CustomObjectives.Utils;
 using LevelGeneration;
+using SNetwork;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,15 +17,19 @@ namespace CustomObjective.DoorMultipleWaves
     {
         public override void OnSetup()
         {
+            DoorWaveManager.Setup();
+
+            var manager = DoorWaveManager.Current;
+
             int count = ObjectiveData.ReactorWaves.Count;
-            DoorWaveManager.Waves = new DoorWaveData[count];
-            DoorWaveManager.MainZone = ObjectiveLayerData.ZonePlacementDatas[0][0].LocalIndex;
+            manager.Waves = new DoorWaveData[count];
+            manager.MainZone = ObjectiveLayerData.ZonePlacementDatas[0][0].LocalIndex;
 
             for (int i = 0; i < count; i++)
             {
                 var ReactWaveData = ObjectiveData.ReactorWaves[i];
 
-                DoorWaveManager.Waves[i] = new DoorWaveData()
+                manager.Waves[i] = new DoorWaveData()
                 {
                     PuzzleID = ReactWaveData.EnemyWaves[0].WaveSettings,
                     EventData = ReactWaveData.Events.ToArray(),
@@ -33,8 +40,8 @@ namespace CustomObjective.DoorMultipleWaves
                     Time_FailInit = ReactWaveData.WarmupFail,
                     Time_FailSearch = ReactWaveData.VerifyFail,
 
-                    GeneratedFileName = $"autogen_key_{SerialGenerator.GetCodeWordPrefix()}.key",
-                    GeneratedFileContent = $"//Generated Key file for BlockCipher:\n\n{GetBase64(GetBase64(GetBase64(SomeBigLongText())))}\n\n//: End of Key File",
+                    GeneratedFileName = $"autogen_{SerialGenerator.GetCodeWordPrefix()}.key",
+                    GeneratedFileContent = $"//Generated Key file for BlockCipher:\n\n{GetBase64(GetBase64(GetBase64(SomeBigLongText())))}",
                     TerminalZone = ReactWaveData.ZoneForVerification
                 };
             }
@@ -45,6 +52,10 @@ namespace CustomObjective.DoorMultipleWaves
         public override void OnBuildDone()
         {
             int count = DoorWaveManager.Waves.Length;
+
+            var doorZone = PlacementUtil.GetZone(LayerType, DoorWaveManager.MainZone);
+            DoorWaveManager.ChainedDoor = PlacementUtil.GetSpawnedDoor(doorZone);
+
             for (int i = 0; i < count; i++)
             {
                 var waveData = DoorWaveManager.Waves[i];
@@ -67,6 +78,9 @@ namespace CustomObjective.DoorMultipleWaves
                     TerminalUtil.AddCommand(terminal, "MASTERDOOR_PUSH_PUBLIC_KEY", "Push public key by filename.", DoorCommandHandler);
                 }
             }
+
+            if (SNet.IsMaster)
+                DoorWaveManager.Current.AttemptInteract(DoorWaveInteractionType.Startup);
         }
 
         public void DoorCommandHandler(LG_ComputerTerminal terminal, string param1, string param2)
@@ -108,17 +122,49 @@ namespace CustomObjective.DoorMultipleWaves
 
                 cmd.AddOutput(TerminalLineType.ProgressWait, "Parsing the Controllers respond", 1.0f);
                 cmd.AddOutput("", true);
-                cmd.AddOutput("SUCCESS! Master Door's Security Scan will be resume in few moment.");
-                cmd.OnEndOfQueue = new Action(() =>
+                if(GameDataBlockBase<ChainedPuzzleDataBlock>.HasBlock(ObjectiveData.ChainedPuzzleMidObjective))
                 {
-                    DoorWaveManager.JumpToNextWave();
-                });
+                    var puzzle = ChainedPuzzleUtil.Setup<TerminalPuzzleContext>(
+                        ObjectiveData.ChainedPuzzleMidObjective,
+                        terminal.SpawnNode.m_area,
+                        terminal.m_wardenObjectiveSecurityScanAlign);
+
+                    puzzle.Terminal = terminal;
+                    puzzle.Handler = this;
+
+                    if (puzzle.Instance.Data.TriggerAlarmOnActivate)
+                    {
+                        cmd.AddOutput(TerminalLineType.Warning, $"Security Scan with [{puzzle.Instance.Data.PublicAlarmName}] is required!");
+                    }
+                    else
+                    {
+                        cmd.AddOutput("Security Scan is required!", true);
+                    }
+                    cmd.AddOutput("", true);
+                    cmd.OnEndOfQueue = new Action(() =>
+                    {
+                        puzzle.Trigger();
+                    });
+                }
+                else
+                {
+                    cmd.AddOutput("SUCCESS! Master Door's Security Scan will be resume in few moment...");
+                    cmd.OnEndOfQueue = new Action(() =>
+                    {
+                        DoorWaveManager.JumpToNextWave();
+                    });
+                }
             }
             else
             {
                 cmd.AddOutput($"There is no such file named: '{param2.ToUpper()}'", true);
                 return;
             }
+        }
+
+        public void OnPushSuccess()
+        {
+
         }
 
         public string SomeBigLongText()

@@ -1,18 +1,19 @@
-﻿using GTFO.CustomObjectives;
+﻿using CustomObjective.DoorMultipleWaves.DoorWaves;
+using GTFO.CustomObjectives;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CustomObjective.DoorMultipleWaves
+namespace CustomObjective.DoorMultipleWaves.PuzzleContext
 {
     public class RelayDoorPuzzleContext : ChainedPuzzleContext
     {
 
         public override void OnSolved()
         {
-            base.OnSolved();
+            DoorWaveManager.StartSearchingPhase();
         }
     }
 }

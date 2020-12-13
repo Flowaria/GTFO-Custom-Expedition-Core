@@ -13,11 +13,16 @@ using UnhollowerBaseLib;
 using GTFO.CustomObjectives.Utils;
 using GTFO.CustomObjectives.Inject;
 using GTFO.CustomObjectives.Inject.Global;
+using SNetwork;
+using UnhollowerRuntimeLib;
 
 namespace GTFO.CustomObjectives
 {
     public abstract class CustomObjectiveHandler
     {
+        public Action OnSetupEvent;
+        public Action OnUnloadEvent;
+
         public LG_Layer Layer { get; private set; }
         public LG_LayerType LayerType { get; private set; }
         public WardenObjectiveDataBlock ObjectiveData { get; private set; }
@@ -87,16 +92,26 @@ namespace GTFO.CustomObjectives
                     break;
             }
 
-            LG_Factory.add_OnFactoryBuildDone(new Action(OnBuildDone));
-            ElevatorRide.add_OnElevatorHasArrived(new Action(OnElevatorArrive));
+            GlobalMessage.OnBuildDone += OnBuildDone;
+            GlobalMessage.OnElevatorArrive += OnElevatorArrive;
+
+            GlobalMessage.OnLevelSuccess += OnExpeditionSuccess;
+            GlobalMessage.OnLevelFail += OnExpeditionFail;
+
+            OnSetupEvent?.Invoke();
 
             OnSetup();
         }
 
         internal void Unload()
         {
-            LG_Factory.remove_OnFactoryBuildDone(new Action(OnBuildDone));
-            ElevatorRide.remove_OnElevatorHasArrived(new Action(OnElevatorArrive));
+            GlobalMessage.OnBuildDone -= OnBuildDone;
+            GlobalMessage.OnElevatorArrive -= OnElevatorArrive;
+
+            GlobalMessage.OnLevelSuccess -= OnExpeditionSuccess;
+            GlobalMessage.OnLevelFail -= OnExpeditionFail;
+
+            OnUnloadEvent?.Invoke();
 
             OnUnload();
         }
@@ -140,29 +155,38 @@ namespace GTFO.CustomObjectives
             {
                 GlobalMessage.OnUpdate += update;
 
-                Action cleanupHandler = null;
-                cleanupHandler = () =>
+                //It will fire only once
+                void cleanupHandler()
                 {
                     GlobalMessage.OnUpdate -= update;
                     GlobalMessage.OnLevelCleanup -= cleanupHandler;
-                };
+                }
+
                 GlobalMessage.OnLevelCleanup += cleanupHandler;
+                OnUnloadEvent += cleanupHandler;
             }
 
             if(fixedUpdate != null)
             {
                 GlobalMessage.OnFixedUpdate += fixedUpdate;
 
-                Action cleanupHandler = null;
-                cleanupHandler = () =>
+                //It will fire only once
+                void cleanupHandler()
                 {
                     GlobalMessage.OnFixedUpdate -= fixedUpdate;
                     GlobalMessage.OnLevelCleanup -= cleanupHandler;
-                };
+                }
+
                 GlobalMessage.OnLevelCleanup += cleanupHandler;
+                OnUnloadEvent += cleanupHandler;
             }
         }
 
+        /// <summary>
+        /// Trigger OnActive WaveSetting from DataBlock
+        /// </summary>
+        /// <param name="node">Spawnnode</param>
+        /// <param name="type">SpawnType</param>
         public void TriggerOnActiveWave(AIG_CourseNode node, SurvivalWaveSpawnType type = SurvivalWaveSpawnType.InRelationToClosestAlivePlayer)
         {
             if (WardenObjectiveManager.HasValidWaveSettings(ObjectiveData.WavesOnActivate))
@@ -171,22 +195,41 @@ namespace GTFO.CustomObjectives
             }
         }
 
+        /// <summary>
+        /// Trigger Single WaveSetting
+        /// </summary>
+        /// <param name="waveData">WaveData to use for spawn</param>
+        /// <param name="node">Spawnnode</param>
+        /// <param name="type">SpawnType</param>
         public void TriggerWave(GenericEnemyWaveData waveData, AIG_CourseNode node, SurvivalWaveSpawnType type = SurvivalWaveSpawnType.InRelationToClosestAlivePlayer)
         {
             TriggerWave(new GenericEnemyWaveData[] { waveData }.ToList(), node, type);
         }
 
-
+        /// <summary>
+        /// Trigger Multiple WaveSetting
+        /// </summary>
+        /// <param name="waveData">WaveData(s) to use for spawn</param>
+        /// <param name="node">Spawnnode</param>
+        /// <param name="type">SpawnType</param>
         public void TriggerWave(List<GenericEnemyWaveData> waveData, AIG_CourseNode node, SurvivalWaveSpawnType type = SurvivalWaveSpawnType.InRelationToClosestAlivePlayer)
         {
             WardenObjectiveManager.TriggerEnemyWaves(waveData.ToIl2CppList(), node, type);
         }
 
-        public void StopWave()
+        /// <summary>
+        /// Stop All Wave
+        /// </summary>
+        public void StopAllWave()
         {
             WardenObjectiveManager.StopAllWardenObjectiveEnemyWaves();
         }
 
+        /// <summary>
+        /// Set Warden Objective hint Fragment (such as [ITEM_SERIAL])
+        /// </summary>
+        /// <param name="type">Fragment Type</param>
+        /// <param name="text">String to be placed in selected Fragment</param>
         public void SetObjectiveTextFragment(eWardenTextFragment type, string text)
         {
             WardenObjectiveManager.SetObjectiveTextFragment(LayerType, type, text);
@@ -203,10 +246,33 @@ namespace GTFO.CustomObjectives
             });
         }
 
+        public void ForceWin()
+        {
+            if (SNet.IsMaster)
+            {
+                GameStateManager.ChangeState(eGameStateName.ExpeditionSuccess);
+            }
+        }
+
+        public void ForceFail()
+        {
+            if(SNet.IsMaster)
+            {
+                GameStateManager.ChangeState(eGameStateName.ExpeditionFail);
+            }
+        }
+
+        public void UnloadSelf()
+        {
+            CustomObjectiveManager.UnloadHandler(this);
+        }
+
         //Forwards
         public abstract void OnSetup();
         public virtual void OnBuildDone() { }
         public virtual void OnElevatorArrive() { }
+        public virtual void OnExpeditionSuccess() { }
+        public virtual void OnExpeditionFail() { }
         public virtual void OnUnload() { }
     }
 }

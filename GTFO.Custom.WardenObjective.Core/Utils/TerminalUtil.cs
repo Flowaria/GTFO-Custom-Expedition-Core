@@ -10,7 +10,6 @@ namespace GTFO.CustomObjectives.Utils
 {
     public static class TerminalUtil
     {
-        //TODO: FIXTHIS
         public static void AddCommand(LG_ComputerTerminal terminal, string cmdText, string helpText, Action<LG_ComputerTerminal, string, string> onCmdReceived)
         {
             terminal.m_command.AddCommand(TERM_Command.Override, cmdText, helpText);

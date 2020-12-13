@@ -1,4 +1,4 @@
-﻿using HarmonyLib;
+﻿using GTFO.CustomObjectives.Inject.Global;
 using LevelGeneration;
 using SNetwork;
 using System;
@@ -6,14 +6,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnhollowerRuntimeLib;
+using UnityEngine;
 
-namespace GTFO.CustomObjectives.Inject.CustomReplicator
+namespace GTFO.CustomObjectives.Inject.CustomReplicators
 {
     using ComplexReplicator = SNet_StateReplicator<pDoorState, pDoorInteraction>;
     using ComplexProvider = iSNet_StateReplicatorProvider<pDoorState, pDoorInteraction>;
 
     using StateChangedAction = Action<pDoorState, pDoorState, bool>;
-    using ProviderDict = Dictionary<LG_Door_Sync, Action<pDoorState, pDoorState, bool>>;
+    using ProviderDict = Dictionary<string, Action<pDoorState, pDoorState, bool>>;
 
     internal static class ProviderManager
     {
@@ -24,13 +26,18 @@ namespace GTFO.CustomObjectives.Inject.CustomReplicator
         {
             PersistentReplicator = new ProviderDict();
             InstanceReplicator = new ProviderDict();
+
+            GlobalMessage.OnLevelCleanup += () =>
+            {
+                InstanceReplicator.Clear();
+            };
         }
 
-        public static bool Contains(LG_Door_Sync doorSync, out StateChangedAction action)
+        public static bool Contains(string guid, out StateChangedAction action)
         {
-            if(!PersistentReplicator.TryGetValue(doorSync, out action))
+            if(!PersistentReplicator.TryGetValue(guid, out action))
             {
-                if(!InstanceReplicator.TryGetValue(doorSync, out action))
+                if(!InstanceReplicator.TryGetValue(guid, out action))
                 {
                     return false;
                 }
@@ -43,31 +50,40 @@ namespace GTFO.CustomObjectives.Inject.CustomReplicator
 
     public abstract class CustomReplicatorProvider<S, I> where S : StateWrapperBase, new() where I : InteractionWrapperBase, new()
     {
+        private bool _HasSetup = false;
         private LG_Door_Sync _ProviderSync;
 
-        private CustomReplicatorProvider() { }
-
-        public CustomReplicatorProvider(eSNetReplicatorLifeTime lifeTime = eSNetReplicatorLifeTime.DestroyedOnLevelReset, SNet_ChannelType channelType = SNet_ChannelType.GameOrderCritical)
+        public void Setup(eSNetReplicatorLifeTime lifeTime = eSNetReplicatorLifeTime.DestroyedOnLevelReset, SNet_ChannelType channelType = SNet_ChannelType.GameOrderCritical)
         {
-            _ProviderSync = new LG_Door_Sync();
+            var guid = Guid.NewGuid().ToString();
+            var syncObj = new GameObject(guid);
+            var syncInstance = syncObj.AddComponent<LG_Door_Sync>();
+
+            _ProviderSync = syncInstance;
 
             var provider = _ProviderSync.Cast<ComplexProvider>();
 
             _ProviderSync.m_stateReplicator = ComplexReplicator.Create(provider, lifeTime, default, channelType);
             _ProviderSync.m_syncStruct = _ProviderSync.m_stateReplicator.GetProviderSyncStruct();
 
-            if(lifeTime == eSNetReplicatorLifeTime.DestroyedOnLevelReset)
+            if (lifeTime == eSNetReplicatorLifeTime.DestroyedOnLevelReset)
             {
-                ProviderManager.InstanceReplicator.Add(_ProviderSync, OnStateChange_Cast);
+                ProviderManager.InstanceReplicator.Add(guid, OnStateChange_Cast);
             }
-            else if(lifeTime == eSNetReplicatorLifeTime.NeverDestroyed)
+            else if (lifeTime == eSNetReplicatorLifeTime.NeverDestroyed)
             {
-                ProviderManager.PersistentReplicator.Add(_ProviderSync, OnStateChange_Cast);
+                ProviderManager.PersistentReplicator.Add(guid, OnStateChange_Cast);
+                GameObject.DontDestroyOnLoad(syncObj);
             }
+
+            _HasSetup = true;
         }
 
         public void AttemptInteract(I interaction)
         {
+            if (!_HasSetup)
+                return;
+
             if(ShouldInteract(interaction, out var state))
             {
                 _ProviderSync.m_stateReplicator.InteractWithState(state.ToOriginal(), interaction.ToOriginal());

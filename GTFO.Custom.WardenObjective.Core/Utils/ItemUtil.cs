@@ -21,12 +21,10 @@ namespace GTFO.CustomObjectives.Utils
         {
             _ItemBuilderDict = new Dictionary<string, BuilderInfo>();
 
-            GlobalMessage.OnLevelCleanup += OnLevelCleanup;
-        }
-
-        private static void OnLevelCleanup()
-        {
-            Clear();
+            GlobalMessage.OnLevelCleanup += () =>
+            {
+                Clear();
+            };
         }
 
         public static void Clear()

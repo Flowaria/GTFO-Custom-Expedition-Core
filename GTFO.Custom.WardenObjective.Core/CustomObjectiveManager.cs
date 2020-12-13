@@ -25,12 +25,10 @@ namespace GTFO.CustomObjectives
             _Handlers = new HandlerDict();
             _GlobalHandlers = new HandlerTypeList();
 
-            GlobalMessage.OnLevelCleanup += OnLevelCleanup;
-        }
-
-        private static void OnLevelCleanup()
-        {
-            UnloadAllHandler();
+            GlobalMessage.OnLevelCleanup += () =>
+            {
+                UnloadAllHandler();
+            };
         }
 
         /// <summary>
@@ -118,6 +116,14 @@ namespace GTFO.CustomObjectives
             }
 
             _ActiveHandlers.Clear();
+        }
+
+        internal static void UnloadHandler(CustomObjectiveHandler handler)
+        {
+            if(_ActiveHandlers.Contains(handler))
+                _ActiveHandlers.Remove(handler);
+
+            handler.Unload();
         }
     }
 }

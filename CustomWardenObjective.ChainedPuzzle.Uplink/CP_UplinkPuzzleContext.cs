@@ -20,7 +20,7 @@ namespace CustomWardenObjective.ChainedPuzzle.Uplink
 
             Terminal.m_command.AddOutput(TerminalLineType.Normal, "SUCCESS! Uplink Established Successfully!", 2f);
 
-            Handler.StopWave();
+            Handler.StopAllWave();
 
             if (SNet.IsMaster)
             {

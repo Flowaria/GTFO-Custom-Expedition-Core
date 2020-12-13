@@ -1,35 +1,39 @@
 ﻿using AssetShards;
-using BepInEx;
-using BepInEx.IL2CPP;
+using GTFO.CustomObjectives;
+using GTFO.CustomObjectives.GlobalHandlers.TimedObjectives;
 using GTFO.CustomObjectives.Inject.Global;
 using GTFO.CustomObjectives.Utils;
-using HarmonyLib;
 using LevelGeneration;
+using MelonLoader;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using UnhollowerRuntimeLib;
 using UnityEngine;
 
+[assembly: MelonInfo(typeof(Entry), "Custom WardenObjective Core", "1.0", "Flowaria")]
+[assembly: MelonGame("10 Chambers Collective", "GTFO")]
 namespace GTFO.CustomObjectives
 {
-    [BepInProcess("GTFO.exe")]
-    [BepInPlugin("GTFO.CustomObjective.Core", "Custom WardenObjective Core", "1.0")]
-    public class Entry : BasePlugin
+    public class Entry : MelonMod
     {
-        public override void Load()
+        public override void OnApplicationStart()
         {
-            var harmony = new Harmony("gtfo.customobjective.core.harmony");
-            harmony.PatchAll();
+            CustomObjectiveManager.AddGlobalHandler<TimedObjectiveHandler>();
+        }
 
-            ClassInjector.RegisterTypeInIl2Cpp<GlobalMessageComponent>();
+        public override void OnUpdate()
+        {
+            GlobalMessage.OnUpdate?.Invoke();
+        }
 
-            var persistentObject = new GameObject();
-            persistentObject.AddComponent<GlobalMessageComponent>();
-
-            GameObject.DontDestroyOnLoad(persistentObject);
+        public override void OnFixedUpdate()
+        {
+            GlobalMessage.OnFixedUpdate?.Invoke();
         }
     }
 }

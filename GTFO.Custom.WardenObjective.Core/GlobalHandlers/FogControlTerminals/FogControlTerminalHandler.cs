@@ -6,11 +6,7 @@ using System.Threading.Tasks;
 
 namespace GTFO.CustomObjectives.GlobalHandlers
 {
-    public class TimedObjectiveHandler : CustomObjectiveHandler
+    class FogControlTerminalHandler
     {
-        public override void OnSetup()
-        {
-            throw new NotImplementedException();
-        }
     }
 }

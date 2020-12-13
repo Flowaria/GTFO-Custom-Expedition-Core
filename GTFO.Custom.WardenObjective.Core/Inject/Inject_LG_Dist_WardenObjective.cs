@@ -1,4 +1,4 @@
-﻿using HarmonyLib;
+﻿using Harmony;
 using LevelGeneration;
 using System;
 using System.Collections.Generic;
@@ -20,13 +20,13 @@ namespace GTFO.CustomObjectives.Inject
             }
 
             var type = (byte)__instance.m_dataBlockData.Type;
-            if(Enum.IsDefined(typeof(eWardenObjectiveType), type))
+            if(!Enum.IsDefined(typeof(eWardenObjectiveType), type))
             {
-                //This is stock warden objective type, no needs to be handled
+                //Custom Handler!
+                CustomObjectiveManager.FireHandler(type, __instance.m_layer, __instance.m_dataBlockData);
                 return;
             }
 
-            CustomObjectiveManager.FireHandler(type, __instance.m_layer, __instance.m_dataBlockData);
             CustomObjectiveManager.FireAllGlobalHandler(__instance.m_layer, __instance.m_dataBlockData);
         }
     }

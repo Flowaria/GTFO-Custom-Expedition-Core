@@ -1,5 +1,5 @@
 ﻿using GTFO.CustomObjectives.Utils;
-using HarmonyLib;
+using Harmony;
 using LevelGeneration;
 using System;
 using System.Collections.Generic;
@@ -9,12 +9,10 @@ using System.Threading.Tasks;
 
 namespace GTFO.CustomObjectives.Inject
 {
-    [HarmonyPatch]
+    [HarmonyPatch(typeof(LG_DistributeItem), "AvailableToReuse")]
     internal static class Inject_LG_DistItem
     {
-        [HarmonyPatch(typeof(LG_DistributeItem), "AvailableToReuse")]
-        [HarmonyPostfix]
-        internal static void Alter_Reusable(LG_DistributeItem __instance, ref bool __result)
+        internal static void Postfix(LG_DistributeItem __instance, ref bool __result)
         {
             __result = !ItemUtil.IsWardenObjectiveItem(__instance);
         }
