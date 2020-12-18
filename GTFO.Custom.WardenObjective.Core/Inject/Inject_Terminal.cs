@@ -14,17 +14,14 @@ namespace GTFO.CustomObjectives.Inject
         internal static void Postfix(LG_ComputerTerminalCommandInterpreter __instance, TERM_Command cmd, string inputLine, string param1, string param2)
         {
             var newInputLine = inputLine.Split(' ')[0].ToLower();
-            Console.WriteLine("got command");
 
             //Unused code
-            if (cmd == TERM_Command.Override)
+            if (cmd != TERM_Command.Override)
+                return;
+
+            if (_handlerDict.TryGetValue(newInputLine, out var handler))
             {
-                Console.WriteLine("got override command");
-                if (_handlerDict.ContainsKey(newInputLine))
-                {
-                    Console.WriteLine("it's override command {0} {1}", param1, param2);
-                    _handlerDict[newInputLine].Invoke(__instance.m_terminal, param1, param2);
-                }
+                handler.Invoke(__instance.m_terminal, param1, param2);
             }
         }
 

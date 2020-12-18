@@ -47,6 +47,8 @@ namespace GTFO.CustomObjectives.Inject.CustomReplicators
         private bool _HasSetup = false;
         private LG_Door_Sync _ProviderSync;
 
+        public bool AllowInteractionByUser { get; set; } = true;
+
         public void Setup(eSNetReplicatorLifeTime lifeTime = eSNetReplicatorLifeTime.DestroyedOnLevelReset, SNet_ChannelType channelType = SNet_ChannelType.GameOrderCritical)
         {
             var guid = Guid.NewGuid().ToString();
@@ -76,6 +78,9 @@ namespace GTFO.CustomObjectives.Inject.CustomReplicators
         public void AttemptInteract(I interaction)
         {
             if (!_HasSetup)
+                return;
+
+            if (!AllowInteractionByUser && !SNet.IsMaster)
                 return;
 
             if (ShouldInteract(interaction, out var state))

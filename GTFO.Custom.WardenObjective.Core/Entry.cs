@@ -1,6 +1,8 @@
 ﻿using GTFO.CustomObjectives;
+using GTFO.CustomObjectives.GlobalHandlers.FogControlTerminals;
 using GTFO.CustomObjectives.GlobalHandlers.TimedObjectives;
 using GTFO.CustomObjectives.Inject.Global;
+using GTFO.CustomObjectives.Utils;
 using MelonLoader;
 
 [assembly: MelonInfo(typeof(Entry), "Custom WardenObjective Core", "1.0", "Flowaria")]
@@ -12,12 +14,22 @@ namespace GTFO.CustomObjectives
     {
         public override void OnApplicationStart()
         {
-            Start_RegisterGlobalHandlers();
+            Setup_GlobalHandlers();
+            //Setup_DefaultReplicator();
         }
 
-        private void Start_RegisterGlobalHandlers()
+        private void Setup_GlobalHandlers()
         {
-            CustomObjectiveManager.AddGlobalHandler<TimedObjectiveHandler>();
+            CustomObjectiveManager.AddGlobalHandler<TimedObjectiveHandler>(CustomObjectiveSettings.MAIN_ONLY);
+            //CustomObjectiveManager.AddGlobalHandler<FogControlTerminalHandler>(); later
+            //TODO: New Global Handler: Change Light Settings (color / type / or whatever)
+            //TODO: New Global Handler: Change Alarm Settings for existing door
+            //TODO: New Global Handler: Regen Hibernating Enemies on other zone
+        }
+
+        private void Setup_DefaultReplicator()
+        {
+            FogLevelUtil.Setup();
         }
 
         public override void OnUpdate()

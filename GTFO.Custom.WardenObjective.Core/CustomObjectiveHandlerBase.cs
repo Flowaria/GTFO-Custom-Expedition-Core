@@ -15,6 +15,8 @@ namespace GTFO.CustomObjectives
 {
     public abstract class CustomObjectiveHandlerBase
     {
+        internal string HandlerGUID;
+
         public Action OnSetupEvent;
         public Action OnUnloadEvent;
 

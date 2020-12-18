@@ -8,33 +8,7 @@ using System.Linq;
 
 namespace GTFO.CustomObjectives.GlobalHandlers.TimedObjectives
 {
-    public enum StartEventType
-    {
-        ElevatorArrive,
-        OnGotoWin
-    }
-
-    public enum EndEventType
-    {
-        OnGotoWin,
-        Persistent
-    }
-
-    public class TimedObjectiveConfigDTO
-    {
-        public List<TimedObjectiveDefinition> Definitions;
-    }
-
-    public class TimedObjectiveDefinition
-    {
-        public uint TargetObjectiveID;
-        public float FailTimer;
-        public string BaseMessage;
-        public StartEventType StartType;
-        public EndEventType EndType;
-    }
-
-    public class TimedObjectiveHandler : CustomObjectiveHandlerBase
+    internal class TimedObjectiveHandler : CustomObjectiveHandlerBase
     {
         private bool IsCountdownMission = false;
 
@@ -77,19 +51,12 @@ namespace GTFO.CustomObjectives.GlobalHandlers.TimedObjectives
                 return;
             }
 
-            MelonLogger.Log($"{TimeUntilFail} {BaseMessage}");
-
             IsCountdownMission = true;
-        }
-
-        public override void OnUnload()
-        {
-            MelonLogger.Log($"Unloaded");
         }
 
         private bool TryGetConfig(uint id)
         {
-            var file = ConfigUtil.GetConfigFilePath("TimedObjective");
+            var file = ConfigUtil.GetConfigPath("TimedObjective");
             if (File.Exists(file))
             {
                 var content = File.ReadAllText(file);

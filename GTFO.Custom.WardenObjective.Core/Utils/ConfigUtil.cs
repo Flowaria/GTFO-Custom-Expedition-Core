@@ -7,6 +7,7 @@ namespace GTFO.CustomObjectives.Utils
     public static class ConfigUtil
     {
         public static readonly string BasePath;
+        private static string LocalPath;
 
         static ConfigUtil()
         {
@@ -18,7 +19,7 @@ namespace GTFO.CustomObjectives.Utils
             }
         }
 
-        public static string GetConfigFilePath(string name, string extension = ".json")
+        public static string GetConfigPath(string name, string extension = ".json")
         {
             return Path.Combine(BasePath, $"{name}{extension}");
         }

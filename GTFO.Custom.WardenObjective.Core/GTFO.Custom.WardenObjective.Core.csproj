@@ -115,8 +115,10 @@
     <Compile Include="ChainedPuzzleContext.cs" />
     <Compile Include="CustomObjectiveManager.cs" />
     <Compile Include="CustomObjectiveHandlerBase.cs" />
+    <Compile Include="CustomObjectiveSettings.cs" />
     <Compile Include="Extensions\Il2CppObjectBaseExtension.cs" />
     <Compile Include="GlobalHandlers\FogControlTerminals\FogControlTerminalHandler.cs" />
+    <Compile Include="GlobalHandlers\TimedObjectives\TimedObjectiveConfigDTO.cs" />
     <Compile Include="Inject\CustomReplicators\CustomReplicator.cs" />
     <Compile Include="Inject\CustomReplicators\Inject_LG_Door_Sync.cs" />
     <Compile Include="Inject\CustomReplicators\InteractionWrapperBase.cs" />
