@@ -65,7 +65,7 @@ namespace GTFO.CustomObjectives.HandlerBase
 
             if(onSpawned != null)
             {
-                ListenItemSpawnEvent(new LG_DistributeItem(), false, onSpawned);
+                ListenItemSpawnEvent(new LG_DistributeItem(), false, onSpawned); //TODO: Connect with PlacementUtil API
             }
         }
 
