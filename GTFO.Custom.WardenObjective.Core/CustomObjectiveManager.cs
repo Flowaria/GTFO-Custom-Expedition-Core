@@ -1,4 +1,5 @@
 ﻿using GameData;
+using GTFO.CustomObjectives.HandlerBase;
 using GTFO.CustomObjectives.Inject.Global;
 using LevelGeneration;
 using System;

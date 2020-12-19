@@ -1,5 +1,6 @@
 ﻿using AIGraph;
 using GameData;
+using GTFO.CustomObjectives.HandlerBase;
 using LevelGeneration;
 using System;
 
@@ -9,7 +10,7 @@ namespace GTFO.CustomObjectives.Utils
     {
         public static bool TryGetRandomPlaceSingleZone(CustomObjectiveHandlerBase handlerContext, out LG_Zone zone, out ZonePlacementWeights weight)
         {
-            return LG_DistributionJobUtils.TryGetRandomPlacementZone(handlerContext.Layer, handlerContext.ObjectiveLayerData.ZonePlacementDatas, out zone, out weight);
+            return LG_DistributionJobUtils.TryGetRandomPlacementZone(handlerContext.Layer, handlerContext.LayerData.ObjectiveData.ZonePlacementDatas, out zone, out weight);
         }
 
         public static void FetchFunctionMarker(LG_Zone zone, ZonePlacementWeights weight, ExpeditionFunction function, out LG_DistributeItem distItem, out AIG_CourseNode distNode, bool createNew = true)

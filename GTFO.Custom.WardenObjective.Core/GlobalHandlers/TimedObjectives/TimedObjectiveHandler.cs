@@ -1,4 +1,5 @@
-﻿using GTFO.CustomObjectives.Utils;
+﻿using GTFO.CustomObjectives.HandlerBase;
+using GTFO.CustomObjectives.Utils;
 using LevelGeneration;
 using MelonLoader;
 using Newtonsoft.Json;
@@ -11,7 +12,6 @@ namespace GTFO.CustomObjectives.GlobalHandlers.TimedObjectives
     internal class TimedObjectiveHandler : CustomObjectiveHandlerBase
     {
         private bool IsCountdownMission = false;
-
         private bool IsCountdownEnable
         {
             get
@@ -26,16 +26,13 @@ namespace GTFO.CustomObjectives.GlobalHandlers.TimedObjectives
                 _isCountdownEnable = value;
             }
         }
-
         private bool _isCountdownEnable = false;
 
-        private StartEventType StartType = StartEventType.ElevatorArrive;
-        private EndEventType EndType = EndEventType.OnGotoWin;
+        private bool IsEndMessageCountdown = false;
 
-        private float TimeUntilFail = 120.0f;
-        private float Timer = 0.0f;
-
-        private string BaseMessage = "";
+        private TimedObjectiveDefinition TimerContext;
+        private float Timer;
+        private float EndMessageTimer;
 
         public override void OnSetup()
         {
@@ -65,14 +62,7 @@ namespace GTFO.CustomObjectives.GlobalHandlers.TimedObjectives
                 if (config.Definitions?.Count > 0)
                 {
                     var def = config.Definitions.FirstOrDefault(x => x.TargetObjectiveID == id);
-                    if (def != null)
-                    {
-                        TimeUntilFail = def.FailTimer;
-                        BaseMessage = def.BaseMessage;
-                        StartType = def.StartType;
-                        EndType = def.EndType;
-                        return true;
-                    }
+                    TimerContext = def;
                 }
             }
             else
@@ -83,7 +73,7 @@ namespace GTFO.CustomObjectives.GlobalHandlers.TimedObjectives
                     {
                         new TimedObjectiveDefinition(){ }
                     }
-                });
+                }, Formatting.Indented);
 
                 File.WriteAllText(file, content);
             }
@@ -107,9 +97,13 @@ namespace GTFO.CustomObjectives.GlobalHandlers.TimedObjectives
             {
                 RegisterUpdateEvent(OnUpdate);
 
-                if (StartType == StartEventType.ElevatorArrive)
+                if (TimerContext.StartType == StartEventType.ElevatorArrive)
                 {
                     IsCountdownEnable = true;
+                    if(TimerContext.EndMessageDuration > 0.0f)
+                    {
+                        IsEndMessageCountdown = true;
+                    }
                 }
             }
         }
@@ -118,12 +112,19 @@ namespace GTFO.CustomObjectives.GlobalHandlers.TimedObjectives
         {
             if (ObjectiveStatus == eWardenObjectiveStatus.WardenObjectiveItemSolved)
             {
-                if (EndType == EndEventType.OnGotoWin)
+                if (TimerContext.EndType == EndEventType.OnGotoWin)
                 {
-                    IsCountdownEnable = false;
+                    if (TimerContext.EndMessageDuration > 0.0f)
+                    {
+                        IsEndMessageCountdown = true;
+                    }
+                    else
+                    {
+                        IsCountdownEnable = false;
+                    }
                 }
 
-                if (StartType == StartEventType.OnGotoWin)
+                if (TimerContext.StartType == StartEventType.OnGotoWin)
                 {
                     IsCountdownEnable = true;
                 }
@@ -132,24 +133,34 @@ namespace GTFO.CustomObjectives.GlobalHandlers.TimedObjectives
             if (IsCountdownEnable)
             {
                 Timer += Clock.Delta;
-                var message = BaseMessage.Replace("[TIMER]", TimerFormat(TimeUntilFail - Timer));
+                var message = TimerContext.BaseMessage;
+                message = message.Replace("[TIMER]", TimerFormat(TimerContext.Duration, Timer));
+                message = message.Replace("[PERCENT]", PercentFormat(TimerContext.Duration, Timer));
 
                 GUIUtil.SetMessage(message);
-                GUIUtil.SetTimer(Timer / TimeUntilFail);
+                GUIUtil.SetTimer(Timer / TimerContext.Duration);
 
-                if (Timer >= TimeUntilFail)
+                if (Timer >= TimerContext.Duration)
                 {
                     ForceFail();
                 }
             }
         }
 
-        private string TimerFormat(float remainingTime)
+        private string TimerFormat(float maxTime, float time)
         {
+            float remainingTime = maxTime - time;
             int min = (int)remainingTime / 60;
             int sec = (int)remainingTime % 60;
 
             return $"{min:D2}:{sec:D2}";
+        }
+
+        private string PercentFormat(float maxTime, float time)
+        {
+            float percent = time / maxTime;
+
+            return percent.ToString("N2");
         }
     }
 }

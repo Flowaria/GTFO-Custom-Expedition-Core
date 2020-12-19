@@ -11,61 +11,26 @@ using System.Linq;
 using UnhollowerBaseLib;
 using UnityEngine;
 
-namespace GTFO.CustomObjectives
+namespace GTFO.CustomObjectives.HandlerBase
 {
     public abstract class CustomObjectiveHandlerBase
     {
         internal string HandlerGUID;
 
-        public Action OnSetupEvent;
-        public Action OnUnloadEvent;
+        private Action _OnSetupEvent;
+        private Action _OnUnloadEvent;
 
         public LG_Layer Layer { get; private set; }
         public LG_LayerType LayerType { get; private set; }
+        public LayerData LayerData { get; private set; }
         public WardenObjectiveDataBlock ObjectiveData { get; private set; }
-        public WardenObjectiveLayerData ObjectiveLayerData { get; private set; }
+        
 
-        public eWardenObjectiveStatus ObjectiveStatus
-        {
-            get
-            {
-                var currentState = WardenObjectiveManager.CurrentState;
-                switch (LayerType)
-                {
-                    case LG_LayerType.MainLayer:
-                        return currentState.main_status;
+        public WinConditionProxy WinConditions { get; private set; }
+        public ObjectiveStatusProxy ObjectiveStatus { get; private set; }
+        public BuilderProxy Builder { get; private set; }
 
-                    case LG_LayerType.SecondaryLayer:
-                        return currentState.second_status;
-
-                    case LG_LayerType.ThirdLayer:
-                        return currentState.third_status;
-                }
-
-                return eWardenObjectiveStatus.NotDiscovered;
-            }
-        }
-
-        public eWardenSubObjectiveStatus SubObjectiveStatus
-        {
-            get
-            {
-                var currentState = WardenObjectiveManager.CurrentState;
-                switch (LayerType)
-                {
-                    case LG_LayerType.MainLayer:
-                        return currentState.main_subObj;
-
-                    case LG_LayerType.SecondaryLayer:
-                        return currentState.second_subObj;
-
-                    case LG_LayerType.ThirdLayer:
-                        return currentState.third_subObj;
-                }
-
-                return eWardenSubObjectiveStatus.FindLocationInfo;
-            }
-        }
+        public bool IsBuildDone { get; private set; } = false;
 
         internal void Setup(LG_Layer layer, WardenObjectiveDataBlock objectiveData)
         {
@@ -77,25 +42,28 @@ namespace GTFO.CustomObjectives
             switch (LayerType)
             {
                 case LG_LayerType.MainLayer:
-                    ObjectiveLayerData = activeExpedition.MainLayerData.ObjectiveData;
+                    LayerData = activeExpedition.MainLayerData;
                     break;
 
                 case LG_LayerType.SecondaryLayer:
-                    ObjectiveLayerData = activeExpedition.SecondaryLayerData.ObjectiveData;
+                    LayerData = activeExpedition.SecondaryLayerData;
                     break;
 
                 case LG_LayerType.ThirdLayer:
-                    ObjectiveLayerData = activeExpedition.ThirdLayerData.ObjectiveData;
+                    LayerData = activeExpedition.ThirdLayerData;
                     break;
             }
 
-            GlobalMessage.OnBuildDone += OnBuildDone;
-            GlobalMessage.OnElevatorArrive += OnElevatorArrive;
+            WinConditions = new WinConditionProxy(this);
+            ObjectiveStatus = new ObjectiveStatusProxy(this);
+
+            GlobalMessage.OnBuildDone += BuildDone;
+            GlobalMessage.OnElevatorArrive += ElevatorArrive;
 
             GlobalMessage.OnLevelSuccess += OnExpeditionSuccess;
             GlobalMessage.OnLevelFail += OnExpeditionFail;
 
-            OnSetupEvent?.Invoke();
+            _OnSetupEvent?.Invoke();
 
             OnSetup();
         }
@@ -108,43 +76,24 @@ namespace GTFO.CustomObjectives
             GlobalMessage.OnLevelSuccess -= OnExpeditionSuccess;
             GlobalMessage.OnLevelFail -= OnExpeditionFail;
 
-            OnUnloadEvent?.Invoke();
+            _OnUnloadEvent?.Invoke();
 
             OnUnload();
         }
 
-        /// <summary>
-        /// Listen to the actual gameObject spawn event for LG_DistributeItem
-        /// </summary>
-        /// <param name="distItem">Target LG_DistributeItem</param>
-        /// <param name="isWardenObjectiveItem">Is the warden objective item? (needed for reason)</param>
-        /// <param name="onSpawned">delegate for spawned event</param>
-        public void ListenItemSpawnEvent(LG_DistributeItem distItem, bool isWardenObjectiveItem, Action<GameObject> onSpawned)
+        private void BuildDone()
         {
-            ItemUtil.RegisterItem(distItem, isWardenObjectiveItem, onSpawned);
+            IsBuildDone = true;
+
+            OnBuildDone();
         }
 
-        /// <summary>
-        ///
-        /// </summary>
-        /// <param name="item"></param>
-        public void RegisterObjectiveItem(iWardenObjectiveItem item)
+        private void ElevatorArrive()
         {
-            WardenObjectiveManager.RegisterObjectiveItem(LayerType, item);
+            OnElevatorArrive();
         }
 
-        public void RegisterObjectiveItemForCollection(iWardenObjectiveItem item)
-        {
-            WardenObjectiveManager.RegisterObjectiveItemForCollection(LayerType, item);
-        }
-
-        public void RegisterRequiredScanItem(iWardenObjectiveItem item)
-        {
-            var array = new Il2CppReferenceArray<iWardenObjectiveItem>(1);
-            array[0] = item;
-
-            ElevatorShaftLanding.Current.AddRequiredScanItems(array);
-        }
+        
 
         public void RegisterUpdateEvent(Action update = null, Action fixedUpdate = null)
         {
@@ -160,7 +109,7 @@ namespace GTFO.CustomObjectives
                 }
 
                 GlobalMessage.OnLevelCleanup += cleanupHandler;
-                OnUnloadEvent += cleanupHandler;
+                _OnUnloadEvent += cleanupHandler;
             }
 
             if (fixedUpdate != null)
@@ -175,7 +124,7 @@ namespace GTFO.CustomObjectives
                 }
 
                 GlobalMessage.OnLevelCleanup += cleanupHandler;
-                OnUnloadEvent += cleanupHandler;
+                _OnUnloadEvent += cleanupHandler;
             }
         }
 
@@ -220,27 +169,6 @@ namespace GTFO.CustomObjectives
         public void StopAllWave()
         {
             WardenObjectiveManager.StopAllWardenObjectiveEnemyWaves();
-        }
-
-        /// <summary>
-        /// Set Warden Objective hint Fragment (such as [ITEM_SERIAL])
-        /// </summary>
-        /// <param name="type">Fragment Type</param>
-        /// <param name="text">String to be placed in selected Fragment</param>
-        public void SetObjectiveTextFragment(eWardenTextFragment type, string text)
-        {
-            WardenObjectiveManager.SetObjectiveTextFragment(LayerType, type, text);
-        }
-
-        public void UpdateObjectiveStatus(eWardenObjectiveInteractionType type, eWardenSubObjectiveStatus status)
-        {
-            WardenObjectiveManager.Current.AttemptInteract(new pWardenObjectiveInteraction
-            {
-                inLayer = LayerType,
-                type = type,
-                newSubObj = status,
-                forceUpdate = true
-            });
         }
 
         public void ForceWin()
