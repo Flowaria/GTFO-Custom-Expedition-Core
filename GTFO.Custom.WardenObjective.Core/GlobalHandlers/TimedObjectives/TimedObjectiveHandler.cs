@@ -1,4 +1,5 @@
-﻿using GTFO.CustomObjectives.HandlerBase;
+﻿using GameData;
+using GTFO.CustomObjectives.HandlerBase;
 using GTFO.CustomObjectives.Utils;
 using LevelGeneration;
 using MelonLoader;
@@ -36,12 +37,6 @@ namespace GTFO.CustomObjectives.GlobalHandlers.TimedObjectives
 
         public override void OnSetup()
         {
-            if (LayerType != LG_LayerType.MainLayer)
-            {
-                UnloadSelf();
-                return;
-            }
-
             if (!TryGetConfig(ObjectiveData.persistentID)) //check config
             {
                 UnloadSelf();
@@ -53,7 +48,7 @@ namespace GTFO.CustomObjectives.GlobalHandlers.TimedObjectives
 
         private bool TryGetConfig(uint id)
         {
-            var file = ConfigUtil.GetConfigPath("TimedObjective");
+            var file = ConfigUtil.GetGlobalConfigPath("TimedObjective");
             if (File.Exists(file))
             {
                 var content = File.ReadAllText(file);
@@ -110,7 +105,7 @@ namespace GTFO.CustomObjectives.GlobalHandlers.TimedObjectives
 
         private void OnUpdate()
         {
-            if (ObjectiveStatus == eWardenObjectiveStatus.WardenObjectiveItemSolved)
+            if (ObjectiveStatus.ObjectiveStatus == eWardenObjectiveStatus.WardenObjectiveItemSolved)
             {
                 if (TimerContext.EndType == EndEventType.OnGotoWin)
                 {

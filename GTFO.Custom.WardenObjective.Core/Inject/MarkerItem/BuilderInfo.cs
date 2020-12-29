@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace GTFO.CustomObjectives.Inject
+namespace GTFO.CustomObjectives.Inject.MarkerItem
 {
     public class BuilderInfo
     {

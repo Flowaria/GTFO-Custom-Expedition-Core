@@ -66,6 +66,8 @@ namespace GTFO.CustomObjectives
 
             _GlobalHandlers.Add(type);
             _HandlerSetting.Add(type, setting);
+
+            Logger.Log("Global Handler Added: {0}", type.Name);
         }
 
         /// <summary>

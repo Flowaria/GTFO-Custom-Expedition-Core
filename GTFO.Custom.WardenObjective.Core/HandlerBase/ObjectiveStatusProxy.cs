@@ -1,4 +1,5 @@
-﻿using LevelGeneration;
+﻿using GTFO.CustomObjectives.Inject.Global;
+using LevelGeneration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,13 +12,21 @@ namespace GTFO.CustomObjectives.HandlerBase
     {
         private CustomObjectiveHandlerBase Base;
         private Action DefaultObjectiveUpdate;
+        private Action OnObjectiveStatusChange;
 
         internal ObjectiveStatusProxy(CustomObjectiveHandlerBase b)
         {
             Base = b;
             Base.RegisterUpdateEvent(OnUpdateWardenObjective);
+
+            GlobalMessage.OnObjectiveStateChanged += OnStateChanged;
+            Base.OnUnloadEvent += () => { GlobalMessage.OnObjectiveStateChanged -= OnStateChanged; };
         }
 
+        private void OnStateChanged(pWardenObjectiveState oldState, pWardenObjectiveState newState, bool isRecall)
+        {
+            
+        }
         
         private void OnUpdateWardenObjective()
         {

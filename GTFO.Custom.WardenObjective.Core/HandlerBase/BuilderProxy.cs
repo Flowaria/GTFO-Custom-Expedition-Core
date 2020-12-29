@@ -24,59 +24,90 @@ namespace GTFO.CustomObjectives.HandlerBase
             get { return new InvalidOperationException("You cannot call Fetch Functions before Level is fully built!\nUse it after OnBuildDone() called!"); }
         }
 
-        internal BuilderProxy(CustomObjectiveHandlerBase b) { Base = b; }
+        internal BuilderProxy(CustomObjectiveHandlerBase b)
+        {
+            Base = b;
+        }
+
+        #region Layer & Zone Gather
+
+        public bool TryGetLayer(out LG_Layer layer)
+        {
+            return TryGetLayer(Base.LayerType, out layer);
+        }
+
+        public bool TryGetLayer(LG_LayerType layerType, out LG_Layer layer)
+        {
+            return Builder.CurrentFloor.TryGetLayer(layerType, out layer);
+        }
+
+        public bool TryGetZone(eLocalZoneIndex zoneIndex, out LG_Zone zone)
+        {
+            return TryGetZone(Base.LayerType, zoneIndex, out zone);
+        }
+
+        public bool TryGetZone(LG_LayerType layerType, eLocalZoneIndex zoneIndex, out LG_Zone zone)
+        {
+            return Builder.CurrentFloor.TryGetZoneByLocalIndex(layerType, zoneIndex, out zone);
+        }
+
+        #endregion
 
         #region Pre-Build Placements
 
-        public void PlaceTerminal(LG_Zone zone, Action<LG_ComputerTerminal> onSpawned = null)
+        public void PlaceTerminal(LG_Zone zone, ZonePlacementWeights weight, Action<LG_ComputerTerminal> onSpawned = null)
         {
-            PlaceFunction(ExpeditionFunction.Terminal, onSpawned);
+            PlaceFunction(zone, weight, ExpeditionFunction.Terminal, onSpawned);
         }
 
-        public void PlaceGenerator(LG_Zone zone, Action<LG_PowerGenerator_Core> onSpawned = null)
+        public void PlaceGenerator(LG_Zone zone, ZonePlacementWeights weight, Action<LG_PowerGenerator_Core> onSpawned = null)
         {
-            PlaceFunction(ExpeditionFunction.PowerGenerator, onSpawned);
+            PlaceFunction(zone, weight, ExpeditionFunction.PowerGenerator, onSpawned);
         }
 
-        public void PlaceGeneratorCluster(LG_Zone zone, Action<LG_PowerGeneratorCluster> onSpawned = null)
+        public void PlaceGeneratorCluster(LG_Zone zone, ZonePlacementWeights weight, Action<LG_PowerGeneratorCluster> onSpawned = null)
         {
-            PlaceFunction(ExpeditionFunction.GeneratorCluster, onSpawned);
+            PlaceFunction(zone, weight, ExpeditionFunction.GeneratorCluster, onSpawned);
         }
 
-        public void PlaceHSU(LG_Zone zone, Action<LG_HSU> onSpawned = null)
+        public void PlaceHSU(LG_Zone zone, ZonePlacementWeights weight, Action<LG_HSU> onSpawned = null)
         {
-            PlaceFunction(ExpeditionFunction.HydroStatisUnit, onSpawned);
+            PlaceFunction(zone, weight, ExpeditionFunction.HydroStatisUnit, onSpawned);
         }
 
-        public void PlaceDisinfectStation(LG_Zone zone, Action<LG_DisinfectionStation> onSpawned = null)
+        public void PlaceDisinfectStation(LG_Zone zone, ZonePlacementWeights weight, Action<LG_DisinfectionStation> onSpawned = null)
         {
-            PlaceFunction(ExpeditionFunction.DisinfectionStation, onSpawned);
+            PlaceFunction(zone, weight, ExpeditionFunction.DisinfectionStation, onSpawned);
         }
 
-        public void PlaceBulkheadController(LG_Zone zone, Action<LG_BulkheadDoorController_Core> onSpawned = null)
+        public void PlaceBulkheadController(LG_Zone zone, ZonePlacementWeights weight, Action<LG_BulkheadDoorController_Core> onSpawned = null)
         {
-            PlaceFunction(ExpeditionFunction.BulkheadDoorController, onSpawned);
+            PlaceFunction(zone, weight, ExpeditionFunction.BulkheadDoorController, onSpawned);
         }
 
-        public void PlaceFunction(ExpeditionFunction function, Action<GameObject> onSpawned = null)
+        public void PlaceFunction(LG_Zone zone, ZonePlacementWeights weight, ExpeditionFunction function, Action<GameObject> onSpawned = null)
         {
             if (IsBuildDone())
                 throw LatePlacementException;
 
-            if(onSpawned != null)
-            {
-                ListenItemSpawnEvent(new LG_DistributeItem(), false, onSpawned); //TODO: Connect with PlacementUtil API
-            }
-        }
-
-        private void PlaceFunction<C>(ExpeditionFunction function, Action<C> onSpawned = null) where C : MonoBehaviour
-        {
-            if (IsBuildDone())
-                throw LatePlacementException;
+            PlacementUtil.PushFunctionMarker(zone, weight, function, out var distItem, out var distNode);
 
             if (onSpawned != null)
             {
-                ListenItemSpawnEvent(new LG_DistributeItem(), false, (gameObject) =>
+                ListenItemSpawnEvent(distItem, false, onSpawned);
+            }
+        }
+
+        public void PlaceFunction<C>(LG_Zone zone, ZonePlacementWeights weight, ExpeditionFunction function, Action<C> onSpawned = null) where C : MonoBehaviour
+        {
+            if (IsBuildDone())
+                throw LatePlacementException;
+
+            PlacementUtil.PushFunctionMarker(zone, weight, function, out var distItem, out var distNode);
+
+            if (onSpawned != null)
+            {
+                ListenItemSpawnEvent(distItem, false, (gameObject) =>
                 {
                     var comp = gameObject.GetComponentInChildren<C>();
                     if (comp != null)
@@ -93,11 +124,23 @@ namespace GTFO.CustomObjectives.HandlerBase
 
         public LG_SecurityDoor GetSpawnedDoorInZone(LG_Zone zone)
         {
+            if (!IsBuildDone())
+                throw EarlyFetchException;
+
             return zone?.m_sourceGate?.SpawnedDoor?.Cast<LG_SecurityDoor>() ?? null;
         }
 
+        /// <summary>
+        /// Get Placed Terminal in Zone
+        /// </summary>
+        /// <param name="zone">Zone to search</param>
+        /// <param name="index">Index of Terminal, Pick random if it's below zero</param>
+        /// <returns></returns>
         public LG_ComputerTerminal GetSpawnedTerminalInZone(LG_Zone zone, int index = -1)
         {
+            if (!IsBuildDone())
+                throw EarlyFetchException;
+
             var terminals = zone?.TerminalsSpawnedInZone ?? null;
             if(terminals != null)
             {
@@ -116,6 +159,9 @@ namespace GTFO.CustomObjectives.HandlerBase
 
         public LG_ComputerTerminal[] GetSpawnedTerminalsInZone(LG_Zone zone)
         {
+            if (!IsBuildDone())
+                throw EarlyFetchException;
+
             return zone?.TerminalsSpawnedInZone?.ToMonoArray() ?? null;
         }
 
@@ -129,6 +175,9 @@ namespace GTFO.CustomObjectives.HandlerBase
         /// <param name="onSpawned">delegate for spawned event</param>
         public void ListenItemSpawnEvent(LG_DistributeItem distItem, bool isWardenObjectiveItem, Action<GameObject> onSpawned)
         {
+            if (!IsBuildDone())
+                throw EarlyFetchException;
+
             ItemUtil.RegisterItem(distItem, isWardenObjectiveItem, onSpawned);
         }
 

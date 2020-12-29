@@ -1,4 +1,5 @@
-﻿using Harmony;
+﻿using GTFO.CustomObjectives.Utils;
+using Harmony;
 using MelonLoader;
 
 namespace GTFO.CustomObjectives.Inject.Global
@@ -8,7 +9,8 @@ namespace GTFO.CustomObjectives.Inject.Global
     {
         internal static void Postfix()
         {
-            MelonLogger.Log("Global: OnElevatorArrive");
+
+            Logger.Log("Global: OnElevatorArrive");
             GlobalMessage.OnElevatorArrive?.Invoke();
         }
     }

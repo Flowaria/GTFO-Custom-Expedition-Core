@@ -1,6 +1,7 @@
 ﻿using GameData;
 using GTFO.CustomObjectives.Inject;
 using GTFO.CustomObjectives.Inject.Global;
+using GTFO.CustomObjectives.Inject.MarkerItem;
 using LevelGeneration;
 using System;
 using System.Collections.Generic;

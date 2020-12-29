@@ -15,5 +15,7 @@ namespace GTFO.CustomObjectives.Inject.Global
         public static Action OnLevelCleanup;
 
         public static Action OnResetSession;
+
+        public static Action<pWardenObjectiveState, pWardenObjectiveState, bool> OnObjectiveStateChanged;
     }
 }

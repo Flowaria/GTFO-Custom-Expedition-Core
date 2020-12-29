@@ -1,4 +1,5 @@
-﻿using Harmony;
+﻿using GTFO.CustomObjectives.Utils;
+using Harmony;
 using LevelGeneration;
 using MelonLoader;
 
@@ -9,7 +10,7 @@ namespace GTFO.CustomObjectives.Inject.Global
     {
         internal static void Postfix()
         {
-            MelonLogger.Log("Global: OnBuildDone");
+            Logger.Log("Global: OnBuildDone");
             GlobalMessage.OnBuildDone?.Invoke();
         }
     }

@@ -3,7 +3,7 @@ using Harmony;
 using LevelGeneration;
 using UnityEngine;
 
-namespace GTFO.CustomObjectives.Inject
+namespace GTFO.CustomObjectives.Inject.MarkerItem
 {
     [HarmonyPatch(typeof(LG_FunctionMarkerBuilder), "SetupFunctionGO")]
     internal static class Inject_LG_MarkerBuilder

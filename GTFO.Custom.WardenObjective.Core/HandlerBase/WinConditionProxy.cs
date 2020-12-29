@@ -1,4 +1,6 @@
-﻿using System;
+﻿using GTFO.CustomObjectives.Utils;
+using LevelGeneration;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,6 +13,15 @@ namespace GTFO.CustomObjectives.HandlerBase
     {
         private CustomObjectiveHandlerBase Base;
         internal WinConditionProxy(CustomObjectiveHandlerBase b) { Base = b; }
+
+        public ObjectiveItem CreateEmptyObjectiveItem()
+        {
+            var item = new ObjectiveItem(Base.LayerType);
+
+            RegisterObjectiveItemForCollection(item.ItemCast);
+
+            return item;
+        }
 
         /// <summary>
         ///

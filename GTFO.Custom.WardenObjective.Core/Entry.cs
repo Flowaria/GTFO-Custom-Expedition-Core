@@ -2,6 +2,7 @@
 using GTFO.CustomObjectives.GlobalHandlers.FogControlTerminals;
 using GTFO.CustomObjectives.GlobalHandlers.TimedObjectives;
 using GTFO.CustomObjectives.Inject.Global;
+using GTFO.CustomObjectives.SimpleLoader;
 using GTFO.CustomObjectives.Utils;
 using MelonLoader;
 
@@ -16,6 +17,13 @@ namespace GTFO.CustomObjectives
         {
             Setup_GlobalHandlers();
             //Setup_DefaultReplicator();
+
+            ObjectiveSimpleLoader.Setup();
+        }
+
+        private void Read_Configs()
+        {
+
         }
 
         private void Setup_GlobalHandlers()

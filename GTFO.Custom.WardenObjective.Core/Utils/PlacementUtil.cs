@@ -19,19 +19,24 @@ namespace GTFO.CustomObjectives.Utils
             var exist = LG_DistributionJobUtils.TryGetExistingZoneFunctionDistribution(zone, function, rand, weight, out distItem, out distNode);
             if (!exist && createNew)
             {
-                var randNode = LG_DistributionJobUtils.GetRandomNodeFromZoneForFunction(zone, function, Builder.BuildSeedRandom.Value("FindFunctionMarkerAndUseAsWardenObjective"), 1f);
-                var newDistItem = new LG_DistributeItem()
-                {
-                    m_function = function,
-                    m_amount = 1.0f,
-                    m_assignedNode = randNode
-                };
-
-                randNode.m_zone.DistributionData.GenericFunctionItems.Enqueue(newDistItem);
-
-                distItem = newDistItem;
-                distNode = randNode;
+                PushFunctionMarker(zone, weight, function, out distItem, out distNode);
             }
+        }
+
+        public static void PushFunctionMarker(LG_Zone zone, ZonePlacementWeights weight, ExpeditionFunction function, out LG_DistributeItem distItem, out AIG_CourseNode distNode)
+        {
+            var randNode = LG_DistributionJobUtils.GetRandomNodeFromZoneForFunction(zone, function, Builder.BuildSeedRandom.Value("FindFunctionMarker"), 1f);
+            var newDistItem = new LG_DistributeItem()
+            {
+                m_function = function,
+                m_amount = 1.0f,
+                m_assignedNode = randNode
+            };
+
+            randNode.m_zone.DistributionData.GenericFunctionItems.Enqueue(newDistItem);
+
+            distItem = newDistItem;
+            distNode = randNode;
         }
 
         public static LG_Zone GetZone(LG_LayerType layer, eLocalZoneIndex index)

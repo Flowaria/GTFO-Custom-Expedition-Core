@@ -17,8 +17,8 @@ namespace GTFO.CustomObjectives.HandlerBase
     {
         internal string HandlerGUID;
 
-        private Action _OnSetupEvent;
-        private Action _OnUnloadEvent;
+        public Action OnSetupEvent;
+        public Action OnUnloadEvent;
 
         public LG_Layer Layer { get; private set; }
         public LG_LayerType LayerType { get; private set; }
@@ -54,6 +54,7 @@ namespace GTFO.CustomObjectives.HandlerBase
                     break;
             }
 
+            Builder = new BuilderProxy(this);
             WinConditions = new WinConditionProxy(this);
             ObjectiveStatus = new ObjectiveStatusProxy(this);
 
@@ -63,7 +64,7 @@ namespace GTFO.CustomObjectives.HandlerBase
             GlobalMessage.OnLevelSuccess += OnExpeditionSuccess;
             GlobalMessage.OnLevelFail += OnExpeditionFail;
 
-            _OnSetupEvent?.Invoke();
+            OnSetupEvent?.Invoke();
 
             OnSetup();
         }
@@ -76,7 +77,7 @@ namespace GTFO.CustomObjectives.HandlerBase
             GlobalMessage.OnLevelSuccess -= OnExpeditionSuccess;
             GlobalMessage.OnLevelFail -= OnExpeditionFail;
 
-            _OnUnloadEvent?.Invoke();
+            OnUnloadEvent?.Invoke();
 
             OnUnload();
         }
@@ -93,8 +94,6 @@ namespace GTFO.CustomObjectives.HandlerBase
             OnElevatorArrive();
         }
 
-        
-
         public void RegisterUpdateEvent(Action update = null, Action fixedUpdate = null)
         {
             if (update != null)
@@ -109,7 +108,7 @@ namespace GTFO.CustomObjectives.HandlerBase
                 }
 
                 GlobalMessage.OnLevelCleanup += cleanupHandler;
-                _OnUnloadEvent += cleanupHandler;
+                OnUnloadEvent += cleanupHandler;
             }
 
             if (fixedUpdate != null)
@@ -124,7 +123,7 @@ namespace GTFO.CustomObjectives.HandlerBase
                 }
 
                 GlobalMessage.OnLevelCleanup += cleanupHandler;
-                _OnUnloadEvent += cleanupHandler;
+                OnUnloadEvent += cleanupHandler;
             }
         }
 

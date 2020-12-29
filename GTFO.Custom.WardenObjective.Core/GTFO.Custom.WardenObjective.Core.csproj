@@ -113,7 +113,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ChainedPuzzleContext.cs" />
+    <Compile Include="ConfigDTO.cs" />
     <Compile Include="CustomObjectiveManager.cs" />
+    <Compile Include="GlobalHandlers\FogControlTerminals\FogTerminalConfigDTO.cs" />
     <Compile Include="HandlerBase\BuilderProxy.cs" />
     <Compile Include="HandlerBase\CustomObjectiveHandlerBase.cs" />
     <Compile Include="CustomObjectiveSettings.cs" />
@@ -130,25 +132,35 @@
     <Compile Include="Entry.cs" />
     <Compile Include="Extensions\ListExtension.cs" />
     <Compile Include="GlobalHandlers\TimedObjectives\TimedObjectiveHandler.cs" />
-    <Compile Include="Inject\BuilderInfo.cs" />
+    <Compile Include="Inject\MarkerItem\BuilderInfo.cs" />
     <Compile Include="Inject\Global\GlobalMessage.cs" />
     <Compile Include="Inject\Global\Inject_Global.cs" />
     <Compile Include="Inject\Global\Inject_GS_Expeditions.cs" />
     <Compile Include="Inject\Global\Inject_GS_Elevator.cs" />
     <Compile Include="Inject\Global\Inject_LG_Factory.cs" />
-    <Compile Include="Inject\Inject_LG_DistItem.cs" />
+    <Compile Include="Inject\Global\Inject_WardenObjectiveManager.cs" />
+    <Compile Include="Inject\MarkerItem\Inject_LG_DistItem.cs" />
     <Compile Include="Inject\Inject_LG_Dist_WardenObjective.cs" />
-    <Compile Include="Inject\Inject_LG_MarkerBuilder.cs" />
+    <Compile Include="Inject\MarkerItem\Inject_LG_MarkerBuilder.cs" />
     <Compile Include="Inject\Inject_Terminal.cs" />
+    <Compile Include="Inject\ObjectiveItem\Inject_CarryItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SimpleLoader\CustomObjectiveAttribute.cs" />
+    <Compile Include="SimpleLoader\ObjectiveSimpleEntry.cs" />
+    <Compile Include="SimpleLoader\ObjectiveSimpleLoader.cs" />
     <Compile Include="Utils\ChainedPuzzleUtil.cs" />
     <Compile Include="Utils\ConfigUtil.cs" />
     <Compile Include="Utils\FogLevelUtil.cs" />
     <Compile Include="Utils\GUIUtil.cs" />
     <Compile Include="Utils\ItemUtil.cs" />
+    <Compile Include="Logger.cs" />
+    <Compile Include="Utils\ObjectiveItemUtil.cs" />
     <Compile Include="Utils\PlacementUtil.cs" />
     <Compile Include="Utils\RandomUtil.cs" />
     <Compile Include="Utils\TerminalUtil.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Utils\JsonConverters\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

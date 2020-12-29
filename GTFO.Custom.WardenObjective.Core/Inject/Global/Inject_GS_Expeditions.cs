@@ -1,4 +1,5 @@
-﻿using Harmony;
+﻿using GTFO.CustomObjectives.Utils;
+using Harmony;
 using MelonLoader;
 
 namespace GTFO.CustomObjectives.Inject.Global
@@ -8,7 +9,7 @@ namespace GTFO.CustomObjectives.Inject.Global
     {
         internal static void Postfix()
         {
-            MelonLogger.Log("Global: OnLevelSuccess");
+            Logger.Log("Global: OnLevelSuccess");
             GlobalMessage.OnLevelSuccess?.Invoke();
         }
     }
@@ -18,7 +19,7 @@ namespace GTFO.CustomObjectives.Inject.Global
     {
         internal static void Postfix()
         {
-            MelonLogger.Log("Global: OnLevelFail");
+            Logger.Log("Global: OnLevelFail");
             GlobalMessage.OnLevelFail?.Invoke();
         }
     }
