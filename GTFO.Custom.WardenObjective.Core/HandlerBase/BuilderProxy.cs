@@ -1,4 +1,5 @@
-﻿using GameData;
+﻿using AIGraph;
+using GameData;
 using GTFO.CustomObjectives.Extensions;
 using GTFO.CustomObjectives.Utils;
 using LevelGeneration;
@@ -11,6 +12,16 @@ using UnityEngine;
 
 namespace GTFO.CustomObjectives.HandlerBase
 {
+    using PlacementDataList = Il2CppSystem.Collections.Generic.List<Il2CppSystem.Collections.Generic.List<ZonePlacementData>>;
+
+    public enum PickMode
+    {
+        Random,
+        First,
+        Last,
+        StartToEnd
+    }
+
     public class BuilderProxy
     {
         private CustomObjectiveHandlerBase Base;
@@ -41,6 +52,17 @@ namespace GTFO.CustomObjectives.HandlerBase
             return Builder.CurrentFloor.TryGetLayer(layerType, out layer);
         }
 
+        public bool TryGetAllLayers(out LG_Layer[] layers)
+        {
+            layers = GetAllLayers();
+            return layers != null;
+        }
+
+        public LG_Layer[] GetAllLayers()
+        {
+            return Builder.CurrentFloor.m_layers?.ToMonoArray() ?? null;
+        }
+
         public bool TryGetZone(eLocalZoneIndex zoneIndex, out LG_Zone zone)
         {
             return TryGetZone(Base.LayerType, zoneIndex, out zone);
@@ -49,6 +71,89 @@ namespace GTFO.CustomObjectives.HandlerBase
         public bool TryGetZone(LG_LayerType layerType, eLocalZoneIndex zoneIndex, out LG_Zone zone)
         {
             return Builder.CurrentFloor.TryGetZoneByLocalIndex(layerType, zoneIndex, out zone);
+        }
+
+        public bool TryGetZones(LG_LayerType layerType, out LG_Zone[] zones)
+        {
+            zones = GetZones(layerType);
+            return zones != null;
+        }
+
+        public LG_Zone[] GetZones(LG_LayerType layerType)
+        {
+            if(TryGetLayer(layerType, out var layer))
+            {
+                return GetZones(layer);
+            }
+            return null;
+        }
+
+        public LG_Zone[] GetZones(LG_Layer layer)
+        {
+            return layer?.m_zones?.ToMonoArray() ?? null;
+        }
+
+        public bool TryGetAllZones(out LG_Zone[] zones)
+        {
+            zones = GetAllZones();
+            return zones != null;
+        }
+
+        public LG_Zone[] GetAllZones()
+        {
+            return Builder.CurrentFloor.allZones.ToMonoArray();
+        }
+
+        #endregion
+
+        #region ZonePicker
+
+        public ZonePlacementData[] PickPlacementsStandard(PlacementDataList datas, int count = 1)
+        {
+            return PickPlacements(datas, PickMode.StartToEnd, PickMode.Random, count);
+        }
+
+        public ZonePlacementData[] PickPlacementsStandard(ZonePlacementData[][] datas, int count = 1)
+        {
+            return PickPlacements(datas, PickMode.StartToEnd, PickMode.Random, count);
+        }
+
+        public ZonePlacementData[] PickPlacements(PlacementDataList datas, PickMode mode1D = PickMode.StartToEnd, PickMode mode2D = PickMode.Random, int count = 1)
+        {
+            var arr = new ZonePlacementData[datas.Count][];
+            for(int i = 0;i < arr.Length; i++)
+            {
+                var dataRow = datas[i];
+                arr[i] = new ZonePlacementData[dataRow.Count];
+                for(int j = 0; j< dataRow.Count;j++)
+                {
+                    arr[i][j] = dataRow[j];
+                }
+            }
+            return PickPlacements(arr, mode1D, mode2D, count);
+        }
+
+        public ZonePlacementData[] PickPlacements(ZonePlacementData[][] datas, PickMode mode1D = PickMode.StartToEnd, PickMode mode2D = PickMode.StartToEnd, int count = 1)
+        {
+            var result = new ZonePlacementData[count];
+
+            for(int i = 0;i<count;i++)
+            {
+                switch (mode1D)
+                {
+                    case PickMode.Random:
+                        result[i] = PickFrom2D(RandomUtil.PickFromArray(datas));
+                        break;
+                }
+            }
+
+            return result;
+            
+
+            ZonePlacementData PickFrom2D(ZonePlacementData[] dataRow)
+            {
+                return null;
+            }
         }
 
         #endregion
@@ -118,6 +223,47 @@ namespace GTFO.CustomObjectives.HandlerBase
             }
         }
 
+        public void FetchTerminal(LG_Zone zone, ZonePlacementWeights weight, out LG_DistributeItem distItem, out AIG_CourseNode distNode, Action<LG_ComputerTerminal> onSpawned = null)
+        {
+            FetchFunction(zone, weight, ExpeditionFunction.Terminal, out distItem, out distNode, onSpawned);
+        }
+
+        public void FetchFunction<C>(LG_Zone zone, ZonePlacementWeights weight, ExpeditionFunction function, out LG_DistributeItem distItem, out AIG_CourseNode distNode, Action<C> onSpawned = null) where C : MonoBehaviour
+        {
+            if (IsBuildDone())
+                throw LatePlacementException;
+
+            
+            if (PlacementUtil.TryFetchFunctionMarker(zone, weight, function, out distItem, out distNode, false))
+            {
+                if (onSpawned == null)
+                    return;
+
+                ListenItemSpawnEvent(distItem, false, (gameObject) =>
+                {
+                    var comp = gameObject.GetComponentInChildren<C>();
+                    if (comp != null)
+                    {
+                        onSpawned(comp);
+                    }
+                });
+            }
+        }
+
+        /// <summary>
+        /// Listen to the actual gameObject spawn event for LG_DistributeItem
+        /// </summary>
+        /// <param name="distItem">Target LG_DistributeItem</param>
+        /// <param name="isWardenObjectiveItem">Is the warden objective item? (needed for reason)</param>
+        /// <param name="onSpawned">delegate for spawned event</param>
+        public void ListenItemSpawnEvent(LG_DistributeItem distItem, bool isWardenObjectiveItem, Action<GameObject> onSpawned)
+        {
+            if (IsBuildDone())
+                throw LatePlacementException;
+
+            ItemUtil.RegisterItem(distItem, isWardenObjectiveItem, onSpawned);
+        }
+
         #endregion
 
         #region Post-Build Get
@@ -166,20 +312,6 @@ namespace GTFO.CustomObjectives.HandlerBase
         }
 
         #endregion
-
-        /// <summary>
-        /// Listen to the actual gameObject spawn event for LG_DistributeItem
-        /// </summary>
-        /// <param name="distItem">Target LG_DistributeItem</param>
-        /// <param name="isWardenObjectiveItem">Is the warden objective item? (needed for reason)</param>
-        /// <param name="onSpawned">delegate for spawned event</param>
-        public void ListenItemSpawnEvent(LG_DistributeItem distItem, bool isWardenObjectiveItem, Action<GameObject> onSpawned)
-        {
-            if (!IsBuildDone())
-                throw EarlyFetchException;
-
-            ItemUtil.RegisterItem(distItem, isWardenObjectiveItem, onSpawned);
-        }
 
         private bool IsBuildDone()
         {

@@ -77,10 +77,12 @@ namespace GTFO.CustomObjectives.Utils
             }
             else
             {
-                item.m_localTerminalLogFiles = new LogList();
+                if(item.m_localTerminalLogFiles == null)
+                    item.m_localTerminalLogFiles = new LogList();
+
                 item.m_localTerminalLogFiles.Add(new TerminalLogFileData()
                 {
-                    FileName = "!PLUGIN_REVERVED_SPECIAL_GUID",
+                    FileName = "!PLUGIN_RESERVED_SPECIAL_GUID",
                     FileContent = guid
                 });
             }

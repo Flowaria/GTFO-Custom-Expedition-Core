@@ -14,19 +14,19 @@ namespace GTFO.CustomObjectives
         internal static bool IsWarnEnabled = false;
         internal static bool IsErrorEnabled = false;
 
-        public static void Log(string str, params string[] args)
+        public static void Log(string str, params object[] args)
         {
             if(IsGlobalEnabled)
                 MelonLogger.Log(str, args);
         }
 
-        public static void Warning(string str, params string[] args)
+        public static void Warning(string str, params object[] args)
         {
             if (IsGlobalEnabled)
                 MelonLogger.LogWarning(str, args);
         }
 
-        public static void Error(string str, params string[] args)
+        public static void Error(string str, params object[] args)
         {
             if (IsGlobalEnabled)
                 MelonLogger.LogError(str, args);

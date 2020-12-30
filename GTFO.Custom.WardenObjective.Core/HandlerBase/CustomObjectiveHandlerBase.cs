@@ -4,6 +4,7 @@ using GTFO.CustomObjectives.Extensions;
 using GTFO.CustomObjectives.Inject.Global;
 using GTFO.CustomObjectives.Utils;
 using LevelGeneration;
+using Newtonsoft.Json;
 using SNetwork;
 using System;
 using System.Collections.Generic;
@@ -24,7 +25,6 @@ namespace GTFO.CustomObjectives.HandlerBase
         public LG_LayerType LayerType { get; private set; }
         public LayerData LayerData { get; private set; }
         public WardenObjectiveDataBlock ObjectiveData { get; private set; }
-        
 
         public WinConditionProxy WinConditions { get; private set; }
         public ObjectiveStatusProxy ObjectiveStatus { get; private set; }
@@ -94,6 +94,29 @@ namespace GTFO.CustomObjectives.HandlerBase
             OnElevatorArrive();
         }
 
+        public void FetchTargetConfig<T>(string configName) where T : TargetConfigBase, new()
+        {
+            var cfgList = new List<T>();
+
+            if(ConfigUtil.TryGetGlobalConfig<T[]>(configName, out var globalCfg))
+            {
+                cfgList.AddRange(globalCfg);
+            }
+
+            if(ConfigUtil.TryGetLocalConfig<T[]>(configName, out var localCfg))
+            {
+                cfgList.AddRange(localCfg);
+            }
+
+            JsonConvert.DeserializeObject<T[]>();
+        }
+
+        /// <summary>
+        /// Register Update Event from Unity MonoBehaviour
+        /// It will be unregister automatically when Handler Unloads
+        /// </summary>
+        /// <param name="update">Update Function Delegate</param>
+        /// <param name="fixedUpdate">Fixed Update Function Delegate</param>
         public void RegisterUpdateEvent(Action update = null, Action fixedUpdate = null)
         {
             if (update != null)

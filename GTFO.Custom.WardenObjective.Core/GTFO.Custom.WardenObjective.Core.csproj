@@ -124,6 +124,7 @@
     <Compile Include="GlobalHandlers\TimedObjectives\TimedObjectiveConfigDTO.cs" />
     <Compile Include="HandlerBase\ObjectiveStatusProxy.cs" />
     <Compile Include="HandlerBase\ObjectiveStatusProxy_DefaultObjectives.cs" />
+    <Compile Include="HandlerBase\TargetConfigBase.cs" />
     <Compile Include="HandlerBase\WinConditionProxy.cs" />
     <Compile Include="Inject\CustomReplicators\CustomReplicator.cs" />
     <Compile Include="Inject\CustomReplicators\Inject_LG_Door_Sync.cs" />

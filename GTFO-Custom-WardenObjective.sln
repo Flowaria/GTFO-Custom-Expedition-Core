@@ -5,9 +5,9 @@ VisualStudioVersion = 16.0.30711.63
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GTFO.Custom.WardenObjective.Core", "GTFO.Custom.WardenObjective.Core\GTFO.Custom.WardenObjective.Core.csproj", "{55634FBC-AD95-4330-A841-20C77EEC253F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomWardenObjective.ChainedPuzzle.Uplink", "CustomWardenObjective.ChainedPuzzle.Uplink\CustomWardenObjective.ChainedPuzzle.Uplink.csproj", "{6EE0DEA3-4B02-46EC-A400-13CC384660C1}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomObjective.DoorMultipleWaves", "CustomObjective.DoorMultipleWaves\CustomObjective.DoorMultipleWaves.csproj", "{40C44A9D-2DD2-416D-B88D-359702942792}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestPlugin", "TestPlugin\TestPlugin.csproj", "{F6E502A8-BE15-4FD8-8330-360C35836464}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,14 +19,14 @@ Global
 		{55634FBC-AD95-4330-A841-20C77EEC253F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{55634FBC-AD95-4330-A841-20C77EEC253F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{55634FBC-AD95-4330-A841-20C77EEC253F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6EE0DEA3-4B02-46EC-A400-13CC384660C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6EE0DEA3-4B02-46EC-A400-13CC384660C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6EE0DEA3-4B02-46EC-A400-13CC384660C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6EE0DEA3-4B02-46EC-A400-13CC384660C1}.Release|Any CPU.Build.0 = Release|Any CPU
 		{40C44A9D-2DD2-416D-B88D-359702942792}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{40C44A9D-2DD2-416D-B88D-359702942792}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{40C44A9D-2DD2-416D-B88D-359702942792}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{40C44A9D-2DD2-416D-B88D-359702942792}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F6E502A8-BE15-4FD8-8330-360C35836464}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F6E502A8-BE15-4FD8-8330-360C35836464}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F6E502A8-BE15-4FD8-8330-360C35836464}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F6E502A8-BE15-4FD8-8330-360C35836464}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -13,14 +13,22 @@ namespace GTFO.CustomObjectives.Utils
             return LG_DistributionJobUtils.TryGetRandomPlacementZone(handlerContext.Layer, handlerContext.LayerData.ObjectiveData.ZonePlacementDatas, out zone, out weight);
         }
 
-        public static void FetchFunctionMarker(LG_Zone zone, ZonePlacementWeights weight, ExpeditionFunction function, out LG_DistributeItem distItem, out AIG_CourseNode distNode, bool createNew = true)
+        public static bool TryFetchFunctionMarker(LG_Zone zone, ZonePlacementWeights weight, ExpeditionFunction function, out LG_DistributeItem distItem, out AIG_CourseNode distNode, bool createNew = true)
         {
-            float rand = Builder.SessionSeedRandom.Value("LG_Distribute_WardenObjective");
+            float rand = RandomUtil.Value("LG_Distribute_WardenObjective");
             var exist = LG_DistributionJobUtils.TryGetExistingZoneFunctionDistribution(zone, function, rand, weight, out distItem, out distNode);
             if (!exist && createNew)
             {
                 PushFunctionMarker(zone, weight, function, out distItem, out distNode);
+                return true;
             }
+
+            return false;
+        }
+
+        public static bool TryFetchFunctionMarker(LG_Zone zone, ZonePlacementWeights weight, ExpeditionFunction function, out LG_DistributeItem distItem)
+        {
+            return TryFetchFunctionMarker(zone, weight, function, out distItem, out _);
         }
 
         public static void PushFunctionMarker(LG_Zone zone, ZonePlacementWeights weight, ExpeditionFunction function, out LG_DistributeItem distItem, out AIG_CourseNode distNode)
@@ -37,6 +45,12 @@ namespace GTFO.CustomObjectives.Utils
 
             distItem = newDistItem;
             distNode = randNode;
+        }
+
+        public static LG_DistributeItem PushFunctionMarker(LG_Zone zone, ZonePlacementWeights weight, ExpeditionFunction function)
+        {
+            PushFunctionMarker(zone, weight, function, out var distItem, out _);
+            return distItem;
         }
 
         public static LG_Zone GetZone(LG_LayerType layer, eLocalZoneIndex index)

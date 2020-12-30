@@ -12,23 +12,23 @@ namespace GTFO.CustomObjectives.Inject.MarkerItem
         {
             var guid = ItemUtil.GetGUID(__instance.m_localTerminalLogFiles);
 
+            //ignore item without log data
             if (guid == null)
-            {
                 return;
-            }
 
             var info = ItemUtil.FindInfoByGUID(guid);
 
-            if (info != null)
-            {
-                var terminal = GO.GetComponentInChildren<LG_ComputerTerminal>();
-                if (terminal != null)
-                {
-                    terminal.m_localLogs.Remove("!PLUGIN_REVERVED_SPECIAL_GUID");
-                }
+            //ignore item without info
+            if (info == null)
+                return;
 
-                info.OnGameObjectSpawned?.Invoke(GO);
+            var terminal = GO.GetComponentInChildren<LG_ComputerTerminal>();
+            if (terminal != null)
+            {
+                terminal.m_localLogs.Remove("!PLUGIN_RESERVED_SPECIAL_GUID");
             }
+
+            info.OnGameObjectSpawned?.Invoke(GO);
         }
     }
 }

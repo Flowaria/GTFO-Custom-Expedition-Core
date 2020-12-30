@@ -7,6 +7,8 @@ namespace GTFO.CustomObjectives.Extensions
 
     public static class ListExtension
     {
+        #region 1D Array
+
         public static Il2CppCollection.List<T> ToIl2CppList<T>(this List<T> list)
         {
             if (list == null)
@@ -49,5 +51,13 @@ namespace GTFO.CustomObjectives.Extensions
 
             return newArray;
         }
+
+        #endregion
+
+        #region 2D Array
+
+
+
+        #endregion
     }
 }

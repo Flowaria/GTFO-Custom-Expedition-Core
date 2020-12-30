@@ -1,6 +1,7 @@
 ﻿using ChainedPuzzles;
 using GameData;
 using GTFO.CustomObjectives;
+using GTFO.CustomObjectives.HandlerBase;
 using GTFO.CustomObjectives.Utils;
 using LevelGeneration;
 using System;
@@ -10,57 +11,46 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace CustomWardenObjective.ChainedPuzzle.Uplink
+namespace TestPlugin.UplinkBioscan
 {
-    public class CP_UplinkHandler : CustomObjectiveHandlerBase
+    public class UplinkBioscanHandler : CustomObjectiveHandlerBase
     {
-        public string UplinkIP;
-
         public override void OnSetup()
         {
-            if(!PlacementUtil.TryGetRandomPlaceSingleZone(this, out var zone, out var weight))
+            var placeData = LayerData.ObjectiveData.ZonePlacementDatas;
+            var terminalNumber = ObjectiveData.Uplink_NumberOfTerminals;
+            var placements = Builder.PickPlacementsStandard(placeData, terminalNumber);
+
+            foreach(var placement in placements)
             {
-                return;
+                if(Builder.TryGetZone(placement.LocalIndex, out var zone))
+                {
+                    Builder.FetchTerminal(zone, placement.Weights, out var distItem, out var distNode, (terminal) =>
+                    {
+                        OnObjectiveTerminalSpawned(terminal);
+                    });
+                }
             }
-            PlacementUtil.FetchFunctionMarker(zone, weight, ExpeditionFunction.Terminal, out var distItem, out var distNode);
-
-            Console.WriteLine("{0} {1}",zone.ID, weight.Middle);
-            Console.WriteLine(distItem.m_function);
-
-            ListenItemSpawnEvent(distItem, true, OnObjectiveTerminalSpawned);
-
-            Console.WriteLine("OnPreSetupCalled");
         }
 
-        public override void OnElevatorArrive()
+        public void OnObjectiveTerminalSpawned(LG_ComputerTerminal terminal)
         {
-            Console.WriteLine("Elevator Arrive");
-        }
-
-        public override void OnBuildDone()
-        {
-            Console.WriteLine("Build Done");
-        }
-
-        public void OnObjectiveTerminalSpawned(GameObject GO)
-        {
-            var terminal = GO.GetComponentInChildren<LG_ComputerTerminal>();
             if(terminal == null)
             {
                 return;
             }
 
-            RegisterObjectiveItemForCollection(terminal.Cast<iWardenObjectiveItem>());
+            terminal.UplinkPuzzle = new TerminalUplinkPuzzle()
+            {
+                TerminalUplinkIP = SerialGenerator.GetIpAddress(),
+                Connected = false
+            };
 
-            var ip = "1.1.1.1";
-            //var ip = SerialGenerator.GetIpAddress();
-            UplinkIP = ip;
-
-            Console.WriteLine("IP: {0}", ip);
+            WinConditions.RegisterObjectiveItemForCollection(terminal.Cast<iWardenObjectiveItem>());
 
             //Register Info text
-            SetObjectiveTextFragment(eWardenTextFragment.ITEM_SERIAL, terminal.ItemKey);
-            SetObjectiveTextFragment(eWardenTextFragment.UPLINK_ADDRESS, ip);
+            ObjectiveStatus.SetObjectiveTextFragment(eWardenTextFragment.ITEM_SERIAL, terminal.ItemKey);
+            ObjectiveStatus.SetObjectiveTextFragment(eWardenTextFragment.UPLINK_ADDRESS, terminal.UplinkPuzzle.TerminalUplinkIP);
 
             //Add Terminal Command
             TerminalUtil.AddCommand(terminal, "UPLINK_CONNECT", "ESTABLISH AN EXTERNAL UPLINK CONNECTION", UplinkCommandHandler);
@@ -72,17 +62,19 @@ namespace CustomWardenObjective.ChainedPuzzle.Uplink
         public void UplinkCommandHandler(LG_ComputerTerminal terminal, string param1, string param2)
         {
             var cmd = terminal.m_command;
-            if(param1.Equals(UplinkIP))
+            if(param1.Equals(terminal.UplinkPuzzle.TerminalUplinkIP))
             {
-                if(terminal.ObjectiveItemSolved)
+                if(terminal.UplinkPuzzle.Connected)
                 {
                     cmd.AddOutput("UPLINK ERROR: Uplink is already opened with ip: '" + param1 + "'.", true);
                     return;
                 }
 
+                terminal.UplinkPuzzle.Connected = true;
+
                 //Create Puzzle Context
                 var puzzle = ChainedPuzzleUtil.Setup<CP_UplinkPuzzleContext>(
-                    this.ObjectiveData.ChainedPuzzleToActive,
+                    ObjectiveData.ChainedPuzzleToActive,
                     terminal.SpawnNode.m_area,
                     terminal.m_wardenObjectiveSecurityScanAlign);
 

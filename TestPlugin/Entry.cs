@@ -7,6 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TestPlugin;
+using TestPlugin.Basic;
+using TestPlugin.UplinkBioscan;
 
 [assembly: CustomObjective(typeof(Entry))]
 namespace TestPlugin
@@ -15,7 +17,10 @@ namespace TestPlugin
     {
         public override void OnStart()
         {
-            CustomObjectiveManager.AddGlobalHandler<TestHandler>(CustomObjectiveSettings.MAIN_ONLY);
+            CustomObjectiveManager.AddGlobalHandler<OverridesHandler>(CustomObjectiveSettings.MAIN_ONLY);
+            CustomObjectiveManager.AddGlobalHandler<BuilderHandler>(CustomObjectiveSettings.ALL_LAYER);
+
+            CustomObjectiveManager.AddHandler<UplinkBioscanHandler>(50/*, CustomObjectiveSettings.ALL_LAYER*/);
         }
     }
 }

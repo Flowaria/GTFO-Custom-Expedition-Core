@@ -35,6 +35,11 @@ namespace GTFO.CustomObjectives.Utils
 
         #region GlobalConfig
 
+        public static bool TryReadConfigAsList<W>(string name, out W[] arr)
+        {
+
+        }
+
         public static bool TryGetGlobalConfig<D>(string name, out D obj)
         {
             var content = GetGlobalConfigContent(name);
