@@ -109,7 +109,7 @@ namespace GTFO.CustomObjectives.Utils
             {
                 foreach (var log in logs)
                 {
-                    if (log.FileName.Equals("!PLUGIN_REVERVED_SPECIAL_GUID"))
+                    if (log.FileName.Equals("!PLUGIN_RESERVED_SPECIAL_GUID"))
                     {
                         guidData = log;
                         return true;

@@ -8,10 +8,21 @@ using System.Linq;
 
 namespace GTFO.CustomObjectives
 {
-    using HandlerTypeList = List<Type>;
-    using HandlerTypeDict = Dictionary<byte, Type>;
-    using HandlerSettingDict = Dictionary<Type, CustomObjectiveSettings>;
+    using HandlerTypeList = List<HandlerTypeContainer>;
+    using HandlerTypeDict = Dictionary<byte, HandlerTypeContainer>;
     using HandlerList = List<CustomObjectiveHandlerBase>;
+
+    internal class HandlerTypeContainer
+    {
+        public Type BaseType;
+        public CustomObjectiveSettings Setting;
+        public string GUID;
+
+        public CustomObjectiveHandlerBase CreateInstance()
+        {
+            return Activator.CreateInstance(BaseType) as CustomObjectiveHandlerBase;
+        }
+    }
 
     public static class CustomObjectiveManager
     {
@@ -20,16 +31,12 @@ namespace GTFO.CustomObjectives
         private readonly static HandlerTypeDict _Handlers;
         private readonly static HandlerTypeList _GlobalHandlers;
 
-        private readonly static HandlerSettingDict _HandlerSetting;
-
         static CustomObjectiveManager()
         {
             _ActiveHandlers = new HandlerList();
 
             _Handlers = new HandlerTypeDict();
             _GlobalHandlers = new HandlerTypeList();
-
-            _HandlerSetting = new HandlerSettingDict();
 
             GlobalMessage.OnLevelCleanup += () =>
             {
@@ -58,16 +65,16 @@ namespace GTFO.CustomObjectives
             if (type.IsAbstract)
                 throw new ArgumentException("You can't use base handler class directly, Use derived class instead.");
 
-            if (_Handlers.ContainsValue(type))
-                throw new ArgumentException($"You can't add same type of handler multiple times\n- type: {type.Name}");
+            if (IsTypeRegistered(type, out var exception))
+                throw exception;
 
-            if (_GlobalHandlers.Contains(type))
-                throw new ArgumentException($"You can't add same type of handler multiple times\n- type: {type.Name}");
+            _GlobalHandlers.Add(new HandlerTypeContainer()
+            {
+                BaseType = type,
+                Setting = setting
+            });
 
-            _GlobalHandlers.Add(type);
-            _HandlerSetting.Add(type, setting);
-
-            Logger.Log("Global Handler Added: {0}", type.Name);
+            Logger.Verbose("Global Handler Added: {0}", type.Name);
         }
 
         /// <summary>
@@ -96,11 +103,8 @@ namespace GTFO.CustomObjectives
             if (Enum.IsDefined(typeof(eWardenObjectiveType), typeID))
                 throw new ArgumentException($"typeID: {typeID} is already defined inside default eWardenObjectiveType");
 
-            if (_Handlers.ContainsValue(type))
-                throw new ArgumentException($"You can't add same type of handler multiple times\n- type: {type.Name}");
-
-            if (_GlobalHandlers.Contains(type))
-                throw new ArgumentException($"You can't add same type of handler multiple times\n- type: {type.Name}");
+            if (IsTypeRegistered(type, out var exception))
+                throw exception;
 
             if (_Handlers.ContainsKey(typeID))
             {
@@ -108,8 +112,31 @@ namespace GTFO.CustomObjectives
                 throw new ArgumentException($"typeID: {typeID} is already defined by other plugin\nInfo:\n\t- Name: {dupType.Name}\n- Assembly: {dupType.Assembly.FullName}");
             }
 
-            _Handlers.Add(typeID, type);
-            _HandlerSetting.Add(type, setting);
+            _Handlers.Add(typeID, new HandlerTypeContainer()
+            {
+                BaseType = type,
+                Setting = setting
+            });
+
+            Logger.Verbose("Handler Added: {0} (TypeID: {1})", type.Name, typeID);
+        }
+
+        private static bool IsTypeRegistered(Type type, out ArgumentException exception)
+        {
+            if (_Handlers.Any(x => x.Value?.BaseType?.Equals(type) ?? false))
+            {
+                exception = new ArgumentException($"You can't add same type of handler multiple times\n- type: {type.Name}");
+                return true;
+            }
+
+            if (_GlobalHandlers.Any(x => x.BaseType?.Equals(type) ?? false))
+            {
+                exception = new ArgumentException($"You can't add same type of handler multiple times\n- type: {type.Name}");
+                return true;
+            }
+
+            exception = null;
+            return false;
         }
 
         internal static CustomObjectiveHandlerBase[] FireAllGlobalHandler(LG_Layer layer, WardenObjectiveDataBlock objectiveData)
@@ -118,7 +145,7 @@ namespace GTFO.CustomObjectives
 
             foreach (var handler in _GlobalHandlers)
             {
-                handlerList.Add(FireHandlerByType(handler, layer, objectiveData));
+                handlerList.Add(FireHandlerByContainer(handler, layer, objectiveData, isGlobalHandler:true));
             }
 
             return handlerList.ToArray();
@@ -126,9 +153,9 @@ namespace GTFO.CustomObjectives
 
         internal static CustomObjectiveHandlerBase FireHandler(byte typeID, LG_Layer layer, WardenObjectiveDataBlock objectiveData)
         {
-            if (_Handlers.TryGetValue(typeID, out var type))
+            if (_Handlers.TryGetValue(typeID, out var handler))
             {
-                return FireHandlerByType(type, layer, objectiveData);
+                return FireHandlerByContainer(handler, layer, objectiveData);
             }
             else
             {
@@ -136,20 +163,20 @@ namespace GTFO.CustomObjectives
             }
         }
 
-        private static CustomObjectiveHandlerBase FireHandlerByType(Type type, LG_Layer layer, WardenObjectiveDataBlock objectiveData)
+        private static CustomObjectiveHandlerBase FireHandlerByContainer(HandlerTypeContainer handlerContainer, LG_Layer layer, WardenObjectiveDataBlock objectiveData, bool isGlobalHandler = false)
         {
-            if(!_HandlerSetting.TryGetValue(type, out var setting))
+            if(handlerContainer.Setting == null)
             {
                 return null;
             }
 
-            if(!setting.ShouldFire_Internal(layer.m_type, objectiveData))
+            if(!handlerContainer.Setting.ShouldFire_Internal(layer.m_type, objectiveData))
             {
                 return null;
             }
 
-            var handler = Activator.CreateInstance(type) as CustomObjectiveHandlerBase;
-            handler.Setup(layer, objectiveData);
+            var handler = handlerContainer.CreateInstance();
+            handler.Setup(layer, objectiveData, isGlobalHandler);
             handler.HandlerGUID = new Guid().ToString();
 
             _ActiveHandlers.Add(handler);

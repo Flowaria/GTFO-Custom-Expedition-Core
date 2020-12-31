@@ -36,10 +36,29 @@ namespace GTFO.CustomObjectives.HandlerBase
         {
             WardenObjectiveManager.RegisterObjectiveItemForCollection(Base.LayerType, item);
         }
+
+        public void FoundObjectiveItem(iWardenObjectiveItem item)
+        {
+            if(Base.IsDefaultObjective)
+            {
+                WardenObjectiveManager.OnLocalPlayerFoundObjectiveItem(Base.LayerType, item);
+            }
+            else
+            {
+                //TODO: Behaviour for Custom Objective
+            }
+        }
         
         public void SolvedObjectiveItem(iWardenObjectiveItem item)
         {
-            WardenObjectiveManager.OnLocalPlayerSolvedObjectiveItem(Base.LayerType, item);
+            if(Base.IsDefaultObjective)
+            {
+                WardenObjectiveManager.OnLocalPlayerSolvedObjectiveItem(Base.LayerType, item);
+            }
+            else
+            {
+                //TODO: Behaviour for Custom Objective
+            }
         }
 
         public void RegisterRequiredScanItem(iWardenObjectiveItem item)

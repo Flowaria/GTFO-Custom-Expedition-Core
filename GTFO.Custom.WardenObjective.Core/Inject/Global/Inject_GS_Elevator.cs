@@ -10,7 +10,7 @@ namespace GTFO.CustomObjectives.Inject.Global
         internal static void Postfix()
         {
 
-            Logger.Log("Global: OnElevatorArrive");
+            Logger.Verbose("Global: OnElevatorArrive");
             GlobalMessage.OnElevatorArrive?.Invoke();
         }
     }

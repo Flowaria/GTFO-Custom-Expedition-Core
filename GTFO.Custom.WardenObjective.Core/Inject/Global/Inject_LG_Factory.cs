@@ -10,7 +10,7 @@ namespace GTFO.CustomObjectives.Inject.Global
     {
         internal static void Postfix()
         {
-            Logger.Log("Global: OnBuildDone");
+            Logger.Verbose("Global: OnBuildDone");
             GlobalMessage.OnBuildDone?.Invoke();
         }
     }

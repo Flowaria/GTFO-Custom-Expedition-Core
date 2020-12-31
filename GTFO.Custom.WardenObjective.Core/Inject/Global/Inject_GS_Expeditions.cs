@@ -9,7 +9,7 @@ namespace GTFO.CustomObjectives.Inject.Global
     {
         internal static void Postfix()
         {
-            Logger.Log("Global: OnLevelSuccess");
+            Logger.Verbose("Global: OnLevelSuccess");
             GlobalMessage.OnLevelSuccess?.Invoke();
         }
     }
@@ -19,7 +19,7 @@ namespace GTFO.CustomObjectives.Inject.Global
     {
         internal static void Postfix()
         {
-            Logger.Log("Global: OnLevelFail");
+            Logger.Verbose("Global: OnLevelFail");
             GlobalMessage.OnLevelFail?.Invoke();
         }
     }

@@ -2,6 +2,7 @@
 using CustomObjective.DoorMultipleWaves.PuzzleContext;
 using GameData;
 using GTFO.CustomObjectives;
+using GTFO.CustomObjectives.HandlerBase;
 using GTFO.CustomObjectives.Utils;
 using LevelGeneration;
 using SNetwork;
@@ -16,6 +17,8 @@ namespace CustomObjective.DoorMultipleWaves
 {
     public class MainHandler : CustomObjectiveHandlerBase
     {
+        private DoorWaveManager doorWaveManager;
+
         public override void OnSetup()
         {
             if(this.LayerType != LG_LayerType.MainLayer)
@@ -26,17 +29,17 @@ namespace CustomObjective.DoorMultipleWaves
 
             DoorWaveManager.Setup();
 
-            var manager = DoorWaveManager.Current;
+            doorWaveManager = DoorWaveManager.Current;
 
             int count = ObjectiveData.ReactorWaves.Count;
-            manager.Waves = new DoorWaveData[count];
-            manager.MainZone = ObjectiveLayerData.ZonePlacementDatas[0][0].LocalIndex;
+            doorWaveManager.Waves = new DoorWaveData[count];
+            //doorWaveManager.MainZone = ObjectiveLayerData.ZonePlacementDatas[0][0].LocalIndex;
 
             for (int i = 0; i < count; i++)
             {
                 var ReactWaveData = ObjectiveData.ReactorWaves[i];
 
-                manager.Waves[i] = new DoorWaveData()
+                doorWaveManager.Waves[i] = new DoorWaveData()
                 {
                     PuzzleID = ReactWaveData.EnemyWaves[0].WaveSettings,
                     EventData = ReactWaveData.Events.ToArray(),
@@ -53,40 +56,28 @@ namespace CustomObjective.DoorMultipleWaves
                 };
             }
 
-            RegisterUpdateEvent(update);
-        }
-
-        public void update()
-        {
-            if(Input.GetKeyDown(KeyCode.F1))
-            {
-                DoorWaveManager.Current.AttemptInteract(DoorWaveInteractionType.Complete);
-            }
-
-            if(Input.GetKeyDown(KeyCode.F2))
-            {
-                DoorWaveManager.Current.AttemptInteract(DoorWaveInteractionType.FailedVerify);
-            }
+            RegisterUpdateEvent(doorWaveManager.OnUpdate);
         }
 
         public override void OnBuildDone()
         {
-            /*
-            int count = DoorWaveManager.Waves.Length;
+            int count = doorWaveManager.Waves.Length;
 
-            var doorZone = PlacementUtil.GetZone(LayerType, DoorWaveManager.MainZone);
-            DoorWaveManager.ChainedDoor = PlacementUtil.GetSpawnedDoor(doorZone);
+            var doorZone = PlacementUtil.GetZone(LayerType, doorWaveManager.MainZone);
+            doorWaveManager.ChainedDoor = PlacementUtil.GetSpawnedDoor(doorZone);
+            //TODO: FIX doorWaveManager.ChainedDoor.m_locks.Cast<LG_SecurityDoor_Locks>();
 
             for (int i = 0; i < count; i++)
             {
-                var waveData = DoorWaveManager.Waves[i];
-                if(!Layer.m_zonesByLocalIndex.TryGetValue(waveData.TerminalZone, out var zone))
+                var waveData = doorWaveManager.Waves[i];
+
+                if(!Builder.TryGetZone(waveData.TerminalZone, out var zone))
                 {
                     continue;
                 }
 
-                var terminal = RandomUtil.PickFromList(zone.TerminalsSpawnedInZone);
-                if(terminal != null)
+                var terminal = Builder.GetSpawnedTerminalInZone(zone);
+                if (terminal != null)
                 {
                     waveData.Terminal = terminal;
 
@@ -96,30 +87,28 @@ namespace CustomObjective.DoorMultipleWaves
                         FileContent = waveData.GeneratedFileContent
                     });
 
-                    TerminalUtil.AddCommand(terminal, "MASTERDOOR_PUSH_PUBLIC_KEY", "Push public key by filename.", DoorCommandHandler);
+                    TerminalUtil.AddCommand(terminal, "PUSH_KEY", "Push public key to Master Door Controller.", DoorCommandHandler);
                 }
             }
 
             if (SNet.IsMaster)
                 DoorWaveManager.Current.AttemptInteract(DoorWaveInteractionType.Startup);
-            */
         }
 
         public void DoorCommandHandler(LG_ComputerTerminal terminal, string param1, string param2)
         {
-            /*
             var cmd = terminal.m_command;
             if (string.IsNullOrEmpty(param1))
             {
                 cmd.AddOutput("Argument length mismatching!", true);
-                cmd.AddOutput("Command Usage: MASTERDOOR_PUSH_PUBLIC_KEY -File <FileName>", true);
+                cmd.AddOutput("Command Usage: PUSH_KEY -File <FileName>", true);
                 return;
             }
 
             if(!param1.ToLower().Equals("-file"))
             {
                 cmd.AddOutput($"There is no such argument named: '{param1.ToUpper()}'", true);
-                cmd.AddOutput("Command Usage: MASTERDOOR_PUSH_PUBLIC_KEY -File <FileName>", true);
+                cmd.AddOutput("Command Usage: PUSH_KEY -File <FileName>", true);
                 return;
             }
 
@@ -127,7 +116,7 @@ namespace CustomObjective.DoorMultipleWaves
             {
                 cmd.AddOutput(TerminalLineType.SpinningWaitNoDone, "Opening connection towards Master Door Controller", 4f);
 
-                if (terminal != DoorWaveManager.CurrentWave.Terminal)
+                if (terminal != doorWaveManager.CurrentWave.Terminal)
                 {
                     cmd.AddOutput("", true);
                     cmd.AddOutput(TerminalLineType.Warning, "ACCESS DENIED :: Push URL is blocked from Door Controller. Try again with other allowed Terminal.", 0.0f);
@@ -137,7 +126,7 @@ namespace CustomObjective.DoorMultipleWaves
                 cmd.AddOutput(TerminalLineType.ProgressWait, "Pushing Key file content", 6.5f);
                 cmd.AddOutput(TerminalLineType.SpinningWaitDone, "Waiting for Controllers respond", 3f);
 
-                if (!DoorWaveManager.CurrentWave.GeneratedFileName.ToUpper().Equals(param2.ToUpper()))
+                if (!doorWaveManager.CurrentWave.GeneratedFileName.ToUpper().Equals(param2.ToUpper()))
                 {
                     cmd.AddOutput(TerminalLineType.Warning, "ACCESS DENIED :: Given Key file was not correct!", 1.0f);
                     return;
@@ -174,7 +163,7 @@ namespace CustomObjective.DoorMultipleWaves
                     cmd.AddOutput("SUCCESS! Master Door's Security Scan will be resume in few moment...");
                     cmd.OnEndOfQueue = new Action(() =>
                     {
-                        DoorWaveManager.JumpToNextWave();
+                        doorWaveManager.JumpToNextWave();
                     });
                 }
             }
@@ -183,7 +172,6 @@ namespace CustomObjective.DoorMultipleWaves
                 cmd.AddOutput($"There is no such file named: '{param2.ToUpper()}'", true);
                 return;
             }
-            */
         }
 
         public void OnPushSuccess()

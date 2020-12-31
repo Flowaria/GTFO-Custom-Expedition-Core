@@ -22,7 +22,7 @@ namespace GTFO.CustomObjectives.SimpleLoader
 
             foreach(var path in lookupPaths)
             {
-                Logger.Log(path);
+                Logger.Verbose($"Searching Plugin Path: {path}");
 
                 if (!Directory.Exists(path))
                     continue;
@@ -65,7 +65,7 @@ namespace GTFO.CustomObjectives.SimpleLoader
             if (type.BaseType != typeof(ObjectiveSimpleEntry))
                 return;
 
-            Logger.Log("Loading Simple Entry {0} {1}", asm.GetName().Name, type.Name);
+            Logger.Verbose("Loading Simple Entry dll: {0} / type: {1}", asm.GetName().Name, type.Name);
             var entry = Activator.CreateInstance(type) as ObjectiveSimpleEntry;
             entry.OnStart();
         }

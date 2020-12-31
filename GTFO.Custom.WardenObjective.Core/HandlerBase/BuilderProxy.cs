@@ -135,24 +135,40 @@ namespace GTFO.CustomObjectives.HandlerBase
 
         public ZonePlacementData[] PickPlacements(ZonePlacementData[][] datas, PickMode mode1D = PickMode.StartToEnd, PickMode mode2D = PickMode.StartToEnd, int count = 1)
         {
-            var result = new ZonePlacementData[count];
+            if (datas == null)
+                return null;
 
-            for(int i = 0;i<count;i++)
+            var result = new ZonePlacementData[count];
+            var rowOffset = new int[datas.Length];
+
+            
+            for(int i = 0; i<count;i++)
             {
-                switch (mode1D)
-                {
-                    case PickMode.Random:
-                        result[i] = PickFrom2D(RandomUtil.PickFromArray(datas));
-                        break;
-                }
+                var rowIndex = PickItemIndex(mode1D, datas.Length, i);
+                var colIndex = PickItemIndex(mode2D, datas[rowIndex].Length, rowOffset[rowIndex]++);
+
+                result[i] = datas[rowIndex][colIndex];
             }
 
             return result;
-            
+        }
 
-            ZonePlacementData PickFrom2D(ZonePlacementData[] dataRow)
+        private int PickItemIndex(PickMode mode, int length, int offset)
+        {
+            switch (mode)
             {
-                return null;
+                case PickMode.StartToEnd:
+                    return offset % length;
+
+                case PickMode.First:
+                    return 0;
+
+                case PickMode.Last:
+                    return length - 1;
+
+                case PickMode.Random:
+                default:
+                    return RandomUtil.Range(0, length);
             }
         }
 

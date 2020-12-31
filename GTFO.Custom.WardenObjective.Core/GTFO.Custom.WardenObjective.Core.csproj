@@ -112,7 +112,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ChainedPuzzleContext.cs" />
+    <Compile Include="Utils\ChainedPuzzleContext.cs" />
     <Compile Include="ConfigDTO.cs" />
     <Compile Include="CustomObjectiveManager.cs" />
     <Compile Include="GlobalHandlers\FogControlTerminals\FogTerminalConfigDTO.cs" />
@@ -143,8 +143,9 @@
     <Compile Include="Inject\MarkerItem\Inject_LG_DistItem.cs" />
     <Compile Include="Inject\Inject_LG_Dist_WardenObjective.cs" />
     <Compile Include="Inject\MarkerItem\Inject_LG_MarkerBuilder.cs" />
-    <Compile Include="Inject\Inject_Terminal.cs" />
+    <Compile Include="Inject\Terminal\Inject_Terminal.cs" />
     <Compile Include="Inject\ObjectiveItem\Inject_CarryItem.cs" />
+    <Compile Include="Inject\Terminal\TerminalMessage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SimpleLoader\CustomObjectiveAttribute.cs" />
     <Compile Include="SimpleLoader\ObjectiveSimpleEntry.cs" />

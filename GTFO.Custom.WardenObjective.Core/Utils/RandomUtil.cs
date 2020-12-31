@@ -39,7 +39,7 @@ namespace GTFO.CustomObjectives.Utils
             return GetSeeder(type).Range(min, max, debugTag);
         }
 
-        public static float Range(float min, float max, string debugTag = "NO_TAG")
+        public static float Range(float min, float max, string debugTag)
         {
             return Range(min, max, SeederType.Session, debugTag);
         }
@@ -49,7 +49,7 @@ namespace GTFO.CustomObjectives.Utils
             return GetSeeder(type).Range(min, max, debugTag);
         }
 
-        public static int Range(int min, int max, string debugTag = "NO_TAG")
+        public static int Range(int min, int max, string debugTag)
         {
             return Range(min, max, SeederType.Session, debugTag);
         }

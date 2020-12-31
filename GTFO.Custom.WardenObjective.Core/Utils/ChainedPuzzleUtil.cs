@@ -1,5 +1,6 @@
 ﻿using ChainedPuzzles;
 using GameData;
+using GTFO.CustomObjectives.Inject.Global;
 using LevelGeneration;
 using System;
 using UnityEngine;
@@ -8,6 +9,24 @@ namespace GTFO.CustomObjectives.Utils
 {
     public static class ChainedPuzzleUtil
     {
+        static bool IsBuildDone = false;
+        static Action BuildQueue;
+
+        static ChainedPuzzleUtil()
+        {
+            GlobalMessage.OnBuildDone += () =>
+            {
+                IsBuildDone = true;
+                BuildQueue?.Invoke();
+            };
+
+            GlobalMessage.OnLevelCleanup += () =>
+            {
+                IsBuildDone = false;
+                BuildQueue = null;
+            };
+        }
+
         /// <summary>
         /// Create ChainedPuzzle Instance
         /// </summary>
@@ -59,12 +78,24 @@ namespace GTFO.CustomObjectives.Utils
         /// <returns></returns>
         public static T Setup<T>(ChainedPuzzleDataBlock block, LG_Area area, Vector3 position, Transform parent) where T : ChainedPuzzleContext, new()
         {
-            var puzzle = ChainedPuzzleManager.CreatePuzzleInstance(block, area, position, parent);
+            var context = new T() { };
 
-            var context = new T() { Instance = puzzle };
-            context.Instance.add_OnPuzzleSolved(new Action(context.OnSolved));
+            if(IsBuildDone)
+            {
+                CreatePuzzleInstance();
+            }
+            else
+            {
+                BuildQueue += CreatePuzzleInstance;
+            }
 
             return context;
+
+            void CreatePuzzleInstance()
+            {
+                context.Instance = ChainedPuzzleManager.CreatePuzzleInstance(block, area, position, parent);
+                context.Instance.add_OnPuzzleSolved(new Action(context.Solved));
+            }
         }
     }
 }

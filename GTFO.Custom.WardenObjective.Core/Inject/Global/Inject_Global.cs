@@ -9,7 +9,7 @@ namespace GTFO.CustomObjectives.Inject.Global
     {
         internal static void Postfix()
         {
-            Logger.Log("Global: OnLevelCleanup");
+            Logger.Verbose("Global: OnLevelCleanup");
             GlobalMessage.OnLevelCleanup?.Invoke();
         }
     }
@@ -19,7 +19,7 @@ namespace GTFO.CustomObjectives.Inject.Global
     {
         internal static void Postfix()
         {
-            Logger.Log("Global: OnResetSession");
+            Logger.Verbose("Global: OnResetSession");
             GlobalMessage.OnResetSession?.Invoke();
         }
     }

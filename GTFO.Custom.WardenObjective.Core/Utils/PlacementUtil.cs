@@ -23,7 +23,7 @@ namespace GTFO.CustomObjectives.Utils
                 return true;
             }
 
-            return false;
+            return exist;
         }
 
         public static bool TryFetchFunctionMarker(LG_Zone zone, ZonePlacementWeights weight, ExpeditionFunction function, out LG_DistributeItem distItem)

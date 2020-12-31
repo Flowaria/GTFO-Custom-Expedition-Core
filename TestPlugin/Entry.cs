@@ -17,8 +17,8 @@ namespace TestPlugin
     {
         public override void OnStart()
         {
-            CustomObjectiveManager.AddGlobalHandler<OverridesHandler>(CustomObjectiveSettings.MAIN_ONLY);
-            CustomObjectiveManager.AddGlobalHandler<BuilderHandler>(CustomObjectiveSettings.ALL_LAYER);
+            //CustomObjectiveManager.AddGlobalHandler<OverridesHandler>(CustomObjectiveSettings.MAIN_ONLY);
+            //CustomObjectiveManager.AddGlobalHandler<BuilderHandler>(CustomObjectiveSettings.ALL_LAYER);
 
             CustomObjectiveManager.AddHandler<UplinkBioscanHandler>(50/*, CustomObjectiveSettings.ALL_LAYER*/);
         }

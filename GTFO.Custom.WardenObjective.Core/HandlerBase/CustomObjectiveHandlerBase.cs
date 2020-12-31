@@ -31,12 +31,17 @@ namespace GTFO.CustomObjectives.HandlerBase
         public BuilderProxy Builder { get; private set; }
 
         public bool IsBuildDone { get; private set; } = false;
+        public bool IsDefaultObjective { get; private set; } = false;
+        public bool IsGlobalHandler { get; private set; } = false;
 
-        internal void Setup(LG_Layer layer, WardenObjectiveDataBlock objectiveData)
+        internal void Setup(LG_Layer layer, WardenObjectiveDataBlock objectiveData, bool isGlobalHandler)
         {
             Layer = layer;
             LayerType = layer.m_type;
             ObjectiveData = objectiveData;
+
+            IsDefaultObjective = Enum.IsDefined(typeof(eWardenObjectiveType), ObjectiveData.Type);
+            IsGlobalHandler = isGlobalHandler;
 
             var activeExpedition = RundownManager.ActiveExpedition;
             switch (LayerType)
@@ -108,7 +113,8 @@ namespace GTFO.CustomObjectives.HandlerBase
                 cfgList.AddRange(localCfg);
             }
 
-            JsonConvert.DeserializeObject<T[]>();
+            //TODO: Implement This
+            //JsonConvert.DeserializeObject<T[]>();
         }
 
         /// <summary>

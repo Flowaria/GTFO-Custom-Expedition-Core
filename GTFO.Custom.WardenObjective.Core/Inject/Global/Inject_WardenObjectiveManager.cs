@@ -14,7 +14,7 @@ namespace GTFO.CustomObjectives.Inject.Global
     {
         internal static void Postfix(pWardenObjectiveState oldState, pWardenObjectiveState newState, bool isRecall)
         {
-            Logger.Log("Global: ObjectiveStateChanged");
+            Logger.Verbose("Global: ObjectiveStateChanged");
             GlobalMessage.OnObjectiveStateChanged?.Invoke(oldState, newState, isRecall);
         }
     }

@@ -12,9 +12,9 @@ namespace GTFO.CustomObjectives
     public enum AllowedLayerType
     {
         All = Main | Secondary | Third,
-        Main = 1,
-        Secondary = 2,
-        Third = 4
+        Main = 0b001,
+        Secondary = 0b010,
+        Third = 0b100
     }
 
     public class CustomObjectiveSettings
