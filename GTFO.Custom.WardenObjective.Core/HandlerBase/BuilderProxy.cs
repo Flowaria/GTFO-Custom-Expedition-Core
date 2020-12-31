@@ -4,10 +4,6 @@ using GTFO.CustomObjectives.Extensions;
 using GTFO.CustomObjectives.Utils;
 using LevelGeneration;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace GTFO.CustomObjectives.HandlerBase
@@ -25,6 +21,7 @@ namespace GTFO.CustomObjectives.HandlerBase
     public class BuilderProxy
     {
         private CustomObjectiveHandlerBase Base;
+
         private InvalidOperationException LatePlacementException
         {
             get { return new InvalidOperationException("You cannot call Builder Functions after Level is fully built!\nUse it before OnBuildDone() called!"); }
@@ -81,7 +78,7 @@ namespace GTFO.CustomObjectives.HandlerBase
 
         public LG_Zone[] GetZones(LG_LayerType layerType)
         {
-            if(TryGetLayer(layerType, out var layer))
+            if (TryGetLayer(layerType, out var layer))
             {
                 return GetZones(layer);
             }
@@ -104,7 +101,7 @@ namespace GTFO.CustomObjectives.HandlerBase
             return Builder.CurrentFloor.allZones.ToMonoArray();
         }
 
-        #endregion
+        #endregion Layer & Zone Gather
 
         #region ZonePicker
 
@@ -121,11 +118,11 @@ namespace GTFO.CustomObjectives.HandlerBase
         public ZonePlacementData[] PickPlacements(PlacementDataList datas, PickMode mode1D = PickMode.StartToEnd, PickMode mode2D = PickMode.Random, int count = 1)
         {
             var arr = new ZonePlacementData[datas.Count][];
-            for(int i = 0;i < arr.Length; i++)
+            for (int i = 0; i < arr.Length; i++)
             {
                 var dataRow = datas[i];
                 arr[i] = new ZonePlacementData[dataRow.Count];
-                for(int j = 0; j< dataRow.Count;j++)
+                for (int j = 0; j < dataRow.Count; j++)
                 {
                     arr[i][j] = dataRow[j];
                 }
@@ -141,8 +138,7 @@ namespace GTFO.CustomObjectives.HandlerBase
             var result = new ZonePlacementData[count];
             var rowOffset = new int[datas.Length];
 
-            
-            for(int i = 0; i<count;i++)
+            for (int i = 0; i < count; i++)
             {
                 var rowIndex = PickItemIndex(mode1D, datas.Length, i);
                 var colIndex = PickItemIndex(mode2D, datas[rowIndex].Length, rowOffset[rowIndex]++);
@@ -172,7 +168,7 @@ namespace GTFO.CustomObjectives.HandlerBase
             }
         }
 
-        #endregion
+        #endregion ZonePicker
 
         #region Pre-Build Placements
 
@@ -249,7 +245,6 @@ namespace GTFO.CustomObjectives.HandlerBase
             if (IsBuildDone())
                 throw LatePlacementException;
 
-            
             if (PlacementUtil.TryFetchFunctionMarker(zone, weight, function, out distItem, out distNode, false))
             {
                 if (onSpawned == null)
@@ -280,7 +275,7 @@ namespace GTFO.CustomObjectives.HandlerBase
             ItemUtil.RegisterItem(distItem, isWardenObjectiveItem, onSpawned);
         }
 
-        #endregion
+        #endregion Pre-Build Placements
 
         #region Post-Build Get
 
@@ -304,9 +299,9 @@ namespace GTFO.CustomObjectives.HandlerBase
                 throw EarlyFetchException;
 
             var terminals = zone?.TerminalsSpawnedInZone ?? null;
-            if(terminals != null)
+            if (terminals != null)
             {
-                if(index < 0)
+                if (index < 0)
                 {
                     return RandomUtil.PickFromList(terminals);
                 }
@@ -327,7 +322,7 @@ namespace GTFO.CustomObjectives.HandlerBase
             return zone?.TerminalsSpawnedInZone?.ToMonoArray() ?? null;
         }
 
-        #endregion
+        #endregion Post-Build Get
 
         private bool IsBuildDone()
         {

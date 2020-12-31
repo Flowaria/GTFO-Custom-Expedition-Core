@@ -12,7 +12,6 @@ namespace GTFO.CustomObjectives.Utils
         public static string LocalPath { get; private set; }
 
         public static readonly JsonSerializerSettings JSONSetting;
-        
 
         static ConfigUtil()
         {
@@ -78,7 +77,7 @@ namespace GTFO.CustomObjectives.Utils
             return Path.Combine(GlobalPath, filename);
         }
 
-        #endregion
+        #endregion GlobalConfig
 
         #region LocalConfig
 
@@ -90,8 +89,8 @@ namespace GTFO.CustomObjectives.Utils
                 obj = default;
                 return false;
             }
-                
-            if(!File.Exists(content))
+
+            if (!File.Exists(content))
             {
                 obj = default;
                 return false;
@@ -118,6 +117,6 @@ namespace GTFO.CustomObjectives.Utils
             return Path.Combine(LocalPath, filename);
         }
 
-        #endregion
+        #endregion LocalConfig
     }
 }

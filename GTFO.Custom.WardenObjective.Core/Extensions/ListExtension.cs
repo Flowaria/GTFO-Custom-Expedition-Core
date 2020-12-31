@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using UnhollowerBaseLib;
 
 namespace GTFO.CustomObjectives.Extensions
 {
@@ -44,7 +43,7 @@ namespace GTFO.CustomObjectives.Extensions
                 return new T[0];
 
             var newArray = new T[array.Count];
-            for(int i = 0;i<newArray.Length;i++)
+            for (int i = 0; i < newArray.Length; i++)
             {
                 newArray[i] = array[i];
             }
@@ -52,12 +51,6 @@ namespace GTFO.CustomObjectives.Extensions
             return newArray;
         }
 
-        #endregion
-
-        #region 2D Array
-
-
-
-        #endregion
+        #endregion 1D Array
     }
 }

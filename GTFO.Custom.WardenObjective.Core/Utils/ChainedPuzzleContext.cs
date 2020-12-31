@@ -11,7 +11,7 @@ namespace GTFO.CustomObjectives.Utils
 
         internal void Solved()
         {
-            if(!string.IsNullOrWhiteSpace(SolvedMessage) || SolvedMessageDuration <= 0.0f)
+            if (!string.IsNullOrWhiteSpace(SolvedMessage) || SolvedMessageDuration <= 0.0f)
             {
                 GuiManager.InteractionLayer.SetTimedMessage(SolvedMessage, SolvedMessageDuration, SolvedMessageStyle, 0);
             }

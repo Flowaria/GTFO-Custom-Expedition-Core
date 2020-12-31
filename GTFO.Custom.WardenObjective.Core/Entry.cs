@@ -1,5 +1,4 @@
 ﻿using GTFO.CustomObjectives;
-using GTFO.CustomObjectives.GlobalHandlers.FogControlTerminals;
 using GTFO.CustomObjectives.GlobalHandlers.TimedObjectives;
 using GTFO.CustomObjectives.Inject.Global;
 using GTFO.CustomObjectives.SimpleLoader;
@@ -23,7 +22,6 @@ namespace GTFO.CustomObjectives
 
         private void Read_Configs()
         {
-
         }
 
         private void Setup_GlobalHandlers()

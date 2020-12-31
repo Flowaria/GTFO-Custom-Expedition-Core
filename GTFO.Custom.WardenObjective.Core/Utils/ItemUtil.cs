@@ -1,5 +1,4 @@
 ﻿using GameData;
-using GTFO.CustomObjectives.Inject;
 using GTFO.CustomObjectives.Inject.Global;
 using GTFO.CustomObjectives.Inject.MarkerItem;
 using LevelGeneration;
@@ -77,7 +76,7 @@ namespace GTFO.CustomObjectives.Utils
             }
             else
             {
-                if(item.m_localTerminalLogFiles == null)
+                if (item.m_localTerminalLogFiles == null)
                     item.m_localTerminalLogFiles = new LogList();
 
                 item.m_localTerminalLogFiles.Add(new TerminalLogFileData()

@@ -1,10 +1,6 @@
 ﻿using GameData;
 using LevelGeneration;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GTFO.CustomObjectives
 {
@@ -43,7 +39,7 @@ namespace GTFO.CustomObjectives
 
         private bool ShouldFire_LayerCheck(LG_LayerType layerType)
         {
-            switch(layerType)
+            switch (layerType)
             {
                 case LG_LayerType.SecondaryLayer: return AllowedLayers.HasFlag(AllowedLayerType.Secondary);
                 case LG_LayerType.ThirdLayer: return AllowedLayers.HasFlag(AllowedLayerType.Third);

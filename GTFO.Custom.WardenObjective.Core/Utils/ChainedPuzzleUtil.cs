@@ -9,8 +9,8 @@ namespace GTFO.CustomObjectives.Utils
 {
     public static class ChainedPuzzleUtil
     {
-        static bool IsBuildDone = false;
-        static Action BuildQueue;
+        private static bool IsBuildDone = false;
+        private static Action BuildQueue;
 
         static ChainedPuzzleUtil()
         {
@@ -80,7 +80,7 @@ namespace GTFO.CustomObjectives.Utils
         {
             var context = new T() { };
 
-            if(IsBuildDone)
+            if (IsBuildDone)
             {
                 CreatePuzzleInstance();
             }

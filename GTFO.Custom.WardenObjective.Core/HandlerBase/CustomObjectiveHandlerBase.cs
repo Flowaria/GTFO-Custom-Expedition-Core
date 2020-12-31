@@ -4,13 +4,10 @@ using GTFO.CustomObjectives.Extensions;
 using GTFO.CustomObjectives.Inject.Global;
 using GTFO.CustomObjectives.Utils;
 using LevelGeneration;
-using Newtonsoft.Json;
 using SNetwork;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using UnhollowerBaseLib;
-using UnityEngine;
 
 namespace GTFO.CustomObjectives.HandlerBase
 {
@@ -103,12 +100,12 @@ namespace GTFO.CustomObjectives.HandlerBase
         {
             var cfgList = new List<T>();
 
-            if(ConfigUtil.TryGetGlobalConfig<T[]>(configName, out var globalCfg))
+            if (ConfigUtil.TryGetGlobalConfig<T[]>(configName, out var globalCfg))
             {
                 cfgList.AddRange(globalCfg);
             }
 
-            if(ConfigUtil.TryGetLocalConfig<T[]>(configName, out var localCfg))
+            if (ConfigUtil.TryGetLocalConfig<T[]>(configName, out var localCfg))
             {
                 cfgList.AddRange(localCfg);
             }

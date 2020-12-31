@@ -1,8 +1,5 @@
-﻿using GameData;
-using GTFO.CustomObjectives.HandlerBase;
+﻿using GTFO.CustomObjectives.HandlerBase;
 using GTFO.CustomObjectives.Utils;
-using LevelGeneration;
-using MelonLoader;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.IO;
@@ -13,6 +10,7 @@ namespace GTFO.CustomObjectives.GlobalHandlers.TimedObjectives
     internal class TimedObjectiveHandler : CustomObjectiveHandlerBase
     {
         private bool IsCountdownMission = false;
+
         private bool IsCountdownEnable
         {
             get
@@ -27,6 +25,7 @@ namespace GTFO.CustomObjectives.GlobalHandlers.TimedObjectives
                 _isCountdownEnable = value;
             }
         }
+
         private bool _isCountdownEnable = false;
 
         private bool IsEndMessageCountdown = false;
@@ -95,7 +94,7 @@ namespace GTFO.CustomObjectives.GlobalHandlers.TimedObjectives
                 if (TimerContext.StartType == StartEventType.ElevatorArrive)
                 {
                     IsCountdownEnable = true;
-                    if(TimerContext.EndMessageDuration > 0.0f)
+                    if (TimerContext.EndMessageDuration > 0.0f)
                     {
                         IsEndMessageCountdown = true;
                     }

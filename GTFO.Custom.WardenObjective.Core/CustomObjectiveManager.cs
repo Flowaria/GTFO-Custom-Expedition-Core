@@ -8,9 +8,9 @@ using System.Linq;
 
 namespace GTFO.CustomObjectives
 {
-    using HandlerTypeList = List<HandlerTypeContainer>;
-    using HandlerTypeDict = Dictionary<byte, HandlerTypeContainer>;
     using HandlerList = List<CustomObjectiveHandlerBase>;
+    using HandlerTypeDict = Dictionary<byte, HandlerTypeContainer>;
+    using HandlerTypeList = List<HandlerTypeContainer>;
 
     internal class HandlerTypeContainer
     {
@@ -54,7 +54,7 @@ namespace GTFO.CustomObjectives
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="settings"></param>
@@ -88,7 +88,7 @@ namespace GTFO.CustomObjectives
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="typeID"></param>
@@ -145,7 +145,7 @@ namespace GTFO.CustomObjectives
 
             foreach (var handler in _GlobalHandlers)
             {
-                handlerList.Add(FireHandlerByContainer(handler, layer, objectiveData, isGlobalHandler:true));
+                handlerList.Add(FireHandlerByContainer(handler, layer, objectiveData, isGlobalHandler: true));
             }
 
             return handlerList.ToArray();
@@ -165,12 +165,12 @@ namespace GTFO.CustomObjectives
 
         private static CustomObjectiveHandlerBase FireHandlerByContainer(HandlerTypeContainer handlerContainer, LG_Layer layer, WardenObjectiveDataBlock objectiveData, bool isGlobalHandler = false)
         {
-            if(handlerContainer.Setting == null)
+            if (handlerContainer.Setting == null)
             {
                 return null;
             }
 
-            if(!handlerContainer.Setting.ShouldFire_Internal(layer.m_type, objectiveData))
+            if (!handlerContainer.Setting.ShouldFire_Internal(layer.m_type, objectiveData))
             {
                 return null;
             }

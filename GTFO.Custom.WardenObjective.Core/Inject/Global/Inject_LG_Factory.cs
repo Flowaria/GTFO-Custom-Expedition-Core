@@ -1,7 +1,5 @@
-﻿using GTFO.CustomObjectives.Utils;
-using Harmony;
+﻿using Harmony;
 using LevelGeneration;
-using MelonLoader;
 
 namespace GTFO.CustomObjectives.Inject.Global
 {

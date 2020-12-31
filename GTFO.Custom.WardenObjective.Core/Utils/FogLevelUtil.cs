@@ -67,7 +67,7 @@ namespace GTFO.CustomObjectives.Utils
 
         public override bool ShouldInteract(FogLevelInteraction interaction, out FogLevelState state)
         {
-            if(interaction.InteractionType == FogLevelInteractionType.Raise)
+            if (interaction.InteractionType == FogLevelInteractionType.Raise)
             {
                 state = new FogLevelState()
                 {
@@ -75,7 +75,7 @@ namespace GTFO.CustomObjectives.Utils
                 };
                 return true;
             }
-            else if(interaction.InteractionType == FogLevelInteractionType.Lower)
+            else if (interaction.InteractionType == FogLevelInteractionType.Lower)
             {
                 state = new FogLevelState()
                 {
@@ -180,12 +180,12 @@ namespace GTFO.CustomObjectives.Utils
                 return;
             }
 
-            if(level < CurrentLevel)
+            if (level < CurrentLevel)
             {
                 _Replicator.Lower();
             }
 
-            if(level > CurrentLevel)
+            if (level > CurrentLevel)
             {
                 _Replicator.Raise();
             }

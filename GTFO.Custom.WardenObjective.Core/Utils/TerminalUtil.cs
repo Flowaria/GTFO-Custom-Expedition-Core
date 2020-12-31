@@ -1,5 +1,4 @@
-﻿using GTFO.CustomObjectives.Inject;
-using GTFO.CustomObjectives.Inject.Terminal;
+﻿using GTFO.CustomObjectives.Inject.Terminal;
 using LevelGeneration;
 using System;
 
@@ -14,7 +13,7 @@ namespace GTFO.CustomObjectives.Utils
                 if (!IsSame(terminal, eTerminal))
                     return;
 
-                if(cmdText.Equals(cmd, StringComparison.OrdinalIgnoreCase))
+                if (cmdText.Equals(cmd, StringComparison.OrdinalIgnoreCase))
                 {
                     onCmdReceived?.Invoke(eTerminal, arg1, arg2);
                 }

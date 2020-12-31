@@ -1,9 +1,5 @@
 ﻿using MelonLoader;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GTFO.CustomObjectives
 {
@@ -23,7 +19,7 @@ namespace GTFO.CustomObjectives
 
         public static void Log(string str, params object[] args)
         {
-            if(IsGlobalEnabled && IsLogEnabled)
+            if (IsGlobalEnabled && IsLogEnabled)
                 MelonLogger.Log(str, args);
         }
 

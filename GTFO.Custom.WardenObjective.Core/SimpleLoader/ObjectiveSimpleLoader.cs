@@ -1,12 +1,7 @@
-﻿using GTFO.CustomObjectives.Utils;
-using MelonLoader;
+﻿using MelonLoader;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GTFO.CustomObjectives.SimpleLoader
 {
@@ -20,7 +15,7 @@ namespace GTFO.CustomObjectives.SimpleLoader
                 Path.Combine(Imports.GetGameDirectory(), "Mods", "CustomObjectives")
             };
 
-            foreach(var path in lookupPaths)
+            foreach (var path in lookupPaths)
             {
                 Logger.Verbose($"Searching Plugin Path: {path}");
 
@@ -28,7 +23,7 @@ namespace GTFO.CustomObjectives.SimpleLoader
                     continue;
 
                 var files = Directory.GetFiles(path, "*.dll", SearchOption.TopDirectoryOnly);
-                foreach(var file in files)
+                foreach (var file in files)
                 {
                     try
                     {
@@ -49,7 +44,6 @@ namespace GTFO.CustomObjectives.SimpleLoader
 
             if (attribute == null)
                 return;
-
 
             var type = attribute.Entry;
 

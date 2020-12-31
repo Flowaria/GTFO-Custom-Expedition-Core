@@ -1,9 +1,5 @@
 ﻿using LevelGeneration;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GTFO.CustomObjectives.Utils
 {
@@ -29,12 +25,10 @@ namespace GTFO.CustomObjectives.Utils
 
         public virtual void OnFound()
         {
-
         }
 
         public virtual void OnSolved()
         {
-
         }
 
         public void Found()
@@ -54,6 +48,5 @@ namespace GTFO.CustomObjectives.Utils
 
     public class ObjectiveItemUtil
     {
-
     }
 }

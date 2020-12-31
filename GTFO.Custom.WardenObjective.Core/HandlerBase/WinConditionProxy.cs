@@ -1,10 +1,4 @@
 ﻿using GTFO.CustomObjectives.Utils;
-using LevelGeneration;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnhollowerBaseLib;
 
 namespace GTFO.CustomObjectives.HandlerBase
@@ -12,7 +6,11 @@ namespace GTFO.CustomObjectives.HandlerBase
     public class WinConditionProxy
     {
         private CustomObjectiveHandlerBase Base;
-        internal WinConditionProxy(CustomObjectiveHandlerBase b) { Base = b; }
+
+        internal WinConditionProxy(CustomObjectiveHandlerBase b)
+        {
+            Base = b;
+        }
 
         public ObjectiveItem CreateEmptyObjectiveItem()
         {
@@ -39,7 +37,7 @@ namespace GTFO.CustomObjectives.HandlerBase
 
         public void FoundObjectiveItem(iWardenObjectiveItem item)
         {
-            if(Base.IsDefaultObjective)
+            if (Base.IsDefaultObjective)
             {
                 WardenObjectiveManager.OnLocalPlayerFoundObjectiveItem(Base.LayerType, item);
             }
@@ -48,10 +46,10 @@ namespace GTFO.CustomObjectives.HandlerBase
                 //TODO: Behaviour for Custom Objective
             }
         }
-        
+
         public void SolvedObjectiveItem(iWardenObjectiveItem item)
         {
-            if(Base.IsDefaultObjective)
+            if (Base.IsDefaultObjective)
             {
                 WardenObjectiveManager.OnLocalPlayerSolvedObjectiveItem(Base.LayerType, item);
             }

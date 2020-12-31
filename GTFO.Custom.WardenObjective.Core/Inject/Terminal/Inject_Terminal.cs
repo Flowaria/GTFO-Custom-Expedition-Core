@@ -1,8 +1,5 @@
-﻿using GTFO.CustomObjectives.Inject.Global;
-using Harmony;
+﻿using Harmony;
 using LevelGeneration;
-using System;
-using System.Collections.Generic;
 
 namespace GTFO.CustomObjectives.Inject.Terminal
 {

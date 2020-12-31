@@ -1,10 +1,6 @@
 ﻿using GTFO.CustomObjectives.Inject.Global;
 using LevelGeneration;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GTFO.CustomObjectives.HandlerBase
 {
@@ -25,9 +21,8 @@ namespace GTFO.CustomObjectives.HandlerBase
 
         private void OnStateChanged(pWardenObjectiveState oldState, pWardenObjectiveState newState, bool isRecall)
         {
-            
         }
-        
+
         private void OnUpdateWardenObjective()
         {
             DefaultObjectiveUpdate?.Invoke();
@@ -35,7 +30,7 @@ namespace GTFO.CustomObjectives.HandlerBase
 
         public void SetupAsDefaultBehaviour(eWardenObjectiveType objType)
         {
-            switch(objType)
+            switch (objType)
             {
                 case eWardenObjectiveType.ClearAPath:
                     DefaultObjectiveUpdate = Update_ClearPath;
