@@ -34,10 +34,6 @@
     <Reference Include="Assets-ASM">
       <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\GTFO\MelonLoader\Managed\Assets-ASM.dll</HintPath>
     </Reference>
-    <Reference Include="GTFO.CustomWardenObjective.Core, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\GTFO.Custom.WardenObjective.Core\bin\Release\GTFO.CustomWardenObjective.Core.dll</HintPath>
-    </Reference>
     <Reference Include="Il2Cppmscorlib, Version=3.7.1.6, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\GTFO\MelonLoader\Managed\Il2Cppmscorlib.dll</HintPath>
@@ -115,6 +111,12 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PuzzleContext\RelayDoorPuzzleContext.cs" />
     <Compile Include="PuzzleContext\TerminalPuzzleContext.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\GTFO.Custom.WardenObjective.Core\GTFO.Custom.WardenObjective.Core.csproj">
+      <Project>{55634fbc-ad95-4330-a841-20c77eec253f}</Project>
+      <Name>GTFO.Custom.WardenObjective.Core</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

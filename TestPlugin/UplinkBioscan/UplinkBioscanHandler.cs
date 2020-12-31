@@ -1,6 +1,7 @@
 ﻿using ChainedPuzzles;
 using GameData;
 using GTFO.CustomObjectives;
+using GTFO.CustomObjectives.Extensions;
 using GTFO.CustomObjectives.HandlerBase;
 using GTFO.CustomObjectives.Utils;
 using LevelGeneration;
@@ -70,17 +71,18 @@ namespace TestPlugin.UplinkBioscan
             terminal.ObjectiveItemSolved = false;
 
             //Create Puzzle Context
-            var puzzle = ChainedPuzzleUtil.Setup<UplinkPuzzleContext>(
-                ObjectiveData.ChainedPuzzleToActive,
-                terminal.SpawnNode.m_area,
-                terminal.m_wardenObjectiveSecurityScanAlign);
+            var puzzle = ChainedPuzzleUtil.Setup<UplinkPuzzleContext>(ObjectiveData.ChainedPuzzleToActive, terminal);
 
             //Assign Context objects for OnSolved Event
             puzzle.Handler = this;
             puzzle.Terminal = terminal;
             puzzle.SolvedMessage = "Security Scan Complete. Uplink Connection has been Established.";
 
-            TerminalInfo.Add(terminal.GetInstanceID(), new UplinkInfo() { Puzzle = puzzle, Ip = ip, CommandUsed = false });
+            TerminalInfo.Add(terminal.GetInstanceID(), new UplinkInfo() {
+                Puzzle = puzzle,
+                Ip = ip,
+                CommandUsed = false
+            });
         }
 
         public void UplinkTerminalDiscovered(LG_ComputerTerminal terminal)
@@ -133,8 +135,8 @@ namespace TestPlugin.UplinkBioscan
                 {
                     cmd.AddOutput($"Security Scan is required for finalizing the connection!", true);
                 }
-                
-                cmd.OnEndOfQueue = new Action (() =>
+
+                cmd.SetEndOfQueue(() =>
                 {
                     //Trigger Alarm, Attempt to Start ChainedPuzzle
                     puzzle.Trigger();

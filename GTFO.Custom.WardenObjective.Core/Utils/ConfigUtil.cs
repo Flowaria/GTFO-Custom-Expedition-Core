@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using System.IO;
+using System.Linq;
 
 //TODO: Fix Json of this shit
 namespace GTFO.CustomObjectives.Utils
@@ -10,6 +11,7 @@ namespace GTFO.CustomObjectives.Utils
     {
         public static string GlobalPath { get; private set; }
         public static string LocalPath { get; private set; }
+        public static bool HasLocalPath { get; private set; } = false;
 
         public static readonly JsonSerializerSettings JSONSetting;
 
@@ -32,6 +34,29 @@ namespace GTFO.CustomObjectives.Utils
             };
         }
 
+        public static void SetupLocalConfig()
+        {
+            if (HasLocalPath)
+                return;
+
+            var isDataDumperExist = MelonHandler.Mods.Any(x => x.Info.Name.Equals("Data-Dumper"));
+            if (isDataDumperExist)
+            {
+                if(MelonPrefs.HasKey("Data Dumper", "RundownPackage"))
+                {
+                    HasLocalPath = true;
+
+                    var path = MelonPrefs.GetString("Data Dumper", "RundownPackage");
+                    LocalPath = Path.Combine(MelonLoaderBase.UserDataPath, path != "default" ? path : GetDefaultFolder());
+                }
+            }
+        }
+
+        private static string GetDefaultFolder()
+        {
+            return "GameData_" + CellBuildData.GetRevision().ToString();
+        }
+
         #region GlobalConfig
 
         //TODO: Implement This
@@ -45,12 +70,6 @@ namespace GTFO.CustomObjectives.Utils
         {
             var content = GetGlobalConfigContent(name);
             if (string.IsNullOrEmpty(content))
-            {
-                obj = default;
-                return false;
-            }
-
-            if (!File.Exists(content))
             {
                 obj = default;
                 return false;
@@ -90,12 +109,6 @@ namespace GTFO.CustomObjectives.Utils
                 return false;
             }
 
-            if (!File.Exists(content))
-            {
-                obj = default;
-                return false;
-            }
-
             obj = JsonConvert.DeserializeObject<D>(content);
             return true;
         }
@@ -108,13 +121,22 @@ namespace GTFO.CustomObjectives.Utils
             }
             catch
             {
+                Logger.Verbose("Can't Read File!: {0}", GetLocalConfigPath(filename));
                 return null;
             }
         }
 
         public static string GetLocalConfigPath(string filename)
         {
-            return Path.Combine(LocalPath, filename);
+            if (HasLocalPath)
+            {
+                return Path.Combine(LocalPath, filename);
+            }
+            else
+            {
+                Logger.Verbose("LocalPath is Missing!");
+                return null;
+            }
         }
 
         #endregion LocalConfig

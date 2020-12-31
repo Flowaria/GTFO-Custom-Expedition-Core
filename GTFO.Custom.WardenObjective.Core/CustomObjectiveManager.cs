@@ -31,6 +31,8 @@ namespace GTFO.CustomObjectives
         private readonly static HandlerTypeDict _Handlers;
         private readonly static HandlerTypeList _GlobalHandlers;
 
+        private static string[] _AllowedGlobalHandlers;
+
         static CustomObjectiveManager()
         {
             _ActiveHandlers = new HandlerList();
@@ -44,13 +46,18 @@ namespace GTFO.CustomObjectives
             };
         }
 
+        internal static void SetGlobalHandlerWhitelist(string[] handlerGUIDs)
+        {
+            _AllowedGlobalHandlers = handlerGUIDs;
+        }
+
         /// <summary>
         /// Register Global CustomObjective Handler to Manager
         /// </summary>
         /// <typeparam name="T">Type of Handler (derived from CustomObjecitveHandler)</typeparam>
-        public static void AddGlobalHandler<T>() where T : CustomObjectiveHandlerBase, new()
+        public static void AddGlobalHandler<T>(string GUID) where T : CustomObjectiveHandlerBase, new()
         {
-            AddGlobalHandler<T>(CustomObjectiveSettings.ALL_LAYER);
+            AddGlobalHandler<T>(GUID, CustomObjectiveSettings.ALL_LAYER);
         }
 
         /// <summary>
@@ -58,7 +65,7 @@ namespace GTFO.CustomObjectives
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="settings"></param>
-        public static void AddGlobalHandler<T>(CustomObjectiveSettings setting) where T : CustomObjectiveHandlerBase, new()
+        public static void AddGlobalHandler<T>(string GUID, CustomObjectiveSettings setting) where T : CustomObjectiveHandlerBase, new()
         {
             var type = typeof(T);
 
@@ -66,6 +73,9 @@ namespace GTFO.CustomObjectives
                 throw new ArgumentException("You can't use base handler class directly, Use derived class instead.");
 
             if (IsTypeRegistered(type, out var exception))
+                throw exception;
+
+            if (IsGUIDRegistered(GUID, out exception))
                 throw exception;
 
             _GlobalHandlers.Add(new HandlerTypeContainer()
@@ -139,12 +149,27 @@ namespace GTFO.CustomObjectives
             return false;
         }
 
+        private static bool IsGUIDRegistered(string GUID, out ArgumentException exception)
+        {
+            if(_GlobalHandlers.Any(x => x.GUID?.Equals(GUID, StringComparison.OrdinalIgnoreCase) ?? false))
+            {
+                exception = new ArgumentException($"GUID ({GUID}) is already registered");
+                return true;
+            }
+
+            exception = null;
+            return false;
+        }
+
         internal static CustomObjectiveHandlerBase[] FireAllGlobalHandler(LG_Layer layer, WardenObjectiveDataBlock objectiveData)
         {
             var handlerList = new HandlerList();
 
             foreach (var handler in _GlobalHandlers)
             {
+                if (!_AllowedGlobalHandlers.Any(x=>x.Equals(handler.GUID, StringComparison.OrdinalIgnoreCase)))
+                    continue;
+
                 handlerList.Add(FireHandlerByContainer(handler, layer, objectiveData, isGlobalHandler: true));
             }
 

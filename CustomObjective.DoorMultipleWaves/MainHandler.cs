@@ -21,12 +21,6 @@ namespace CustomObjective.DoorMultipleWaves
 
         public override void OnSetup()
         {
-            if(this.LayerType != LG_LayerType.MainLayer)
-            {
-                UnloadSelf();
-                return;
-            }
-
             DoorWaveManager.Setup();
 
             doorWaveManager = DoorWaveManager.Current;

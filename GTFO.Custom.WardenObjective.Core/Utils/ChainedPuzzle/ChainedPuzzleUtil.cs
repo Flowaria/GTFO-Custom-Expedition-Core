@@ -27,6 +27,16 @@ namespace GTFO.CustomObjectives.Utils
             };
         }
 
+        public static T Setup<T>(uint id, LG_ComputerTerminal terminal) where T : ChainedPuzzleContext, new()
+        {
+            return Setup<T>(ChainedPuzzleDataBlock.GetBlock(id), terminal.SpawnNode.m_area, terminal.m_wardenObjectiveSecurityScanAlign);
+        }
+
+        public static T Setup<T>(ChainedPuzzleDataBlock block, LG_ComputerTerminal terminal) where T : ChainedPuzzleContext, new()
+        {
+            return Setup<T>(block, terminal.SpawnNode.m_area, terminal.m_wardenObjectiveSecurityScanAlign);
+        }
+
         /// <summary>
         /// Create ChainedPuzzle Instance
         /// </summary>
@@ -94,7 +104,7 @@ namespace GTFO.CustomObjectives.Utils
             void CreatePuzzleInstance()
             {
                 context.Instance = ChainedPuzzleManager.CreatePuzzleInstance(block, area, position, parent);
-                context.Instance.add_OnPuzzleSolved(new Action(context.Solved));
+                context.Instance.add_OnPuzzleSolved(new Action(context.Solved_Internal));
             }
         }
     }

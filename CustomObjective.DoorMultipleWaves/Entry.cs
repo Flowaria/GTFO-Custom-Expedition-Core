@@ -15,7 +15,7 @@ namespace CustomObjective.DoorMultipleWaves
     {
         public override void OnApplicationStart()
         {
-            CustomObjectiveManager.AddGlobalHandler<MainHandler>();
+            CustomObjectiveManager.AddGlobalHandler<MainHandler>("MultiWaveDoor");
         }
     }
 }

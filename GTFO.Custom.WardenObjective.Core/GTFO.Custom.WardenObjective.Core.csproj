@@ -112,7 +112,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Utils\ChainedPuzzleContext.cs" />
+    <Compile Include="Extensions\TerminalExtension.cs" />
+    <Compile Include="Utils\ChainedPuzzle\ChainedPuzzleContext.cs" />
     <Compile Include="ConfigDTO.cs" />
     <Compile Include="CustomObjectiveManager.cs" />
     <Compile Include="GlobalHandlers\FogControlTerminals\FogTerminalConfigDTO.cs" />
@@ -150,9 +151,10 @@
     <Compile Include="SimpleLoader\CustomObjectiveAttribute.cs" />
     <Compile Include="SimpleLoader\ObjectiveSimpleEntry.cs" />
     <Compile Include="SimpleLoader\ObjectiveSimpleLoader.cs" />
-    <Compile Include="Utils\ChainedPuzzleUtil.cs" />
+    <Compile Include="Utils\ChainedPuzzle\ChainedPuzzleUtil.cs" />
     <Compile Include="Utils\ConfigUtil.cs" />
-    <Compile Include="Utils\FogLevelUtil.cs" />
+    <Compile Include="Utils\FogLevel\FogLevelReplicator.cs" />
+    <Compile Include="Utils\FogLevel\FogLevelUtil.cs" />
     <Compile Include="Utils\GUIUtil.cs" />
     <Compile Include="Utils\ItemUtil.cs" />
     <Compile Include="Logger.cs" />

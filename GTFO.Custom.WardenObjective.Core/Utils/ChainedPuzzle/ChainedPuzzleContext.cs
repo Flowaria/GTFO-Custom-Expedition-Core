@@ -1,4 +1,5 @@
 ﻿using ChainedPuzzles;
+using System;
 
 namespace GTFO.CustomObjectives.Utils
 {
@@ -9,15 +10,18 @@ namespace GTFO.CustomObjectives.Utils
         public float SolvedMessageDuration { get; set; } = 10.0f;
         public ePUIMessageStyle SolvedMessageStyle { get; set; } = ePUIMessageStyle.Bioscan;
 
-        internal void Solved()
+        internal void Solved_Internal()
         {
-            if (!string.IsNullOrWhiteSpace(SolvedMessage) || SolvedMessageDuration >= 0.0f)
+            if (!string.IsNullOrWhiteSpace(SolvedMessage) && SolvedMessageDuration >= 0.0f)
             {
                 GuiManager.InteractionLayer.SetTimedMessage(SolvedMessage, SolvedMessageDuration, SolvedMessageStyle, 0);
             }
 
+            Solved?.Invoke();
             OnSolved();
         }
+
+        public Action Solved;
 
         public virtual void OnSolved()
         {
