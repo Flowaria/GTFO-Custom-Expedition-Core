@@ -1,12 +1,14 @@
-﻿using Harmony;
+﻿using HarmonyLib;
 using LevelGeneration;
 
 namespace GTFO.CustomObjectives.Inject.Terminal
 {
-    [HarmonyPatch(typeof(LG_ComputerTerminalCommandInterpreter), "ReceiveCommand")]
-    internal static class Inject_Terminal_ReceiveCommand
+    [HarmonyPatch(typeof(LG_ComputerTerminalCommandInterpreter))]
+    internal static class Inject_TerminalCommandInterpreter
     {
-        internal static void Postfix(LG_ComputerTerminalCommandInterpreter __instance, TERM_Command cmd, string inputLine, string param1, string param2)
+        [HarmonyPostfix]
+        [HarmonyPatch("ReceiveCommand")]
+        internal static void Post_ReceiveCommand(LG_ComputerTerminalCommandInterpreter __instance, TERM_Command cmd, string inputLine, string param1, string param2)
         {
             if (cmd == TERM_Command.Override)
             {
@@ -20,18 +22,18 @@ namespace GTFO.CustomObjectives.Inject.Terminal
         }
     }
 
-    [HarmonyPatch(typeof(LG_ComputerTerminal), "OnProximityEnter")]
-    internal static class Inject_Terminal_Enter
+    [HarmonyPatch(typeof(LG_ComputerTerminal))]
+    internal static class Inject_Terminal
     {
-        internal static void Postfix(LG_ComputerTerminal __instance)
+        [HarmonyPostfix]
+        [HarmonyPatch("OnProximityEnter")]
+        internal static void Post_ProxEnter(LG_ComputerTerminal __instance)
         {
             TerminalMessage.OnProximityEnter?.Invoke(__instance);
         }
-    }
 
-    [HarmonyPatch(typeof(LG_ComputerTerminal), "OnProximityExit")]
-    internal static class Inject_Terminal_Exit
-    {
+        [HarmonyPostfix]
+        [HarmonyPatch("OnProximityExit")]
         internal static void Postfix(LG_ComputerTerminal __instance)
         {
             TerminalMessage.OnProximityExit?.Invoke(__instance);

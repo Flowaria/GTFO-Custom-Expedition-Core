@@ -1,4 +1,6 @@
-﻿using MelonLoader;
+﻿using BepInEx;
+using BepInEx.Configuration;
+using BepInEx.IL2CPP;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using System.IO;
@@ -17,7 +19,9 @@ namespace GTFO.CustomObjectives.Utils
 
         static ConfigUtil()
         {
-            GlobalPath = Path.Combine(MelonLoaderBase.UserDataPath, "CustomObjective");
+            GlobalPath = Paths.ConfigPath;
+            LocalPath = Paths.ConfigPath;
+            HasLocalPath = true;
 
             if (!Directory.Exists(GlobalPath))
             {
@@ -34,21 +38,25 @@ namespace GTFO.CustomObjectives.Utils
             };
         }
 
-        public static void SetupLocalConfig()
+        public static void SetupLocalConfig(ConfigFile config)
         {
             if (HasLocalPath)
                 return;
 
-            var isDataDumperExist = MelonHandler.Mods.Any(x => x.Info.Name.Equals("Data-Dumper"));
+
+            
+            var isDataDumperExist = IL2CPPChainloader.Instance.Plugins.ContainsKey("Data-Dumper"); //MAJOR: Fix it to DataDumper GUID later
             if (isDataDumperExist)
             {
-                if(MelonPrefs.HasKey("Data Dumper", "RundownPackage"))
-                {
-                    HasLocalPath = true;
+                HasLocalPath = true;
 
-                    var path = MelonPrefs.GetString("Data Dumper", "RundownPackage");
-                    LocalPath = Path.Combine(MelonLoaderBase.UserDataPath, path != "default" ? path : GetDefaultFolder());
+                var path = GetDefaultFolder();
+                if (config.TryGetEntry<string>(new ConfigDefinition("", ""), out var entry))
+                {
+                    path = entry.Value;
                 }
+
+                LocalPath = Path.Combine(Paths.ConfigPath, path);
             }
         }
 

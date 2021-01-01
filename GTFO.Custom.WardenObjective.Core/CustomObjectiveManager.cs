@@ -81,7 +81,8 @@ namespace GTFO.CustomObjectives
             _GlobalHandlers.Add(new HandlerTypeContainer()
             {
                 BaseType = type,
-                Setting = setting
+                Setting = setting,
+                GUID = GUID
             });
 
             Logger.Verbose("Global Handler Added: {0}", type.Name);
@@ -170,7 +171,10 @@ namespace GTFO.CustomObjectives
                 if (!_AllowedGlobalHandlers.Any(x=>x.Equals(handler.GUID, StringComparison.OrdinalIgnoreCase)))
                     continue;
 
-                handlerList.Add(FireHandlerByContainer(handler, layer, objectiveData, isGlobalHandler: true));
+                var handlerInstance = FireHandlerByContainer(handler, layer, objectiveData, isGlobalHandler: true);
+
+                if(handlerInstance != null)
+                    handlerList.Add(handlerInstance);
             }
 
             return handlerList.ToArray();

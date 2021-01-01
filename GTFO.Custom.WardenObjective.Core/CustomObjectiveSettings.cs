@@ -26,12 +26,12 @@ namespace GTFO.CustomObjectives
             {
                 shouldFire = true;
                 shouldFire &= ShouldFire_LayerCheck(layerType);
-                shouldFire &= ShouldFire_User(objectiveData);
+                shouldFire &= ShouldFire_User(shouldFire, objectiveData);
             }
             else
             {
                 shouldFire |= ShouldFire_LayerCheck(layerType);
-                shouldFire |= ShouldFire_User(objectiveData);
+                shouldFire |= ShouldFire_User(shouldFire, objectiveData);
             }
 
             return shouldFire;
@@ -47,22 +47,22 @@ namespace GTFO.CustomObjectives
             }
         }
 
-        private bool ShouldFire_User(WardenObjectiveDataBlock objectiveData)
+        private bool ShouldFire_User(bool originalState, WardenObjectiveDataBlock objectiveData)
         {
-            return CustomFilter?.Invoke(objectiveData) ?? true;
+            return CustomFilter?.Invoke(objectiveData) ?? originalState;
         }
 
-        public static CustomObjectiveSettings ALL_LAYER = new CustomObjectiveSettings()
+        public static readonly CustomObjectiveSettings ALL_LAYER = new CustomObjectiveSettings()
         {
             AllowedLayers = AllowedLayerType.All
         };
 
-        public static CustomObjectiveSettings MAIN_ONLY = new CustomObjectiveSettings()
+        public static readonly CustomObjectiveSettings MAIN_ONLY = new CustomObjectiveSettings()
         {
             AllowedLayers = AllowedLayerType.Main
         };
 
-        public static CustomObjectiveSettings SUB_ONLY = new CustomObjectiveSettings()
+        public static readonly CustomObjectiveSettings SUB_ONLY = new CustomObjectiveSettings()
         {
             AllowedLayers = AllowedLayerType.Secondary | AllowedLayerType.Third
         };

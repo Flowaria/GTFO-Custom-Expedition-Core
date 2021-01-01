@@ -1,4 +1,4 @@
-﻿using Harmony;
+﻿using HarmonyLib;
 
 namespace GTFO.CustomObjectives.Inject.Global
 {

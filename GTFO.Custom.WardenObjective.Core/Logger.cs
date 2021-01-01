@@ -1,10 +1,12 @@
-﻿using MelonLoader;
+﻿using BepInEx.Logging;
 using System;
 
 namespace GTFO.CustomObjectives
 {
     public static class Logger
     {
+        internal static ManualLogSource LogInstance;
+
         internal static bool IsGlobalEnabled = true;
         internal static bool IsLogEnabled = true;
         internal static bool IsWarnEnabled = true;
@@ -15,28 +17,28 @@ namespace GTFO.CustomObjectives
         public static void Verbose(string str, params object[] args)
         {
             if (IsGlobalEnabled && IsVerboseEnabled)
-                MelonLogger.Log(ConsoleColor.Cyan, $"[Verbose] {str}", args);
+                LogInstance?.LogInfo(string.Format($"[Verbose] {str}", args));
         }
 
         public static void Log(object obj) => Log(obj.ToString());
         public static void Log(string str, params object[] args)
         {
             if (IsGlobalEnabled && IsLogEnabled)
-                MelonLogger.Log(str, args);
+                LogInstance?.LogInfo(string.Format(str, args));
         }
 
         public static void Warning(object obj) => Warning(obj.ToString());
         public static void Warning(string str, params object[] args)
         {
             if (IsGlobalEnabled && IsWarnEnabled)
-                MelonLogger.LogWarning(str, args);
+                LogInstance?.LogWarning(string.Format(str, args));
         }
 
         public static void Error(object obj) => Error(obj.ToString());
         public static void Error(string str, params object[] args)
         {
             if (IsGlobalEnabled && IsErrorEnabled)
-                MelonLogger.LogError(str, args);
+                LogInstance?.LogError(string.Format(str, args));
         }
     }
 }

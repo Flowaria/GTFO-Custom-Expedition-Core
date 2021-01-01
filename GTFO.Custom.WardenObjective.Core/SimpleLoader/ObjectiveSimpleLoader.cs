@@ -1,4 +1,4 @@
-﻿using MelonLoader;
+﻿using BepInEx;
 using System;
 using System.IO;
 using System.Reflection;
@@ -11,8 +11,8 @@ namespace GTFO.CustomObjectives.SimpleLoader
         {
             var lookupPaths = new string[]
             {
-                Path.Combine(Imports.GetGameDirectory(), "Mods"),
-                Path.Combine(Imports.GetGameDirectory(), "Mods", "CustomObjectives")
+                Paths.PluginPath,
+                Path.Combine(Paths.PluginPath, "CustomObjectives")
             };
 
             foreach (var path in lookupPaths)

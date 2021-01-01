@@ -33,10 +33,15 @@
   <ItemGroup>
     <Reference Include="Il2Cppmscorlib, Version=3.7.1.6, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\GTFO\MelonLoader\Managed\Il2Cppmscorlib.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\GTFO\BepInEx\unhollowed\Il2Cppmscorlib.dll</HintPath>
     </Reference>
-    <Reference Include="Modules-ASM">
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\GTFO\MelonLoader\Managed\Modules-ASM.dll</HintPath>
+    <Reference Include="Modules-ASM, Version=3.7.1.6, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\GTFO\BepInEx\unhollowed\Modules-ASM.dll</HintPath>
+    </Reference>
+    <Reference Include="SNet_ASM, Version=3.7.1.6, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\GTFO\BepInEx\unhollowed\SNet_ASM.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -48,18 +53,19 @@
     <Reference Include="System.Xml" />
     <Reference Include="UnhollowerBaseLib, Version=0.4.10.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\GTFO\MelonLoader\Managed\UnhollowerBaseLib.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.TextMeshPro, Version=3.7.1.6, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\GTFO\MelonLoader\Managed\Unity.TextMeshPro.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\GTFO\BepInEx\core\UnhollowerBaseLib.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.CoreModule, Version=3.7.1.6, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\GTFO\MelonLoader\Managed\UnityEngine.CoreModule.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\GTFO\BepInEx\unhollowed\UnityEngine.CoreModule.dll</HintPath>
     </Reference>
-    <Reference Include="Utils-ASM">
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\GTFO\MelonLoader\Managed\Utils-ASM.dll</HintPath>
+    <Reference Include="UnityEngine.InputLegacyModule, Version=3.7.1.6, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\GTFO\BepInEx\unhollowed\UnityEngine.InputLegacyModule.dll</HintPath>
+    </Reference>
+    <Reference Include="Utils-ASM, Version=3.7.1.6, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\GTFO\BepInEx\unhollowed\Utils-ASM.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -67,6 +73,8 @@
     <Compile Include="Entry.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Basic\BuilderHandler.cs" />
+    <Compile Include="ShuffleSeed\SeedState.cs" />
+    <Compile Include="ShuffleSeed\ShuffleSeedReplicator.cs" />
     <Compile Include="UplinkBioscan\UplinkBioscanHandler.cs" />
     <Compile Include="UplinkBioscan\UplinkPuzzleContext.cs" />
   </ItemGroup>

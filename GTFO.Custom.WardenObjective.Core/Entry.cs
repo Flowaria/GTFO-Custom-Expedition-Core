@@ -1,81 +1,67 @@
-﻿using GTFO.CustomObjectives;
+﻿using BepInEx;
+using BepInEx.Configuration;
+using BepInEx.IL2CPP;
+using GTFO.CustomObjectives;
 using GTFO.CustomObjectives.GlobalHandlers.TimedObjectives;
 using GTFO.CustomObjectives.Inject.Global;
 using GTFO.CustomObjectives.SimpleLoader;
 using GTFO.CustomObjectives.Utils;
-using MelonLoader;
+using SNetwork;
 using System;
-
-[assembly: MelonInfo(typeof(Entry), "Custom WardenObjective Core", "1.0", "Flowaria")]
-[assembly: MelonGame("10 Chambers Collective", "GTFO")]
+using System.Linq;
+using TestPlugin.ShuffleSeed;
+using UnhollowerRuntimeLib;
+using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace GTFO.CustomObjectives
 {
-    internal class Entry : MelonMod
+    [BepInPlugin("flowaria.CustomWardenObjective.Core", "Custom WardenObjective Core", "1.0.0.0")]
+    internal class Entry : BasePlugin
     {
-        private const string CONFIG_SECTION = "Custom WardenObjective Global";
-        public const int CONFIG_VERSION = 1;
+        private const string CONFIG_SECTION = "Global";
 
-        public override void OnApplicationStart()
+        public override void Load()
         {
-            Setup_DefaultConfigs();
-            Setup_DefaultGlobalHandlers();
-            //Setup_DefaultReplicator();
+            ClassInjector.RegisterTypeInIl2Cpp<GlobalBehaviour>();
 
             ObjectiveSimpleLoader.Setup();
+            Setup_GlobalBehaviour();
+
+            Setup_DefaultConfigs();
+            Setup_DefaultGlobalHandlers();
         }
 
-        public override void OnModSettingsApplied()
+        #region ApplicationStart
+
+        private void Setup_GlobalBehaviour()
         {
-            ConfigUtil.SetupLocalConfig();
+            GlobalBehaviour.Setup();
 
-            if (!ConfigUtil.HasLocalPath)
-                return;
-
-            if(ConfigUtil.TryGetLocalConfig<LocalConfigDTO>("ObjectivePrefs.json", out var config))
-            {
-                Logger.Log("=== Global Handler Whitelist ===");
-                foreach (var p in config.EnabledModules)
-                {
-                    Logger.Log("Allowed Plugin: {0}", p);
-                }
-                CustomObjectiveManager.SetGlobalHandlerWhitelist(config.EnabledModules);
-            }
+            
+            GlobalBehaviour.OnGameInit += OnGameInit;
+            GlobalBehaviour.OnUpdate += OnUpdate;
+            GlobalBehaviour.OnFixedUpdate += OnFixedUpdate;
         }
 
-        
         private void Setup_DefaultConfigs()
         {
-            if (!MelonPrefs.HasKey(CONFIG_SECTION, "Version"))
-            {
-                Register_DefaultConfigs();
-            }
-            else
-            {
-                var cfgVersion = MelonPrefs.GetInt(CONFIG_SECTION, "Version");
-                if(cfgVersion < CONFIG_VERSION)
-                {
-                    MelonPrefs.SetInt(CONFIG_SECTION, "Version", CONFIG_VERSION);
-                    Register_DefaultConfigs();
-                }
-            }
+            Logger.LogInstance = this.Log;
+            Logger.IsGlobalEnabled = GetCfgValue("UseLogger", true, "Enable Logger?");
 
-            Logger.IsGlobalEnabled = MelonPrefs.GetBool(CONFIG_SECTION, "UseLogger");
-            Logger.IsVerboseEnabled = MelonPrefs.GetBool(CONFIG_SECTION, "UseLogger_Verbose");
-            Logger.IsLogEnabled = MelonPrefs.GetBool(CONFIG_SECTION, "UseLogger_Log");
-            Logger.IsWarnEnabled = MelonPrefs.GetBool(CONFIG_SECTION, "UseLogger_Warning");
-            Logger.IsErrorEnabled = MelonPrefs.GetBool(CONFIG_SECTION, "UseLogger_Error");
+            var raw = GetCfgValue("UsingLogLevels", "Log, Warning, Error", "Allowed Level for Logger (Verbose, Log, Warning and Error)");
+            var list = raw.Split(',').Select(item => item.Trim());
+            Logger.IsVerboseEnabled = list.Any(x => x.Equals("Verbose", StringComparison.OrdinalIgnoreCase));
+            Logger.IsLogEnabled = list.Any(x => x.Equals("Log", StringComparison.OrdinalIgnoreCase));
+            Logger.IsWarnEnabled = list.Any(x => x.Equals("Warning", StringComparison.OrdinalIgnoreCase));
+            Logger.IsErrorEnabled = list.Any(x => x.Equals("Error", StringComparison.OrdinalIgnoreCase));
+
+            Config.Save();
         }
 
-        private void Register_DefaultConfigs()
+        private T GetCfgValue<T>(string entry, T defaultValue, string description)
         {
-            MelonPrefs.RegisterInt(CONFIG_SECTION, "Version", CONFIG_VERSION, "DO NOT TOUCH THIS VALUE");
-            MelonPrefs.RegisterBool(CONFIG_SECTION, "UseLogger", true, "Use Logger?");
-            MelonPrefs.RegisterBool(CONFIG_SECTION, "UseLogger_Verbose", false, "Display Verbose Logs?");
-            MelonPrefs.RegisterBool(CONFIG_SECTION, "UseLogger_Log", true, "Display Normal Logs?");
-            MelonPrefs.RegisterBool(CONFIG_SECTION, "UseLogger_Warning", true, "Display Warning Logs?");
-            MelonPrefs.RegisterBool(CONFIG_SECTION, "UseLogger_Error", true, "Display Error Logs?");
-            MelonPrefs.SaveConfig();
+            return Config.Bind<T>(new ConfigDefinition(CONFIG_SECTION, entry), defaultValue, new ConfigDescription(description)).Value;
         }
 
         private void Setup_DefaultGlobalHandlers()
@@ -87,17 +73,60 @@ namespace GTFO.CustomObjectives
             //TODO: New Global Handler: Regen Hibernating Enemies on other zone
         }
 
-        private void Setup_DefaultReplicator()
+        #endregion
+
+        public void OnGameInit()
         {
-            FogLevelUtil.Setup();
+            Setup_LocalConfigs();
+            Setup_DefaultReplicator();
         }
 
-        public override void OnUpdate()
+        #region GameInit
+
+        private void Setup_LocalConfigs()
         {
+            ConfigUtil.SetupLocalConfig(Config);
+
+            if (!ConfigUtil.HasLocalPath)
+                return;
+
+            if (ConfigUtil.TryGetLocalConfig<LocalConfigDTO>("ObjectivePrefs.json", out var config))
+            {
+                Logger.Log("=== Global Handler Whitelist ===");
+                foreach (var p in config.EnabledModules)
+                {
+                    Logger.Log("Allowed Plugin: {0}", p);
+                }
+                CustomObjectiveManager.SetGlobalHandlerWhitelist(config.EnabledModules);
+            }
+        }
+
+        ShuffleSeedReplicator Replicator;
+        private void Setup_DefaultReplicator()
+        {
+            Replicator = new ShuffleSeedReplicator();
+            Replicator.Setup(eSNetReplicatorLifeTime.NeverDestroyed, SNet_ChannelType.SessionOrderCritical);
+        }
+
+        #endregion
+
+        private void OnUpdate()
+        {
+            if (Input.GetKeyDown(KeyCode.PageUp))
+            {
+                Replicator.State.SeedNumber++;
+                Replicator.UpdateState();
+            }
+            else if (Input.GetKeyDown(KeyCode.PageDown))
+            {
+                Replicator.State.SeedNumber--;
+                Replicator.UpdateState();
+            }
+
             GlobalMessage.OnUpdate?.Invoke();
         }
 
-        public override void OnFixedUpdate()
+        private void OnFixedUpdate()
         {
             GlobalMessage.OnFixedUpdate?.Invoke();
         }

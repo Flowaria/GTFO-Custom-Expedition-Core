@@ -34,63 +34,40 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="GameData-ASM">
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\GTFO\MelonLoader\Managed\GameData-ASM.dll</HintPath>
+    <Reference Include="0Harmony">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\GTFO\BepInEx\core\0Harmony.dll</HintPath>
     </Reference>
-    <Reference Include="GlobalFramework-ASM, Version=3.7.1.6, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\GTFO\MelonLoader\Managed\GlobalFramework-ASM.dll</HintPath>
+    <Reference Include="BepInEx.Core">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\GTFO\BepInEx\core\BepInEx.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="BepInEx.IL2CPP">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\GTFO\BepInEx\core\BepInEx.IL2CPP.dll</HintPath>
+    </Reference>
+    <Reference Include="GlobalFramework-ASM">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\GTFO\BepInEx\unhollowed\GlobalFramework-ASM.dll</HintPath>
     </Reference>
     <Reference Include="Il2Cppmscorlib, Version=3.7.1.6, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\GTFO\MelonLoader\Managed\Il2Cppmscorlib.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\GTFO\BepInEx\unhollowed\Il2Cppmscorlib.dll</HintPath>
     </Reference>
     <Reference Include="Il2CppSystem, Version=3.7.1.6, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\GTFO\MelonLoader\Managed\Il2CppSystem.dll</HintPath>
-    </Reference>
-    <Reference Include="Il2CppSystem.Configuration, Version=3.7.1.6, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\GTFO\MelonLoader\Managed\Il2CppSystem.Configuration.dll</HintPath>
-    </Reference>
-    <Reference Include="Il2CppSystem.Core, Version=3.7.1.6, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\GTFO\MelonLoader\Managed\Il2CppSystem.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="Il2CppSystem.Net.Http, Version=3.7.1.6, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\GTFO\MelonLoader\Managed\Il2CppSystem.Net.Http.dll</HintPath>
-    </Reference>
-    <Reference Include="Il2CppSystem.Runtime.Serialization, Version=3.7.1.6, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\GTFO\MelonLoader\Managed\Il2CppSystem.Runtime.Serialization.dll</HintPath>
-    </Reference>
-    <Reference Include="Il2CppSystem.Xml, Version=3.7.1.6, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\GTFO\MelonLoader\Managed\Il2CppSystem.Xml.dll</HintPath>
-    </Reference>
-    <Reference Include="Il2CppSystem.Xml.Linq, Version=3.7.1.6, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\GTFO\MelonLoader\Managed\Il2CppSystem.Xml.Linq.dll</HintPath>
-    </Reference>
-    <Reference Include="MelonLoader.ModHandler">
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\GTFO\MelonLoader\MelonLoader.ModHandler.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\GTFO\BepInEx\unhollowed\Il2CppSystem.dll</HintPath>
     </Reference>
     <Reference Include="Modules-ASM, Version=3.7.1.6, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\GTFO\MelonLoader\Managed\Modules-ASM.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\GTFO\BepInEx\unhollowed\Modules-ASM.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\GTFO\MelonLoader\Managed\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\GTFO\BepInEx\plugins\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="Shards-ASM, Version=3.7.1.6, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\GTFO\MelonLoader\Managed\Shards-ASM.dll</HintPath>
+    <Reference Include="Shards-ASM">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\GTFO\BepInEx\unhollowed\Shards-ASM.dll</HintPath>
     </Reference>
     <Reference Include="SNet_ASM, Version=3.7.1.6, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\GTFO\MelonLoader\Managed\SNet_ASM.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\GTFO\BepInEx\unhollowed\SNet_ASM.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -98,23 +75,30 @@
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="UnhollowerBaseLib, Version=0.4.9.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="UnhollowerBaseLib, Version=0.4.10.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\GTFO\MelonLoader\Managed\UnhollowerBaseLib.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\GTFO\BepInEx\core\UnhollowerBaseLib.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.CoreModule, Version=3.7.1.6, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\GTFO\MelonLoader\Managed\UnityEngine.CoreModule.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\GTFO\BepInEx\unhollowed\UnityEngine.CoreModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.InputLegacyModule, Version=3.7.1.6, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\GTFO\BepInEx\unhollowed\UnityEngine.InputLegacyModule.dll</HintPath>
     </Reference>
     <Reference Include="Utils-ASM, Version=3.7.1.6, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\GTFO\MelonLoader\Managed\Utils-ASM.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\GTFO\BepInEx\unhollowed\Utils-ASM.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Extensions\TerminalExtension.cs" />
+    <Compile Include="GlobalBehaviour.cs" />
+    <Compile Include="ShuffleSeed\SeedState.cs" />
+    <Compile Include="ShuffleSeed\ShuffleSeedReplicator.cs" />
     <Compile Include="Utils\ChainedPuzzle\ChainedPuzzleContext.cs" />
-    <Compile Include="ConfigDTO.cs" />
+    <Compile Include="LocalConfigDTO.cs" />
     <Compile Include="CustomObjectiveManager.cs" />
     <Compile Include="GlobalHandlers\FogControlTerminals\FogTerminalConfigDTO.cs" />
     <Compile Include="HandlerBase\BuilderProxy.cs" />
