@@ -14,7 +14,9 @@ namespace GTFO.CustomObjectives.Inject.CustomReplicators
 
     internal static class ProviderManager
     {
-        internal static ushort IdSlot = 20000;
+        private static ushort IdSlot_Manager = 17500;
+        private static ushort IdSlot_SelfManaged = 20000;
+        private static ushort IdSlot_Manager_Original = 0;
         public static readonly ProviderDict PersistentReplicator;
         public static readonly ProviderDict InstanceReplicator;
 
@@ -23,10 +25,57 @@ namespace GTFO.CustomObjectives.Inject.CustomReplicators
             PersistentReplicator = new ProviderDict();
             InstanceReplicator = new ProviderDict();
 
-            GlobalMessage.OnLevelCleanup += () =>
+            GlobalMessage.OnResetSession += () =>
             {
                 InstanceReplicator.Clear();
+                IdSlot_SelfManaged = 20000;
+                SNet_Replication.s_highestSlotUsed_Manager = IdSlot_Manager_Original;
             };
+        }
+
+        public static void AssignReplicator(IReplicator replicator, string guid, StateChangedAction onStateChange)
+        {
+            var replicator_casted = replicator.Cast<SNet_Replicator>();
+            switch(replicator.Type)
+            {
+                case SNet_ReplicatorType.Manager:
+                    ProviderManager.PersistentReplicator.Add(guid, onStateChange);
+                    break;
+
+                case SNet_ReplicatorType.SelfManaged:
+                    ProviderManager.InstanceReplicator.Add(guid, onStateChange);
+                    break;
+            }
+
+            AssignKey(replicator_casted, replicator);
+        }
+
+        public static void AssignKey(SNet_Replicator replicator, IReplicator replicator_i)
+        {
+            ushort oldKey = replicator.Key; //TODO: FIX GODAMN BUG
+            ushort newKey = 0;
+            switch(replicator.Type)
+            {
+                case SNet_ReplicatorType.Manager:
+                    newKey = IdSlot_Manager++;
+                    IdSlot_Manager_Original = (ushort)(--SNet_Replication.s_highestSlotUsed_Manager); //Roll-back the Slot Usage
+                    break;
+
+                case SNet_ReplicatorType.SelfManaged:
+                    newKey = IdSlot_SelfManaged++;
+                    SNet_Replication.s_highestSlotUsed_SelfManaged--;
+                    break;
+            }
+
+            if(newKey == 0)
+            {
+                Logger.Warning("Cannot Assign Key for Replicator!");
+                return;
+            }
+
+            SNet_Replication.ClearReplicatorKey(newKey, replicator_i);
+            SNet_Replication.s_replicatorSlots[oldKey] = null;
+            SNet_Replication.s_replicatorSlots[newKey] = replicator_i;
         }
 
         public static bool Contains(string guid, out StateChangedAction action)
@@ -54,36 +103,28 @@ namespace GTFO.CustomObjectives.Inject.CustomReplicators
 
         public void Setup(eSNetReplicatorLifeTime lifeTime = eSNetReplicatorLifeTime.DestroyedOnLevelReset, SNet_ChannelType channelType = SNet_ChannelType.GameOrderCritical)
         {
+            //Create stuffs
             var guid = Guid.NewGuid().ToString();
             var syncObj = new GameObject(guid);
             var syncInstance = syncObj.AddComponent<LG_Door_Sync>();
 
+            //Cast Door_Sync to Provider
             SyncProvider = syncInstance;
-
             var provider = SyncProvider.Cast<ComplexStateReplicatorProvider>();
 
+            //Create Replicator
             Replicator = ComplexStateReplicator.Create(provider, lifeTime, default, channelType);
             InnerReplicator = Replicator.Replicator.Cast<SNet_Replicator>();
             InnerIReplicator = Replicator.Replicator;
 
-            var oldKey = InnerReplicator.Key; //TODO: FIX GODAMN BUG
-            var newKey = InnerReplicator.Key = ProviderManager.IdSlot++; //Use Custom ID Area
-            SNet_Replication.ClearReplicatorKey(newKey, InnerIReplicator);
-            SNet_Replication.s_replicatorSlots[oldKey] = null;
-            SNet_Replication.s_replicatorSlots[newKey] = InnerIReplicator;
+            //Assign Replicator
+            ProviderManager.AssignReplicator(InnerIReplicator, guid, OnStateChange_Cast);
 
             SyncProvider.m_stateReplicator = Replicator;
             SyncProvider.m_syncStruct = Replicator.GetProviderSyncStruct();
 
-            if (lifeTime == eSNetReplicatorLifeTime.DestroyedOnLevelReset)
+            if (lifeTime == eSNetReplicatorLifeTime.NeverDestroyed)
             {
-                SNet_Replication.s_highestSlotUsed_SelfManaged--; //Roll-back the Slot Usage
-                ProviderManager.InstanceReplicator.Add(guid, OnStateChange_Cast);
-            }
-            else if (lifeTime == eSNetReplicatorLifeTime.NeverDestroyed)
-            {
-                SNet_Replication.s_highestSlotUsed_Manager--; //Roll-back the Slot Usage
-                ProviderManager.PersistentReplicator.Add(guid, OnStateChange_Cast);
                 GameObject.DontDestroyOnLoad(syncObj);
             }
 
