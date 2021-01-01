@@ -102,6 +102,7 @@ namespace GTFO.CustomObjectives.Inject.CustomReplicators
         public void UpdateState()
         {
             Replicator.State = State.ToOriginal();
+            Logger.Log("Got Key {0} {1}", InnerReplicator.Key, InnerReplicator.KeyBytes);
         }
 
         internal void OnStateChange_Cast(pDoorState oldState, pDoorState newState, bool isRecall)

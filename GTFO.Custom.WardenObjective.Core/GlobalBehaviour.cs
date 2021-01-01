@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HarmonyLib;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,25 +15,14 @@ namespace GTFO.CustomObjectives
         public static void Setup()
         {
             var initObject = new GameObject();
-            GameObject.DontDestroyOnLoad(initObject);
-            initObject.AddComponent(UnhollowerRuntimeLib.Il2CppType.Of<GlobalBehaviour>());
+            DontDestroyOnLoad(initObject);
+            initObject.AddComponent<GlobalBehaviour>();
         }
 
         public static Action OnUpdate;
         public static Action OnFixedUpdate;
-        public static Action OnGameInit;
 
         public GlobalBehaviour(IntPtr intPtr) : base(intPtr) { }
-
-        private void Awake()
-        {
-            AssetShards.AssetShardManager.add_OnStartupAssetsLoaded((Il2CppSystem.Action)GameLoaded);
-        }
-
-        private void GameLoaded()
-        {
-            OnGameInit?.Invoke();
-        }
 
         private void Update()
         {

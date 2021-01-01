@@ -6,6 +6,7 @@ using GTFO.CustomObjectives.GlobalHandlers.TimedObjectives;
 using GTFO.CustomObjectives.Inject.Global;
 using GTFO.CustomObjectives.SimpleLoader;
 using GTFO.CustomObjectives.Utils;
+using HarmonyLib;
 using SNetwork;
 using System;
 using System.Linq;
@@ -16,7 +17,7 @@ using UnityEngine.SceneManagement;
 
 namespace GTFO.CustomObjectives
 {
-    [BepInPlugin("flowaria.CustomWardenObjective.Core", "Custom WardenObjective Core", "1.0.0.0")]
+    [BepInPlugin("flowaria.CustomWObjective.Core", "Custom WardenObjective Core", "1.0.0.0")]
     internal class Entry : BasePlugin
     {
         private const string CONFIG_SECTION = "Global";
@@ -25,36 +26,32 @@ namespace GTFO.CustomObjectives
         {
             ClassInjector.RegisterTypeInIl2Cpp<GlobalBehaviour>();
 
-            ObjectiveSimpleLoader.Setup();
-            Setup_GlobalBehaviour();
+            //Setup Harmony Patcher
+            var harmonyInstance = new Harmony("flowaria.CustomWObjective.Core.Harmony");
+            harmonyInstance.PatchAll();
 
             Setup_DefaultConfigs();
             Setup_DefaultGlobalHandlers();
+
+            //Setup Simple Loader
+            ObjectiveSimpleLoader.Setup();
+
+            AssetShards.AssetShardManager.add_OnStartupAssetsLoaded((Il2CppSystem.Action)OnGameInit);
         }
 
         #region ApplicationStart
-
-        private void Setup_GlobalBehaviour()
-        {
-            GlobalBehaviour.Setup();
-
-            
-            GlobalBehaviour.OnGameInit += OnGameInit;
-            GlobalBehaviour.OnUpdate += OnUpdate;
-            GlobalBehaviour.OnFixedUpdate += OnFixedUpdate;
-        }
 
         private void Setup_DefaultConfigs()
         {
             Logger.LogInstance = this.Log;
             Logger.IsGlobalEnabled = GetCfgValue("UseLogger", true, "Enable Logger?");
 
-            var raw = GetCfgValue("UsingLogLevels", "Log, Warning, Error", "Allowed Level for Logger (Verbose, Log, Warning and Error)");
+            var raw = GetCfgValue("UsingLogLevels", "Log, Warning, Error", "Allowed Level for Logger ('Verbose', 'Log', 'Warning' and 'Error')");
             var list = raw.Split(',').Select(item => item.Trim());
-            Logger.IsVerboseEnabled = list.Any(x => x.Equals("Verbose", StringComparison.OrdinalIgnoreCase));
-            Logger.IsLogEnabled = list.Any(x => x.Equals("Log", StringComparison.OrdinalIgnoreCase));
-            Logger.IsWarnEnabled = list.Any(x => x.Equals("Warning", StringComparison.OrdinalIgnoreCase));
-            Logger.IsErrorEnabled = list.Any(x => x.Equals("Error", StringComparison.OrdinalIgnoreCase));
+            Logger.IsVerboseEnabled =   list.Any(x => x.Equals("Verbose", StringComparison.OrdinalIgnoreCase));
+            Logger.IsLogEnabled =       list.Any(x => x.Equals("Log", StringComparison.OrdinalIgnoreCase));
+            Logger.IsWarnEnabled =      list.Any(x => x.Equals("Warning", StringComparison.OrdinalIgnoreCase));
+            Logger.IsErrorEnabled =     list.Any(x => x.Equals("Error", StringComparison.OrdinalIgnoreCase));
 
             Config.Save();
         }
@@ -77,6 +74,11 @@ namespace GTFO.CustomObjectives
 
         public void OnGameInit()
         {
+            //Setup Global Handler
+            GlobalBehaviour.Setup();
+            GlobalBehaviour.OnUpdate += OnUpdate;
+            GlobalBehaviour.OnFixedUpdate += OnFixedUpdate;
+
             Setup_LocalConfigs();
             Setup_DefaultReplicator();
         }
