@@ -21,7 +21,6 @@ namespace GTFO.CustomObjectives.Utils
         {
             GlobalPath = Paths.ConfigPath;
             LocalPath = Paths.ConfigPath;
-            HasLocalPath = true;
 
             if (!Directory.Exists(GlobalPath))
             {
@@ -43,20 +42,16 @@ namespace GTFO.CustomObjectives.Utils
             if (HasLocalPath)
                 return;
 
-
+            return;
             
             var isDataDumperExist = IL2CPPChainloader.Instance.Plugins.ContainsKey("Data-Dumper"); //MAJOR: Fix it to DataDumper GUID later
             if (isDataDumperExist)
             {
                 HasLocalPath = true;
 
-                var path = GetDefaultFolder();
-                if (config.TryGetEntry<string>(new ConfigDefinition("", ""), out var entry))
-                {
-                    path = entry.Value;
-                }
+                //READ FROM CONFIGMANAGER
 
-                LocalPath = Path.Combine(Paths.ConfigPath, path);
+                LocalPath = Path.Combine(Paths.ConfigPath, null);
             }
         }
 
@@ -108,6 +103,16 @@ namespace GTFO.CustomObjectives.Utils
 
         #region LocalConfig
 
+        public static void SaveLocalConfig<D>(string name, D obj)
+        {
+            var path = GetLocalConfigPath(name);
+            if(string.IsNullOrEmpty(path))
+            {
+                var json = JsonConvert.SerializeObject(obj, JSONSetting);
+                File.WriteAllText(path, json);
+            }
+        }
+
         public static bool TryGetLocalConfig<D>(string name, out D obj)
         {
             var content = GetLocalConfigContent(name);
@@ -117,7 +122,7 @@ namespace GTFO.CustomObjectives.Utils
                 return false;
             }
 
-            obj = JsonConvert.DeserializeObject<D>(content);
+            obj = JsonConvert.DeserializeObject<D>(content, JSONSetting);
             return true;
         }
 

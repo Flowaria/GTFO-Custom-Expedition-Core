@@ -4,6 +4,7 @@ using GTFO.CustomObjectives.Extensions;
 using GTFO.CustomObjectives.Utils;
 using LevelGeneration;
 using System;
+using System.Linq;
 using UnityEngine;
 
 namespace GTFO.CustomObjectives.HandlerBase

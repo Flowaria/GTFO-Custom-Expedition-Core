@@ -10,10 +10,12 @@ namespace TestPlugin.ShuffleSeed
 {
     public class SeedState : StateWrapperBase
     {
+        public bool UsingSeed = false;
         public int SeedNumber = 0;
 
         public override void FromOriginal(pDoorState state)
         {
+            UsingSeed = state.hasBeenOpenedDuringGame;
             SeedNumber = FloatByteToInt(state.animProgress);
         }
 
