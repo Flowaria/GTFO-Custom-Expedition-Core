@@ -31,6 +31,7 @@ namespace GTFO.CustomObjectives.GlobalHandlers.TimedObjectives
     {
         public uint TargetObjectiveID = 0;
         public float Duration = 3600.0f;
+        public bool FillOut = false;
         public string BaseMessage = "";
 
         public string EndMessage = "";

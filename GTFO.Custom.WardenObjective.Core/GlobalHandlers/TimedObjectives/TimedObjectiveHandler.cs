@@ -32,7 +32,6 @@ namespace GTFO.CustomObjectives.GlobalHandlers.TimedObjectives
 
         private TimedObjectiveDefinition TimerContext;
         private float Timer;
-        private float EndMessageTimer;
 
         public override void OnSetup()
         {
@@ -47,12 +46,8 @@ namespace GTFO.CustomObjectives.GlobalHandlers.TimedObjectives
 
         private bool TryGetConfig(uint id)
         {
-            var file = ConfigUtil.GetGlobalConfigPath("TimedObjective");
-            if (File.Exists(file))
+            if(ConfigUtil.TryGetLocalConfig<TimedObjectiveConfigDTO>("TimedObjective.json", out var config))
             {
-                var content = File.ReadAllText(file);
-                var config = JsonConvert.DeserializeObject<TimedObjectiveConfigDTO>(content);
-
                 if (config.Definitions?.Count > 0)
                 {
                     var def = config.Definitions.FirstOrDefault(x => x.TargetObjectiveID == id);
@@ -61,15 +56,13 @@ namespace GTFO.CustomObjectives.GlobalHandlers.TimedObjectives
             }
             else
             {
-                var content = JsonConvert.SerializeObject(new TimedObjectiveConfigDTO()
+                ConfigUtil.SaveLocalConfig("TimedObjective.json", new TimedObjectiveConfigDTO()
                 {
                     Definitions = new List<TimedObjectiveDefinition>()
                     {
                         new TimedObjectiveDefinition(){ }
                     }
-                }, Formatting.Indented);
-
-                File.WriteAllText(file, content);
+                });
             }
 
             return false;

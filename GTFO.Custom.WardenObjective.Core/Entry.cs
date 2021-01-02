@@ -3,6 +3,7 @@ using BepInEx.Configuration;
 using BepInEx.IL2CPP;
 using GTFO.CustomObjectives;
 using GTFO.CustomObjectives.GlobalHandlers.TimedObjectives;
+using GTFO.CustomObjectives.Inject.CustomReplicators;
 using GTFO.CustomObjectives.Inject.Global;
 using GTFO.CustomObjectives.SimpleLoader;
 using GTFO.CustomObjectives.Utils;
@@ -10,6 +11,7 @@ using HarmonyLib;
 using SNetwork;
 using System;
 using System.Linq;
+using System.Reflection;
 using TestPlugin.ShuffleSeed;
 using UnhollowerRuntimeLib;
 using UnityEngine;
@@ -17,7 +19,7 @@ using UnityEngine.SceneManagement;
 
 namespace GTFO.CustomObjectives
 {
-    [BepInPlugin("flowaria.CustomWObjective.Core", "Custom WardenObjective Core", "1.0.0.0")]
+    [BepInPlugin("Custom-WardenObjective-Core", "Custom WardenObjective Core", "1.0.0.0")]
     internal class Entry : BasePlugin
     {
         private const string CONFIG_SECTION = "Global";
@@ -26,12 +28,14 @@ namespace GTFO.CustomObjectives
         {
             ClassInjector.RegisterTypeInIl2Cpp<GlobalBehaviour>();
 
+            Setup_DefaultConfigs();
+            Setup_DefaultGlobalHandlers();
+
             //Setup Harmony Patcher
             var harmonyInstance = new Harmony("flowaria.CustomWObjective.Core.Harmony");
             harmonyInstance.PatchAll();
 
-            Setup_DefaultConfigs();
-            Setup_DefaultGlobalHandlers();
+            Inject_Replication.MakePatch(harmonyInstance);
 
             //Setup Simple Loader
             ObjectiveSimpleLoader.Setup();

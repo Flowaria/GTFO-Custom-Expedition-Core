@@ -14,9 +14,7 @@ namespace GTFO.CustomObjectives.Inject.CustomReplicators
 
     internal static class ProviderManager
     {
-        private static ushort IdSlot_Manager = 17500;
         private static ushort IdSlot_SelfManaged = 20000;
-        private static ushort IdSlot_Manager_Original = 0;
         public static readonly ProviderDict PersistentReplicator;
         public static readonly ProviderDict InstanceReplicator;
 
@@ -25,11 +23,10 @@ namespace GTFO.CustomObjectives.Inject.CustomReplicators
             PersistentReplicator = new ProviderDict();
             InstanceReplicator = new ProviderDict();
 
-            GlobalMessage.OnResetSession += () =>
+            GlobalMessage.OnResetSession_SNet += () =>
             {
                 InstanceReplicator.Clear();
                 IdSlot_SelfManaged = 20000;
-                SNet_Replication.s_highestSlotUsed_Manager = IdSlot_Manager_Original;
             };
         }
 
@@ -57,8 +54,7 @@ namespace GTFO.CustomObjectives.Inject.CustomReplicators
             switch(replicator.Type)
             {
                 case SNet_ReplicatorType.Manager:
-                    newKey = IdSlot_Manager++;
-                    IdSlot_Manager_Original = (ushort)(--SNet_Replication.s_highestSlotUsed_Manager); //Roll-back the Slot Usage
+                    newKey = oldKey;
                     break;
 
                 case SNet_ReplicatorType.SelfManaged:
@@ -73,9 +69,9 @@ namespace GTFO.CustomObjectives.Inject.CustomReplicators
                 return;
             }
 
-            SNet_Replication.ClearReplicatorKey(newKey, replicator_i);
-            SNet_Replication.s_replicatorSlots[oldKey] = null;
-            SNet_Replication.s_replicatorSlots[newKey] = replicator_i;
+            replicator.Key = newKey;
+
+            SNet_Replication.AssignReplicatorKey(replicator_i, newKey);
         }
 
         public static bool Contains(string guid, out StateChangedAction action)
@@ -96,10 +92,11 @@ namespace GTFO.CustomObjectives.Inject.CustomReplicators
     {
         public bool DoneSetup { get; private set; }
         public LG_Door_Sync SyncProvider { get; private set; }
-        public ComplexStateReplicator Replicator { get; private set; }
         public SNet_Replicator InnerReplicator { get; private set; }
         public IReplicator InnerIReplicator { get; private set; }
         public S State { get; private set; }
+
+        internal ComplexStateReplicator _Replicator { get; set; }
 
         public void Setup(eSNetReplicatorLifeTime lifeTime = eSNetReplicatorLifeTime.DestroyedOnLevelReset, SNet_ChannelType channelType = SNet_ChannelType.GameOrderCritical)
         {
@@ -113,15 +110,15 @@ namespace GTFO.CustomObjectives.Inject.CustomReplicators
             var provider = SyncProvider.Cast<ComplexStateReplicatorProvider>();
 
             //Create Replicator
-            Replicator = ComplexStateReplicator.Create(provider, lifeTime, default, channelType);
-            InnerReplicator = Replicator.Replicator.Cast<SNet_Replicator>();
-            InnerIReplicator = Replicator.Replicator;
+            _Replicator = ComplexStateReplicator.Create(provider, lifeTime, default, channelType);
+            InnerReplicator = _Replicator.Replicator.Cast<SNet_Replicator>();
+            InnerIReplicator = _Replicator.Replicator;
 
             //Assign Replicator
             ProviderManager.AssignReplicator(InnerIReplicator, guid, OnStateChange_Cast);
 
-            SyncProvider.m_stateReplicator = Replicator;
-            SyncProvider.m_syncStruct = Replicator.GetProviderSyncStruct();
+            SyncProvider.m_stateReplicator = _Replicator;
+            SyncProvider.m_syncStruct = _Replicator.GetProviderSyncStruct();
 
             if (lifeTime == eSNetReplicatorLifeTime.NeverDestroyed)
             {
@@ -129,7 +126,7 @@ namespace GTFO.CustomObjectives.Inject.CustomReplicators
             }
 
             var newState = new S();
-            newState.FromOriginal(Replicator.State);
+            newState.FromOriginal(_Replicator.State);
             State = newState;
             DoneSetup = true;
         }
@@ -142,8 +139,8 @@ namespace GTFO.CustomObjectives.Inject.CustomReplicators
 
         public void UpdateState()
         {
-            Replicator.State = State.ToOriginal();
-            Logger.Log("Got Key {0} {1}", InnerReplicator.Key, InnerReplicator.KeyBytes);
+            _Replicator.State = State.ToOriginal();
+            InnerReplicator.Key = InnerReplicator.Key; //TODO: Need to find good way
         }
 
         internal void OnStateChange_Cast(pDoorState oldState, pDoorState newState, bool isRecall)
@@ -174,7 +171,7 @@ namespace GTFO.CustomObjectives.Inject.CustomReplicators
 
             if (ShouldInteract(interaction, out var state))
             {
-                Replicator.InteractWithState(state.ToOriginal(), interaction.ToOriginal());
+                _Replicator.InteractWithState(state.ToOriginal(), interaction.ToOriginal());
             }
         }
 
