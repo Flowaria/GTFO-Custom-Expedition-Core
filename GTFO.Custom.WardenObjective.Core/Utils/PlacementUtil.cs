@@ -1,10 +1,10 @@
 ﻿using AIGraph;
+using CustomObjectives.HandlerBase;
 using GameData;
-using GTFO.CustomObjectives.HandlerBase;
 using LevelGeneration;
 using System;
 
-namespace GTFO.CustomObjectives.Utils
+namespace CustomObjectives.Utils
 {
     public static class PlacementUtil
     {

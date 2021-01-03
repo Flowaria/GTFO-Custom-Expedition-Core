@@ -1,4 +1,4 @@
-﻿namespace GTFO.CustomObjectives.SimpleLoader
+﻿namespace CustomObjectives.SimpleLoader
 {
     public abstract class ObjectiveSimpleEntry
     {

@@ -1,15 +1,15 @@
 ﻿using AIGraph;
+using CustomObjectives.Extensions;
+using CustomObjectives.Messages;
+using CustomObjectives.Utils;
 using GameData;
-using GTFO.CustomObjectives.Extensions;
-using GTFO.CustomObjectives.Inject.Global;
-using GTFO.CustomObjectives.Utils;
 using LevelGeneration;
 using SNetwork;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace GTFO.CustomObjectives.HandlerBase
+namespace CustomObjectives.HandlerBase
 {
     public abstract class CustomObjectiveHandlerBase
     {

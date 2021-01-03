@@ -1,4 +1,4 @@
-﻿using GTFO.CustomObjectives.Inject.CustomReplicators;
+﻿using CustomObjectives.Inject.CustomReplicators;
 using LevelGeneration;
 using System;
 using System.Collections.Generic;

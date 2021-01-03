@@ -1,4 +1,4 @@
-﻿namespace GTFO.CustomObjectives.HandlerBase
+﻿namespace CustomObjectives.HandlerBase
 {
     public partial class ObjectiveStatusProxy
     {

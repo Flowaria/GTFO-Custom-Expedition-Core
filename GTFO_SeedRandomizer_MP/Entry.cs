@@ -1,6 +1,6 @@
-﻿using GTFO.CustomObjectives;
-using GTFO.CustomObjectives.Inject.Global;
-using GTFO.CustomObjectives.SimpleLoader;
+﻿using CustomObjectives;
+using CustomObjectives.Messages;
+using CustomObjectives.SimpleLoader;
 using GTFO_SeedRandomizer_MP;
 using HarmonyLib;
 using LevelGeneration;
@@ -12,19 +12,15 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
-using static PlayerChatManager;
 
 [assembly: CustomObjective(typeof(Entry))]
 namespace GTFO_SeedRandomizer_MP
 {
     public class Entry : ObjectiveSimpleEntry
     {
-        private static MD5 _Md5;
         public static ShuffleSeedReplicator Replicator;
         public override void OnStart()
         {
-            _Md5 = MD5.Create();
-
             var harmonyInstance = new Harmony("SeedRandomizer_MP");
             harmonyInstance.PatchAll();
 

@@ -1,7 +1,6 @@
 ﻿using BepInEx.Logging;
-using System;
 
-namespace GTFO.CustomObjectives
+namespace CustomObjectives
 {
     public static class Logger
     {
@@ -14,6 +13,7 @@ namespace GTFO.CustomObjectives
         internal static bool IsVerboseEnabled = false;
 
         public static void Verbose(object obj) => Verbose(obj.ToString());
+
         public static void Verbose(string str, params object[] args)
         {
             if (IsGlobalEnabled && IsVerboseEnabled)
@@ -21,6 +21,7 @@ namespace GTFO.CustomObjectives
         }
 
         public static void Log(object obj) => Log(obj.ToString());
+
         public static void Log(string str, params object[] args)
         {
             if (IsGlobalEnabled && IsLogEnabled)
@@ -28,6 +29,7 @@ namespace GTFO.CustomObjectives
         }
 
         public static void Warning(object obj) => Warning(obj.ToString());
+
         public static void Warning(string str, params object[] args)
         {
             if (IsGlobalEnabled && IsWarnEnabled)
@@ -35,6 +37,7 @@ namespace GTFO.CustomObjectives
         }
 
         public static void Error(object obj) => Error(obj.ToString());
+
         public static void Error(string str, params object[] args)
         {
             if (IsGlobalEnabled && IsErrorEnabled)

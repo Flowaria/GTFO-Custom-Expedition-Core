@@ -1,7 +1,4 @@
-﻿using GTFO.CustomObjectives;
-using GTFO.CustomObjectives.Inject.Global;
-using GTFO.CustomObjectives.SimpleLoader;
-using GTFO.CustomObjectives.Utils;
+﻿using CustomObjectives.SimpleLoader;
 using SNetwork;
 using System;
 using System.Collections.Generic;
@@ -13,7 +10,7 @@ using TestPlugin.Basic;
 using TestPlugin.ShuffleSeed;
 using TestPlugin.UplinkBioscan;
 using UnityEngine;
-using Logger = GTFO.CustomObjectives.Logger;
+using Logger = CustomObjectives.Logger;
 
 [assembly: CustomObjective(typeof(Entry))]
 namespace TestPlugin

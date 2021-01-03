@@ -1,22 +1,15 @@
-﻿using GTFO.CustomObjectives.Utility;
-using HarmonyLib;
-using LevelGeneration;
+﻿using HarmonyLib;
 using SNetwork;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using UnhollowerBaseLib;
 
-namespace GTFO.CustomObjectives.Inject.CustomReplicators
+namespace CustomObjectives.Inject.CustomReplicators
 {
     //[HarmonyPatch(typeof(SNet_Replication))]
     internal static class Inject_Replication
     {
-        /*
+        [Obsolete]
         internal static void MakePatch(Harmony harmonyInstance)
         {
             var pMethodBinding = BindingFlags.NonPublic | BindingFlags.Static;
@@ -38,19 +31,12 @@ namespace GTFO.CustomObjectives.Inject.CustomReplicators
             harmonyInstance.Patch(tMethod, postfix: harmonyMethod);
         }
 
-        internal static void Post_Temp(string input, out string commonPrefix)
-        {
-            commonPrefix = "";
-        }
-
-        //[HarmonyPostfix]
-        //[HarmonyPatch("TryGetReplicator")]
-        //[HarmonyPatch(new Type[] { typeof(Il2CppStructArray<byte>), typeof(IReplicator), typeof(int) })]
-        internal static void Post_TryGetReplicator(ref bool __result, Il2CppStructArray<byte> bytes, ref IReplicator id, ref int packetIndex)
+        private static void Post_TryGetReplicator(ref bool __result, Il2CppStructArray<byte> bytes, ref IReplicator id, ref int packetIndex)
         {
             Buffer.BlockCopy(bytes, 0, SNet_Replication.m_ushortConverter, 0, 2);
             int num = SNet_Replication.m_ushortConverter[0];
+
+            Logger.Log("{0} {1} {2} {3} {4}", bytes, id, packetIndex, __result, num);
         }
-        */
     }
 }

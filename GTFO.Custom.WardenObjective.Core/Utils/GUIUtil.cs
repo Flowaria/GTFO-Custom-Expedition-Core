@@ -1,4 +1,4 @@
-﻿namespace GTFO.CustomObjectives.Utils
+﻿namespace CustomObjectives.Utils
 {
     public static class GUIUtil
     {

@@ -1,12 +1,12 @@
-﻿using GameData;
-using GTFO.CustomObjectives.Inject.Global;
-using GTFO.CustomObjectives.Inject.MarkerItem;
+﻿using CustomObjectives.Inject.MarkerItem;
+using CustomObjectives.Messages;
+using GameData;
 using LevelGeneration;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace GTFO.CustomObjectives.Utils
+namespace CustomObjectives.Utils
 {
     using LogList = Il2CppSystem.Collections.Generic.List<TerminalLogFileData>;
 

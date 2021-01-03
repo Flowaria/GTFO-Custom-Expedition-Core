@@ -1,7 +1,7 @@
 ﻿using LevelGeneration;
 using System;
 
-namespace GTFO.CustomObjectives.Utils
+namespace CustomObjectives.Utils
 {
     public class ObjectiveItem
     {

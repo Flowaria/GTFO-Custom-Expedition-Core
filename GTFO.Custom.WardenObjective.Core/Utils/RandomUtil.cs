@@ -1,7 +1,7 @@
 ﻿using LevelGeneration;
 using System.Collections.Generic;
 
-namespace GTFO.CustomObjectives.Utils
+namespace CustomObjectives.Utils
 {
     public enum SeederType
     {

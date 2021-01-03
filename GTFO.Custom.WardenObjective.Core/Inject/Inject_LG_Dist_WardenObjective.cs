@@ -2,7 +2,7 @@
 using LevelGeneration;
 using System;
 
-namespace GTFO.CustomObjectives.Inject
+namespace CustomObjectives.Inject
 {
     [HarmonyPatch(typeof(LG_Distribute_WardenObjective), "Build")]
     internal static class Inject_LG_Dist_WardenObjective

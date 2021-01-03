@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace GTFO.CustomObjectives
+﻿namespace CustomObjectives
 {
     internal class LocalConfigDTO
     {

@@ -3,7 +3,7 @@ using System;
 using System.IO;
 using System.Reflection;
 
-namespace GTFO.CustomObjectives.SimpleLoader
+namespace CustomObjectives.SimpleLoader
 {
     internal static class ObjectiveSimpleLoader
     {

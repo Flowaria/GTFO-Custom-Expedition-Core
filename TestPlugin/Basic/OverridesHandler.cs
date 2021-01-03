@@ -1,5 +1,5 @@
-﻿using GTFO.CustomObjectives;
-using GTFO.CustomObjectives.HandlerBase;
+﻿using CustomObjectives;
+using CustomObjectives.HandlerBase;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -1,11 +1,9 @@
-﻿using GTFO.CustomObjectives.HandlerBase;
-using GTFO.CustomObjectives.Utils;
-using Newtonsoft.Json;
+﻿using CustomObjectives.HandlerBase;
+using CustomObjectives.Utils;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 
-namespace GTFO.CustomObjectives.GlobalHandlers.TimedObjectives
+namespace CustomObjectives.GlobalHandlers.TimedObjectives
 {
     internal class TimedObjectiveHandler : CustomObjectiveHandlerBase
     {
@@ -27,7 +25,6 @@ namespace GTFO.CustomObjectives.GlobalHandlers.TimedObjectives
         }
 
         private bool _isCountdownEnable = false;
-
         private bool IsEndMessageCountdown = false;
 
         private TimedObjectiveDefinition TimerContext;
@@ -46,7 +43,7 @@ namespace GTFO.CustomObjectives.GlobalHandlers.TimedObjectives
 
         private bool TryGetConfig(uint id)
         {
-            if(ConfigUtil.TryGetLocalConfig<TimedObjectiveConfigDTO>("TimedObjective.json", out var config))
+            if (ConfigUtil.TryGetLocalConfig<TimedObjectiveConfigDTO>("TimedObjective.json", out var config))
             {
                 if (config.Definitions?.Count > 0)
                 {

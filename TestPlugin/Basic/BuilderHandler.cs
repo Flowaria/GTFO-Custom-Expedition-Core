@@ -1,7 +1,7 @@
-﻿using GameData;
-using GTFO.CustomObjectives;
-using GTFO.CustomObjectives.HandlerBase;
-using GTFO.CustomObjectives.Utils;
+﻿using CustomObjectives;
+using CustomObjectives.HandlerBase;
+using CustomObjectives.Utils;
+using GameData;
 using LevelGeneration;
 using System;
 using System.Collections.Generic;

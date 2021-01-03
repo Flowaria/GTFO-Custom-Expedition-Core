@@ -1,5 +1,4 @@
 ﻿using GameData;
-using GTFO.CustomObjectives.Utils;
 using LevelGeneration;
 using System;
 using System.Collections.Generic;

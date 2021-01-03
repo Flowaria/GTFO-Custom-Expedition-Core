@@ -1,11 +1,11 @@
-﻿using GTFO.CustomObjectives.Utils;
+﻿using CustomObjectives.Utils;
 using UnhollowerBaseLib;
 
-namespace GTFO.CustomObjectives.HandlerBase
+namespace CustomObjectives.HandlerBase
 {
     public class WinConditionProxy
     {
-        private CustomObjectiveHandlerBase Base;
+        private readonly CustomObjectiveHandlerBase Base;
 
         internal WinConditionProxy(CustomObjectiveHandlerBase b)
         {

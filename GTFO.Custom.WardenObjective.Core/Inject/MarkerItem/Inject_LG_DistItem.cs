@@ -1,8 +1,8 @@
-﻿using GTFO.CustomObjectives.Utils;
+﻿using CustomObjectives.Utils;
 using HarmonyLib;
 using LevelGeneration;
 
-namespace GTFO.CustomObjectives.Inject.MarkerItem
+namespace CustomObjectives.Inject.MarkerItem
 {
     [HarmonyPatch(typeof(LG_DistributeItem), "AvailableToReuse")]
     internal static class Inject_LG_DistItem

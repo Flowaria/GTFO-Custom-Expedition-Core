@@ -1,12 +1,12 @@
-﻿using GameData;
-using GTFO.CustomObjectives.HandlerBase;
-using GTFO.CustomObjectives.Inject.Global;
+﻿using CustomObjectives.HandlerBase;
+using CustomObjectives.Messages;
+using GameData;
 using LevelGeneration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace GTFO.CustomObjectives
+namespace CustomObjectives
 {
     using HandlerList = List<CustomObjectiveHandlerBase>;
     using HandlerTypeDict = Dictionary<byte, HandlerTypeContainer>;
@@ -152,7 +152,7 @@ namespace GTFO.CustomObjectives
 
         private static bool IsGUIDRegistered(string GUID, out ArgumentException exception)
         {
-            if(_GlobalHandlers.Any(x => x.GUID?.Equals(GUID, StringComparison.OrdinalIgnoreCase) ?? false))
+            if (_GlobalHandlers.Any(x => x.GUID?.Equals(GUID, StringComparison.OrdinalIgnoreCase) ?? false))
             {
                 exception = new ArgumentException($"GUID ({GUID}) is already registered");
                 return true;
@@ -168,12 +168,12 @@ namespace GTFO.CustomObjectives
 
             foreach (var handler in _GlobalHandlers)
             {
-                if (!_AllowedGlobalHandlers.Any(x => !string.IsNullOrEmpty(handler.GUID) ? x.Equals(handler.GUID, StringComparison.OrdinalIgnoreCase) : false))
+                if (!_AllowedGlobalHandlers.Any(x => !string.IsNullOrEmpty(handler.GUID) && x.Equals(handler.GUID, StringComparison.OrdinalIgnoreCase)))
                     continue;
 
                 var handlerInstance = FireHandlerByContainer(handler, layer, objectiveData, isGlobalHandler: true);
 
-                if(handlerInstance != null)
+                if (handlerInstance != null)
                     handlerList.Add(handlerInstance);
             }
 

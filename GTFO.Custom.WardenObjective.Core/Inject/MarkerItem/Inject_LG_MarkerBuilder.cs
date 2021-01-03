@@ -1,9 +1,9 @@
-﻿using GTFO.CustomObjectives.Utils;
+﻿using CustomObjectives.Utils;
 using HarmonyLib;
 using LevelGeneration;
 using UnityEngine;
 
-namespace GTFO.CustomObjectives.Inject.MarkerItem
+namespace CustomObjectives.Inject.MarkerItem
 {
     [HarmonyPatch(typeof(LG_FunctionMarkerBuilder), "SetupFunctionGO")]
     internal static class Inject_LG_MarkerBuilder

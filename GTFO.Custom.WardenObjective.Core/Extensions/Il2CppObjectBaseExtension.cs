@@ -1,6 +1,6 @@
 ﻿using UnhollowerBaseLib;
 
-namespace GTFO.CustomObjectives.Extensions
+namespace CustomObjectives.Extensions
 {
     public static class Il2CppObjectBaseExtension
     {

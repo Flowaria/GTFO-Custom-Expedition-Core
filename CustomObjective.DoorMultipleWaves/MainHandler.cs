@@ -1,9 +1,9 @@
 ﻿using CustomObjective.DoorMultipleWaves.DoorWaves;
 using CustomObjective.DoorMultipleWaves.PuzzleContext;
+using CustomObjectives.HandlerBase;
+using CustomObjectives.Utils;
+using CustomObjectives.Utils.ChainedPuzzle;
 using GameData;
-using GTFO.CustomObjectives;
-using GTFO.CustomObjectives.HandlerBase;
-using GTFO.CustomObjectives.Utils;
 using LevelGeneration;
 using SNetwork;
 using System;

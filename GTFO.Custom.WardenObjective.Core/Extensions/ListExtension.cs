@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace GTFO.CustomObjectives.Extensions
+namespace CustomObjectives.Extensions
 {
     using Il2CppCollection = Il2CppSystem.Collections.Generic;
 

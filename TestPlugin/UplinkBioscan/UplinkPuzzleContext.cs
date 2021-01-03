@@ -1,4 +1,4 @@
-﻿using GTFO.CustomObjectives.Utils;
+﻿using CustomObjectives.Utils.ChainedPuzzle;
 using LevelGeneration;
 using System;
 using System.Collections.Generic;

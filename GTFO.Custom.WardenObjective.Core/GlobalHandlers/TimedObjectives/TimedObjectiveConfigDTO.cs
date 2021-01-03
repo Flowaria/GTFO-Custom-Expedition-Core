@@ -1,7 +1,7 @@
 ﻿using GameData;
 using System.Collections.Generic;
 
-namespace GTFO.CustomObjectives.GlobalHandlers.TimedObjectives
+namespace CustomObjectives.GlobalHandlers.TimedObjectives
 {
     internal enum StartEventType
     {

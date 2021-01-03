@@ -1,7 +1,7 @@
 ﻿using ChainedPuzzles;
 using System;
 
-namespace GTFO.CustomObjectives.Utils
+namespace CustomObjectives.Utils.ChainedPuzzle
 {
     public class ChainedPuzzleContext
     {

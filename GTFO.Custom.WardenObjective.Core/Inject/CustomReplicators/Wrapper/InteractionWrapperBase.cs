@@ -1,6 +1,6 @@
 ﻿using LevelGeneration;
 
-namespace GTFO.CustomObjectives.Inject.CustomReplicators
+namespace CustomObjectives.Inject.CustomReplicators
 {
     public abstract class InteractionWrapperBase
     {

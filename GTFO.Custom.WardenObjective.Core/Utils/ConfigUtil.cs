@@ -1,5 +1,4 @@
 ﻿using BepInEx;
-using BepInEx.Configuration;
 using BepInEx.IL2CPP;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
@@ -9,22 +8,21 @@ using System.Linq;
 using System.Reflection;
 
 //TODO: Fix Json of this shit
-namespace GTFO.CustomObjectives.Utils
+namespace CustomObjectives.Utils
 {
     public static class ConfigUtil
     {
         public const string DATADUMPER_GUID = "Data-Dumper";
 
-        private static IL2CPPChainloader ChainLoader;
         public static string GlobalPath { get; private set; }
         public static string LocalPath { get; private set; }
         public static bool HasLocalPath { get; private set; } = false;
 
-        public static readonly JsonSerializerSettings JSONSetting;
+        private static readonly JsonSerializerSettings _JSONSetting;
+        private static readonly IL2CPPChainloader _ChainLoader;
 
         static ConfigUtil()
         {
-            ChainLoader = IL2CPPChainloader.Instance;
             GlobalPath = Paths.ConfigPath;
             LocalPath = Paths.ConfigPath;
 
@@ -33,7 +31,8 @@ namespace GTFO.CustomObjectives.Utils
                 Directory.CreateDirectory(GlobalPath);
             }
 
-            JSONSetting = new JsonSerializerSettings()
+            _ChainLoader = IL2CPPChainloader.Instance;
+            _JSONSetting = new JsonSerializerSettings()
             {
                 Formatting = Formatting.Indented,
                 Converters = new JsonConverter[]
@@ -48,7 +47,7 @@ namespace GTFO.CustomObjectives.Utils
             if (HasLocalPath)
                 return;
 
-            if (ChainLoader.Plugins.TryGetValue(DATADUMPER_GUID, out var info))
+            if (_ChainLoader.Plugins.TryGetValue(DATADUMPER_GUID, out var info))
             {
                 try
                 {
@@ -67,7 +66,7 @@ namespace GTFO.CustomObjectives.Utils
                     HasLocalPath = true;
                     LocalPath = customPath;
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
                     Logger.Error("Exception thrown while reading path from Data Dumper:\n{0}", e.ToString());
                     HasLocalPath = false;
@@ -115,9 +114,9 @@ namespace GTFO.CustomObjectives.Utils
         public static void SaveLocalConfig<D>(string name, D obj)
         {
             var path = GetLocalConfigPath(name);
-            if(string.IsNullOrEmpty(path))
+            if (string.IsNullOrEmpty(path))
             {
-                var json = JsonConvert.SerializeObject(obj, JSONSetting);
+                var json = JsonConvert.SerializeObject(obj, _JSONSetting);
                 File.WriteAllText(path, json);
             }
         }
@@ -131,7 +130,7 @@ namespace GTFO.CustomObjectives.Utils
                 return false;
             }
 
-            obj = JsonConvert.DeserializeObject<D>(content, JSONSetting);
+            obj = JsonConvert.DeserializeObject<D>(content, _JSONSetting);
             return true;
         }
 

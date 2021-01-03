@@ -1,25 +1,19 @@
 ﻿using BepInEx;
 using BepInEx.Configuration;
 using BepInEx.IL2CPP;
-using GTFO.CustomObjectives;
-using GTFO.CustomObjectives.GlobalHandlers.TimedObjectives;
-using GTFO.CustomObjectives.Inject.CustomReplicators;
-using GTFO.CustomObjectives.Inject.Global;
-using GTFO.CustomObjectives.SimpleLoader;
-using GTFO.CustomObjectives.Utils;
+using CustomObjectives.GlobalHandlers.TimedObjectives;
+using CustomObjectives.Messages;
+using CustomObjectives.SimpleLoader;
+using CustomObjectives.Utils;
 using HarmonyLib;
-using LevelGeneration;
-using SNetwork;
 using System;
 using System.Linq;
-using System.Reflection;
 using UnhollowerRuntimeLib;
-using UnityEngine;
-using UnityEngine.SceneManagement;
 
-namespace GTFO.CustomObjectives
+namespace CustomObjectives
 {
     [BepInPlugin("Custom-WardenObjective-Core", "Custom WardenObjective Core", "1.0.0.0")]
+    [BepInDependency("Data-Dumper", BepInDependency.DependencyFlags.SoftDependency)]
     internal class Entry : BasePlugin
     {
         private const string CONFIG_SECTION = "Global";
@@ -38,7 +32,7 @@ namespace GTFO.CustomObjectives
             //Setup Simple Loader
             ObjectiveSimpleLoader.Setup();
 
-            AssetShards.AssetShardManager.add_OnStartupAssetsLoaded((Il2CppSystem.Action)OnGameInit);
+            AssetShards.AssetShardManager.add_OnStartupAssetsLoaded((Il2CppSystem.Action)OnAssetLoaded);
         }
 
         #region ApplicationStart
@@ -50,10 +44,10 @@ namespace GTFO.CustomObjectives
 
             var raw = GetCfgValue("UsingLogLevels", "Log, Warning, Error", "Allowed Level for Logger ('Verbose', 'Log', 'Warning' and 'Error')");
             var list = raw.Split(',').Select(item => item.Trim());
-            Logger.IsVerboseEnabled =   list.Any(x => x.Equals("Verbose", StringComparison.OrdinalIgnoreCase));
-            Logger.IsLogEnabled =       list.Any(x => x.Equals("Log", StringComparison.OrdinalIgnoreCase));
-            Logger.IsWarnEnabled =      list.Any(x => x.Equals("Warning", StringComparison.OrdinalIgnoreCase));
-            Logger.IsErrorEnabled =     list.Any(x => x.Equals("Error", StringComparison.OrdinalIgnoreCase));
+            Logger.IsVerboseEnabled = list.Any(x => x.Equals("Verbose", StringComparison.OrdinalIgnoreCase));
+            Logger.IsLogEnabled = list.Any(x => x.Equals("Log", StringComparison.OrdinalIgnoreCase));
+            Logger.IsWarnEnabled = list.Any(x => x.Equals("Warning", StringComparison.OrdinalIgnoreCase));
+            Logger.IsErrorEnabled = list.Any(x => x.Equals("Error", StringComparison.OrdinalIgnoreCase));
 
             Config.Save();
         }
@@ -72,9 +66,20 @@ namespace GTFO.CustomObjectives
             //TODO: New Global Handler: Regen Hibernating Enemies on other zone
         }
 
-        #endregion
+        #endregion ApplicationStart
 
-        public void OnGameInit()
+        private bool _gameInitCalled = false;
+
+        private void OnAssetLoaded()
+        {
+            if (_gameInitCalled)
+                return;
+
+            OnGameInit_Once();
+            _gameInitCalled = true;
+        }
+
+        private void OnGameInit_Once()
         {
             //Setup Global Handler
             GlobalBehaviour.Setup();
@@ -91,7 +96,7 @@ namespace GTFO.CustomObjectives
 
         private void Setup_LocalConfigs()
         {
-            ConfigUtil.SetupLocalConfig(Config);
+            ConfigUtil.SetupLocalConfig();
 
             if (!ConfigUtil.HasLocalPath)
                 return;
@@ -109,10 +114,9 @@ namespace GTFO.CustomObjectives
 
         private void Setup_DefaultReplicator()
         {
-            
         }
 
-        #endregion
+        #endregion GameInit
 
         private void OnUpdate()
         {

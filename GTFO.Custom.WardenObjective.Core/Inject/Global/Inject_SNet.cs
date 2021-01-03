@@ -1,12 +1,8 @@
-﻿using HarmonyLib;
+﻿using CustomObjectives.Messages;
+using HarmonyLib;
 using SNetwork;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace GTFO.CustomObjectives.Inject.Global
+namespace CustomObjectives.Inject.Global
 {
     [HarmonyPatch(typeof(SNet))]
     internal static class Inject_SNet

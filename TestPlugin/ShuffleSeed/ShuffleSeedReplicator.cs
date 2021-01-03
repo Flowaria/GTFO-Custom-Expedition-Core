@@ -1,5 +1,5 @@
-﻿using GTFO.CustomObjectives;
-using GTFO.CustomObjectives.Inject.CustomReplicators;
+﻿using CustomObjectives;
+using CustomObjectives.Inject.CustomReplicators;
 using System;
 using System.Collections.Generic;
 using System.Linq;

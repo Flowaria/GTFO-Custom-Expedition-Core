@@ -1,6 +1,7 @@
-﻿using HarmonyLib;
+﻿using CustomObjectives.Messages;
+using HarmonyLib;
 
-namespace GTFO.CustomObjectives.Inject.Global
+namespace CustomObjectives.Inject.Global
 {
     [HarmonyPatch(typeof(WardenObjectiveManager), "OnStateChange")]
     internal class Inject_WardenObjectiveManager

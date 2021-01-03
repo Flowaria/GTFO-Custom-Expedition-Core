@@ -1,7 +1,7 @@
 ﻿using HarmonyLib;
 using LevelGeneration;
 
-namespace GTFO.CustomObjectives.Inject.CustomReplicators
+namespace CustomObjectives.Inject.CustomReplicators
 {
     [HarmonyPatch(typeof(LG_Door_Sync), "OnStateChange")]
     internal static class Inject_LG_Door_Sync

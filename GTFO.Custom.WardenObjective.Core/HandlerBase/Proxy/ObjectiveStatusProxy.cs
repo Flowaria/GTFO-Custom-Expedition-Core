@@ -1,12 +1,12 @@
-﻿using GTFO.CustomObjectives.Inject.Global;
+﻿using CustomObjectives.Messages;
 using LevelGeneration;
 using System;
 
-namespace GTFO.CustomObjectives.HandlerBase
+namespace CustomObjectives.HandlerBase
 {
     public partial class ObjectiveStatusProxy
     {
-        private CustomObjectiveHandlerBase Base;
+        private readonly CustomObjectiveHandlerBase Base;
         private Action DefaultObjectiveUpdate;
         private Action OnObjectiveStatusChange;
 

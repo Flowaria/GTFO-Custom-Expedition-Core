@@ -1,8 +1,8 @@
-﻿using GTFO.CustomObjectives.Inject.Terminal;
+﻿using CustomObjectives.Messages;
 using LevelGeneration;
 using System;
 
-namespace GTFO.CustomObjectives.Utils
+namespace CustomObjectives.Utils
 {
     public static class TerminalUtil
     {

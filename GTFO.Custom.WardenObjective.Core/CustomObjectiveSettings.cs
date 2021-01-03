@@ -2,7 +2,7 @@
 using LevelGeneration;
 using System;
 
-namespace GTFO.CustomObjectives
+namespace CustomObjectives
 {
     [Flags]
     public enum AllowedLayerType

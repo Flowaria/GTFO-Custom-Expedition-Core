@@ -1,13 +1,9 @@
-﻿using GameData;
-using GTFO.CustomObjectives.Inject.CustomReplicators;
-using GTFO.CustomObjectives.Inject.Global;
-using LevelGeneration;
+﻿using CustomObjectives.Messages;
+using GameData;
 using SNetwork;
-using System;
 using System.Collections.Generic;
-using UnityEngine;
 
-namespace GTFO.CustomObjectives.Utils
+namespace CustomObjectives.Utils.FogLevel
 {
     public static class FogLevelUtil
     {
@@ -76,7 +72,7 @@ namespace GTFO.CustomObjectives.Utils
             }
         }
 
-        //TODO: Allow user to jump without increament or decreament (ex: 1 -> 3)
+        //TODO: Allow user to jump without increament or decreament(ex: 1 -> 3)
         public static void SetLevel(int level)
         {
             if (!(0 <= level && level < LevelCount))

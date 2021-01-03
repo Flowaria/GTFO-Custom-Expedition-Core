@@ -1,7 +1,8 @@
-﻿using HarmonyLib;
+﻿using CustomObjectives.Messages;
+using HarmonyLib;
 using LevelGeneration;
 
-namespace GTFO.CustomObjectives.Inject.Global
+namespace CustomObjectives.Inject.Global
 {
     [HarmonyPatch(typeof(LG_Factory), "FactoryDone")]
     internal static class Inject_LG_Factory

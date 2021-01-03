@@ -1,13 +1,9 @@
-﻿using GTFO.CustomObjectives.Inject.CustomReplicators;
+﻿using CustomObjectives.Inject.CustomReplicators;
 using LevelGeneration;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
-namespace GTFO.CustomObjectives.Utils
+namespace CustomObjectives.Utils.FogLevel
 {
     public class FogLevelSetting
     {

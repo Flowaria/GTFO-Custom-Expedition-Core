@@ -1,13 +1,12 @@
 ﻿using AIGraph;
 using GameData;
-using GTFO.CustomObjectives.Extensions;
-using GTFO.CustomObjectives.Utils;
+using CustomObjectives.Extensions;
+using CustomObjectives.Utils;
 using LevelGeneration;
 using System;
-using System.Linq;
 using UnityEngine;
 
-namespace GTFO.CustomObjectives.HandlerBase
+namespace CustomObjectives.HandlerBase
 {
     using PlacementDataList = Il2CppSystem.Collections.Generic.List<Il2CppSystem.Collections.Generic.List<ZonePlacementData>>;
 
@@ -21,7 +20,7 @@ namespace GTFO.CustomObjectives.HandlerBase
 
     public class BuilderProxy
     {
-        private CustomObjectiveHandlerBase Base;
+        private readonly CustomObjectiveHandlerBase Base;
 
         private InvalidOperationException LatePlacementException
         {

@@ -1,6 +1,4 @@
-﻿using HarmonyLib;
-
-namespace GTFO.CustomObjectives.Inject.ObjectiveItem
+﻿namespace CustomObjectives.Inject.ObjectiveItem
 {
     //[HarmonyPatch(typeof(CarryItemPickup_Core))]
     internal static class Inject_CarryItem
@@ -9,14 +7,12 @@ namespace GTFO.CustomObjectives.Inject.ObjectiveItem
         //[HarmonyPatch("ActivateWardenObjectiveItem")]
         internal static void Post_Activate(CarryItemPickup_Core __instance)
         {
-
         }
 
         //[HarmonyPostfix]
         //[HarmonyPatch("DeactivateWardenObjectiveItem")]
         internal static void Post_Deactivate(CarryItemPickup_Core __instance)
         {
-
         }
     }
 }

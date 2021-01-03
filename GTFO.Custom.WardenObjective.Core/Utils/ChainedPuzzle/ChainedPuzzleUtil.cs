@@ -1,11 +1,11 @@
 ﻿using ChainedPuzzles;
+using CustomObjectives.Messages;
 using GameData;
-using GTFO.CustomObjectives.Inject.Global;
 using LevelGeneration;
 using System;
 using UnityEngine;
 
-namespace GTFO.CustomObjectives.Utils
+namespace CustomObjectives.Utils.ChainedPuzzle
 {
     public static class ChainedPuzzleUtil
     {

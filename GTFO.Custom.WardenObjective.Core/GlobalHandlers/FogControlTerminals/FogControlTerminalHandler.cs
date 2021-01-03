@@ -1,6 +1,8 @@
-﻿using GTFO.CustomObjectives.HandlerBase;
+﻿
 
-namespace GTFO.CustomObjectives.GlobalHandlers.FogControlTerminals
+using CustomObjectives.HandlerBase;
+
+namespace CustomObjectives.GlobalHandlers.FogControlTerminals
 {
     internal class FogControlTerminalHandler : CustomObjectiveHandlerBase
     {

@@ -1,5 +1,5 @@
-﻿using GameData;
-using GTFO.CustomObjectives.Inject.CustomReplicators;
+﻿using CustomObjectives.Inject.CustomReplicators;
+using GameData;
 using LevelGeneration;
 using SNetwork;
 using System;

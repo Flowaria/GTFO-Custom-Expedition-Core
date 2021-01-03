@@ -1,9 +1,10 @@
 ﻿using ChainedPuzzles;
+using CustomObjectives;
+using CustomObjectives.Extensions;
+using CustomObjectives.HandlerBase;
+using CustomObjectives.Utils;
+using CustomObjectives.Utils.ChainedPuzzle;
 using GameData;
-using GTFO.CustomObjectives;
-using GTFO.CustomObjectives.Extensions;
-using GTFO.CustomObjectives.HandlerBase;
-using GTFO.CustomObjectives.Utils;
 using LevelGeneration;
 using System;
 using System.Collections.Generic;

@@ -1,14 +1,7 @@
-﻿using HarmonyLib;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnhollowerRuntimeLib;
+﻿using System;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
-namespace GTFO.CustomObjectives
+namespace CustomObjectives
 {
     public class GlobalBehaviour : MonoBehaviour
     {
@@ -22,14 +15,16 @@ namespace GTFO.CustomObjectives
         public static Action OnUpdate;
         public static Action OnFixedUpdate;
 
-        public GlobalBehaviour(IntPtr intPtr) : base(intPtr) { }
+        public GlobalBehaviour(IntPtr intPtr) : base(intPtr)
+        {
+        }
 
-        private void Update()
+        protected void Update()
         {
             OnUpdate?.Invoke();
         }
 
-        private void FixedUpdate()
+        protected void FixedUpdate()
         {
             OnFixedUpdate?.Invoke();
         }

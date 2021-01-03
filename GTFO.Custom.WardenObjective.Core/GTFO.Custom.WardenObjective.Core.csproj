@@ -7,7 +7,7 @@
     <ProjectGuid>{55634FBC-AD95-4330-A841-20C77EEC253F}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>GTFO.CustomObjectives</RootNamespace>
+    <RootNamespace>CustomObjectives</RootNamespace>
     <AssemblyName>GTFO.CustomWardenObjective.Core</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -121,7 +121,7 @@
     <Compile Include="Extensions\ListExtension.cs" />
     <Compile Include="GlobalHandlers\TimedObjectives\TimedObjectiveHandler.cs" />
     <Compile Include="Inject\MarkerItem\BuilderInfo.cs" />
-    <Compile Include="Inject\Global\GlobalMessage.cs" />
+    <Compile Include="Messages\GlobalMessage.cs" />
     <Compile Include="Inject\Global\Inject_Global.cs" />
     <Compile Include="Inject\Global\Inject_GS_Expeditions.cs" />
     <Compile Include="Inject\Global\Inject_GS_Elevator.cs" />
@@ -132,7 +132,7 @@
     <Compile Include="Inject\MarkerItem\Inject_LG_MarkerBuilder.cs" />
     <Compile Include="Inject\Terminal\Inject_Terminal.cs" />
     <Compile Include="Inject\ObjectiveItem\Inject_CarryItem.cs" />
-    <Compile Include="Inject\Terminal\TerminalMessage.cs" />
+    <Compile Include="Messages\TerminalMessage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SimpleLoader\CustomObjectiveAttribute.cs" />
     <Compile Include="SimpleLoader\ObjectiveSimpleEntry.cs" />

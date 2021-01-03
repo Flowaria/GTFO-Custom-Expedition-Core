@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace GTFO.CustomObjectives.Inject.Global
+namespace CustomObjectives.Messages
 {
     public static class GlobalMessage
     {

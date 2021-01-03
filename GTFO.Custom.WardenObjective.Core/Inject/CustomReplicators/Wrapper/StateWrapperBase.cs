@@ -1,7 +1,7 @@
 ﻿using LevelGeneration;
 using System;
 
-namespace GTFO.CustomObjectives.Inject.CustomReplicators
+namespace CustomObjectives.Inject.CustomReplicators
 {
     public abstract class StateWrapperBase
     {
