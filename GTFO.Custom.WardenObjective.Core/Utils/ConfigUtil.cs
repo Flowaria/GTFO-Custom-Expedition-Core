@@ -3,14 +3,19 @@ using BepInEx.Configuration;
 using BepInEx.IL2CPP;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using System;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 
 //TODO: Fix Json of this shit
 namespace GTFO.CustomObjectives.Utils
 {
     public static class ConfigUtil
     {
+        public const string DATADUMPER_GUID = "Data-Dumper";
+
+        private static IL2CPPChainloader ChainLoader;
         public static string GlobalPath { get; private set; }
         public static string LocalPath { get; private set; }
         public static bool HasLocalPath { get; private set; } = false;
@@ -19,6 +24,7 @@ namespace GTFO.CustomObjectives.Utils
 
         static ConfigUtil()
         {
+            ChainLoader = IL2CPPChainloader.Instance;
             GlobalPath = Paths.ConfigPath;
             LocalPath = Paths.ConfigPath;
 
@@ -37,37 +43,40 @@ namespace GTFO.CustomObjectives.Utils
             };
         }
 
-        public static void SetupLocalConfig(ConfigFile config)
+        public static void SetupLocalConfig()
         {
             if (HasLocalPath)
                 return;
 
-            return;
-            
-            var isDataDumperExist = IL2CPPChainloader.Instance.Plugins.ContainsKey("Data-Dumper"); //MAJOR: Fix it to DataDumper GUID later
-            if (isDataDumperExist)
+            if (ChainLoader.Plugins.TryGetValue(DATADUMPER_GUID, out var info))
             {
-                HasLocalPath = true;
+                try
+                {
+                    var assemblies = AppDomain.CurrentDomain.GetAssemblies();
+                    var ddAsm = assemblies.First(a => a.Location == info.Location);
 
-                //READ FROM CONFIGMANAGER
+                    var types = ddAsm.GetTypes();
+                    var cfgManagerType = types.First(t => t.Name == "ConfigManager");
 
-                LocalPath = Path.Combine(Paths.ConfigPath, null);
+                    var dataPathProp = cfgManagerType.GetProperty("GameDataPath", BindingFlags.Public | BindingFlags.Static);
+                    var customPathProp = cfgManagerType.GetProperty("CustomPath", BindingFlags.Public | BindingFlags.Static);
+
+                    var dataPath = dataPathProp.GetValue(null) as string;
+                    var customPath = customPathProp.GetValue(null) as string;
+
+                    HasLocalPath = true;
+                    LocalPath = customPath;
+                }
+                catch(Exception e)
+                {
+                    Logger.Error("Exception thrown while reading path from Data Dumper:\n{0}", e.ToString());
+                    HasLocalPath = false;
+                    LocalPath = null;
+                }
             }
         }
 
-        private static string GetDefaultFolder()
-        {
-            return "GameData_" + CellBuildData.GetRevision().ToString();
-        }
-
         #region GlobalConfig
-
-        //TODO: Implement This
-        public static bool TryReadConfigAsList<W>(string name, out W[] arr)
-        {
-            arr = null;
-            return true;
-        }
 
         public static bool TryGetGlobalConfig<D>(string name, out D obj)
         {
