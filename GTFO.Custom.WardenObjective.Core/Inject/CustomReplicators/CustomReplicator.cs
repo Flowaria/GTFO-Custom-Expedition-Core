@@ -94,7 +94,8 @@ namespace GTFO.CustomObjectives.Inject.CustomReplicators
         public LG_Door_Sync SyncProvider { get; private set; }
         public SNet_Replicator InnerReplicator { get; private set; }
         public IReplicator InnerIReplicator { get; private set; }
-        public S State { get; private set; }
+        public S SendState { get; private set; } = new S();
+        public S State { get; private set; } = new S();
 
         internal ComplexStateReplicator _Replicator { get; set; }
 
@@ -125,33 +126,39 @@ namespace GTFO.CustomObjectives.Inject.CustomReplicators
                 GameObject.DontDestroyOnLoad(syncObj);
             }
 
-            var newState = new S();
-            newState.FromOriginal(_Replicator.State);
-            State = newState;
+            SendState.FromOriginal(_Replicator.State);
             DoneSetup = true;
         }
 
         public void ChangeState(S state)
         {
-            State = state;
-            UpdateState();
+            if (!SNet.HasMaster || SNet.IsMaster)
+            {
+                SendState = state;
+                UpdateState();
+            }   
         }
 
         public void UpdateState()
         {
-            _Replicator.State = State.ToOriginal();
+            if(!SNet.HasMaster || SNet.IsMaster)
+            {
+                _Replicator.State = SendState.ToOriginal();
+            }
+            
             InnerReplicator.Key = InnerReplicator.Key; //TODO: Need to find good way
         }
 
         internal void OnStateChange_Cast(pDoorState oldState, pDoorState newState, bool isRecall)
         {
             var oldWrapper = new S();
-            var newWrapper = new S();
+            var newWrapper = State;
 
             oldWrapper.FromOriginal(oldState);
-            newWrapper.FromOriginal(newState);
+            State.FromOriginal(newState);
 
-            OnStateChange(oldWrapper, newWrapper, isRecall);
+
+            OnStateChange(oldWrapper, State, isRecall);
         }
 
         public abstract void OnStateChange(S oldState, S newState, bool isRecall);

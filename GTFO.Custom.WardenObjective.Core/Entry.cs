@@ -8,11 +8,11 @@ using GTFO.CustomObjectives.Inject.Global;
 using GTFO.CustomObjectives.SimpleLoader;
 using GTFO.CustomObjectives.Utils;
 using HarmonyLib;
+using LevelGeneration;
 using SNetwork;
 using System;
 using System.Linq;
 using System.Reflection;
-using TestPlugin.ShuffleSeed;
 using UnhollowerRuntimeLib;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -34,8 +34,6 @@ namespace GTFO.CustomObjectives
             //Setup Harmony Patcher
             var harmonyInstance = new Harmony("flowaria.CustomWObjective.Core.Harmony");
             harmonyInstance.PatchAll();
-
-            Inject_Replication.MakePatch(harmonyInstance);
 
             //Setup Simple Loader
             ObjectiveSimpleLoader.Setup();
@@ -85,6 +83,8 @@ namespace GTFO.CustomObjectives
 
             Setup_LocalConfigs();
             Setup_DefaultReplicator();
+
+            GlobalMessage.OnGameInit?.Invoke();
         }
 
         #region GameInit
@@ -107,28 +107,15 @@ namespace GTFO.CustomObjectives
             }
         }
 
-        ShuffleSeedReplicator Replicator;
         private void Setup_DefaultReplicator()
         {
-            Replicator = new ShuffleSeedReplicator();
-            Replicator.Setup(eSNetReplicatorLifeTime.NeverDestroyed, SNet_ChannelType.SessionOrderCritical);
+            
         }
 
         #endregion
 
         private void OnUpdate()
         {
-            if (Input.GetKeyDown(KeyCode.PageUp))
-            {
-                Replicator.State.SeedNumber++;
-                Replicator.UpdateState();
-            }
-            else if (Input.GetKeyDown(KeyCode.PageDown))
-            {
-                Replicator.State.SeedNumber--;
-                Replicator.UpdateState();
-            }
-
             GlobalMessage.OnUpdate?.Invoke();
         }
 

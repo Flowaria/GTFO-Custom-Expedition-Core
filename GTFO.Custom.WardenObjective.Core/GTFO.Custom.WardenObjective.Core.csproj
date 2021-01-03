@@ -98,8 +98,6 @@
     <Compile Include="HandlerBase\Event\CustomEvent.cs" />
     <Compile Include="Inject\CustomReplicators\Inject_Replication.cs" />
     <Compile Include="Inject\Global\Inject_SNet.cs" />
-    <Compile Include="ShuffleSeed\SeedState.cs" />
-    <Compile Include="ShuffleSeed\ShuffleSeedReplicator.cs" />
     <Compile Include="Utility\BindFlagPresets.cs" />
     <Compile Include="Utils\ChainedPuzzle\ChainedPuzzleContext.cs" />
     <Compile Include="LocalConfigDTO.cs" />

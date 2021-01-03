@@ -4,6 +4,8 @@ namespace GTFO.CustomObjectives.Inject.Global
 {
     public static class GlobalMessage
     {
+        public static Action OnGameInit;
+
         public static Action OnUpdate;
         public static Action OnFixedUpdate;
 

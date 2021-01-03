@@ -31,7 +31,7 @@ namespace GTFO.CustomObjectives
         private readonly static HandlerTypeDict _Handlers;
         private readonly static HandlerTypeList _GlobalHandlers;
 
-        private static string[] _AllowedGlobalHandlers;
+        private static string[] _AllowedGlobalHandlers = new string[0];
 
         static CustomObjectiveManager()
         {
@@ -168,7 +168,7 @@ namespace GTFO.CustomObjectives
 
             foreach (var handler in _GlobalHandlers)
             {
-                if (!_AllowedGlobalHandlers.Any(x=>x.Equals(handler.GUID, StringComparison.OrdinalIgnoreCase)))
+                if (!_AllowedGlobalHandlers.Any(x => !string.IsNullOrEmpty(handler.GUID) ? x.Equals(handler.GUID, StringComparison.OrdinalIgnoreCase) : false))
                     continue;
 
                 var handlerInstance = FireHandlerByContainer(handler, layer, objectiveData, isGlobalHandler: true);
