@@ -1,12 +1,12 @@
-﻿using CustomObjectives.Inject.MarkerItem;
-using CustomObjectives.Messages;
+﻿using CustomExpeditions.Inject.MarkerItem;
+using CustomExpeditions.Messages;
 using GameData;
 using LevelGeneration;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace CustomObjectives.Utils
+namespace CustomExpeditions.Utils
 {
     using LogList = Il2CppSystem.Collections.Generic.List<TerminalLogFileData>;
 

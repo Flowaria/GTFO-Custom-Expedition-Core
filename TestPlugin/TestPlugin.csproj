@@ -31,6 +31,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="0Harmony, Version=2.3.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\GTFO\BepInEx\core\0Harmony.dll</HintPath>
+    </Reference>
     <Reference Include="Il2Cppmscorlib, Version=3.7.1.6, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\GTFO\BepInEx\unhollowed\Il2Cppmscorlib.dll</HintPath>
@@ -74,6 +78,7 @@
   <ItemGroup>
     <Compile Include="Basic\OverridesHandler.cs" />
     <Compile Include="Entry.cs" />
+    <Compile Include="HackFail.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Basic\BuilderHandler.cs" />
     <Compile Include="ShuffleSeed\SeedState.cs" />
@@ -82,9 +87,9 @@
     <Compile Include="UplinkBioscan\UplinkPuzzleContext.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\GTFO.Custom.WardenObjective.Core\GTFO.Custom.WardenObjective.Core.csproj">
+    <ProjectReference Include="..\GTFO.Custom.WardenObjective.Core\GTFO.CustomExpedition.Core.csproj">
       <Project>{55634fbc-ad95-4330-a841-20c77eec253f}</Project>
-      <Name>GTFO.Custom.WardenObjective.Core</Name>
+      <Name>GTFO.CustomExpedition.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

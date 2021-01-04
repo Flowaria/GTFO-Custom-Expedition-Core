@@ -1,7 +1,7 @@
 ﻿using ChainedPuzzles;
 using System;
 
-namespace CustomObjectives.Utils.ChainedPuzzle
+namespace CustomExpeditions.Utils.ChainedPuzzle
 {
     public class ChainedPuzzleContext
     {

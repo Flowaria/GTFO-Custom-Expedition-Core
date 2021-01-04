@@ -1,6 +1,6 @@
 ﻿using BepInEx.Logging;
 
-namespace CustomObjectives
+namespace CustomExpeditions
 {
     public static class Logger
     {

@@ -1,8 +1,8 @@
-﻿using CustomObjectives.Messages;
+﻿using CustomExpeditions.Messages;
 using HarmonyLib;
 using LevelGeneration;
 
-namespace CustomObjectives.Inject.Terminal
+namespace CustomExpeditions.Inject.Terminal
 {
     [HarmonyPatch(typeof(LG_ComputerTerminalCommandInterpreter))]
     internal static class Inject_TerminalCommandInterpreter

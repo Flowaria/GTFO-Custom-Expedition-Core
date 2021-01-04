@@ -113,9 +113,9 @@
     <Compile Include="PuzzleContext\TerminalPuzzleContext.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\GTFO.Custom.WardenObjective.Core\GTFO.Custom.WardenObjective.Core.csproj">
+    <ProjectReference Include="..\GTFO.Custom.WardenObjective.Core\GTFO.CustomExpedition.Core.csproj">
       <Project>{55634fbc-ad95-4330-a841-20c77eec253f}</Project>
-      <Name>GTFO.Custom.WardenObjective.Core</Name>
+      <Name>GTFO.CustomExpedition.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

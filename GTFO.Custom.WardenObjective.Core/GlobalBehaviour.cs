@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace CustomObjectives
+namespace CustomExpeditions
 {
     public class GlobalBehaviour : MonoBehaviour
     {

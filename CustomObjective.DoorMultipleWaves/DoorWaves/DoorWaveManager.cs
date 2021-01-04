@@ -1,4 +1,4 @@
-﻿using CustomObjectives.Inject.CustomReplicators;
+﻿using CustomExpeditions.Inject.CustomReplicators;
 using GameData;
 using LevelGeneration;
 using SNetwork;

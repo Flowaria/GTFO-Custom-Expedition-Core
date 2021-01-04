@@ -1,14 +1,14 @@
 ﻿using AIGraph;
-using CustomObjectives.HandlerBase;
+using CustomExpeditions.HandlerBase;
 using GameData;
 using LevelGeneration;
 using System;
 
-namespace CustomObjectives.Utils
+namespace CustomExpeditions.Utils
 {
     public static class PlacementUtil
     {
-        public static bool TryGetRandomPlaceSingleZone(CustomObjectiveHandlerBase handlerContext, out LG_Zone zone, out ZonePlacementWeights weight)
+        public static bool TryGetRandomPlaceSingleZone(CustomExpHandlerBase handlerContext, out LG_Zone zone, out ZonePlacementWeights weight)
         {
             return LG_DistributionJobUtils.TryGetRandomPlacementZone(handlerContext.Layer, handlerContext.LayerData.ObjectiveData.ZonePlacementDatas, out zone, out weight);
         }

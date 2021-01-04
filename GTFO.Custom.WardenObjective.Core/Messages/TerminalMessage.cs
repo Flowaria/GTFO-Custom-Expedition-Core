@@ -1,7 +1,7 @@
 ﻿using LevelGeneration;
 using System;
 
-namespace CustomObjectives.Messages
+namespace CustomExpeditions.Messages
 {
     public static class TerminalMessage
     {

@@ -1,5 +1,6 @@
-﻿using CustomObjectives;
-using CustomObjectives.HandlerBase;
+﻿using CustomExpeditions;
+using CustomExpeditions.HandlerBase;
+using GameData;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,10 +9,19 @@ using System.Threading.Tasks;
 
 namespace TestPlugin.Basic
 {
-    public class OverridesHandler : CustomObjectiveHandlerBase
+    public class OverridesHandler : CustomExpHandlerBase
     {
         public override void OnSetup()
         {
+            var waveSetting = new GenericEnemyWaveData()
+            {
+                WaveSettings = 1,
+                WavePopulation = 5,
+                TriggerAlarm = true,
+                SpawnDelay = 3.0f
+            };
+            HackFail.OnCalled = (node) => { this.TriggerWave(waveSetting, node); };
+
             Logger.Log("OVERRIDES TEST: OnSetup");
             RegisterUpdateEvent(OnUpdate, OnFixedUpdate); // It will be automatically unloaded when OnUnload called
         }

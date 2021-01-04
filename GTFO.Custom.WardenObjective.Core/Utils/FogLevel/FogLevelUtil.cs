@@ -1,9 +1,9 @@
-﻿using CustomObjectives.Messages;
+﻿using CustomExpeditions.Messages;
 using GameData;
 using SNetwork;
 using System.Collections.Generic;
 
-namespace CustomObjectives.Utils.FogLevel
+namespace CustomExpeditions.Utils.FogLevel
 {
     public static class FogLevelUtil
     {

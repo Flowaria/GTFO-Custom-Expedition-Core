@@ -1,7 +1,7 @@
 ﻿using GameData;
 using System.Collections.Generic;
 
-namespace CustomObjectives.GlobalHandlers.TimedObjectives
+namespace CustomExpeditions.GlobalHandlers.TimedObjectives
 {
     internal enum StartEventType
     {

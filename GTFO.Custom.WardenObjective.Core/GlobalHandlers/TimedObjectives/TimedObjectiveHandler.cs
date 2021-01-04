@@ -1,11 +1,11 @@
-﻿using CustomObjectives.HandlerBase;
-using CustomObjectives.Utils;
+﻿using CustomExpeditions.HandlerBase;
+using CustomExpeditions.Utils;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace CustomObjectives.GlobalHandlers.TimedObjectives
+namespace CustomExpeditions.GlobalHandlers.TimedObjectives
 {
-    internal class TimedObjectiveHandler : CustomObjectiveHandlerBase
+    internal class TimedObjectiveHandler : CustomExpHandlerBase
     {
         private bool IsCountdownMission = false;
 

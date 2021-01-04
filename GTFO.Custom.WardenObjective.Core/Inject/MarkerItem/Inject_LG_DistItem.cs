@@ -1,8 +1,8 @@
-﻿using CustomObjectives.Utils;
+﻿using CustomExpeditions.Utils;
 using HarmonyLib;
 using LevelGeneration;
 
-namespace CustomObjectives.Inject.MarkerItem
+namespace CustomExpeditions.Inject.MarkerItem
 {
     [HarmonyPatch(typeof(LG_DistributeItem), "AvailableToReuse")]
     internal static class Inject_LG_DistItem

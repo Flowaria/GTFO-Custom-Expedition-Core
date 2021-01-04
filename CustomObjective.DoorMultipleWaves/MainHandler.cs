@@ -1,8 +1,8 @@
 ﻿using CustomObjective.DoorMultipleWaves.DoorWaves;
 using CustomObjective.DoorMultipleWaves.PuzzleContext;
-using CustomObjectives.HandlerBase;
-using CustomObjectives.Utils;
-using CustomObjectives.Utils.ChainedPuzzle;
+using CustomExpeditions.HandlerBase;
+using CustomExpeditions.Utils;
+using CustomExpeditions.Utils.ChainedPuzzle;
 using GameData;
 using LevelGeneration;
 using SNetwork;
@@ -15,7 +15,7 @@ using UnityEngine;
 
 namespace CustomObjective.DoorMultipleWaves
 {
-    public class MainHandler : CustomObjectiveHandlerBase
+    public class MainHandler : CustomExpHandlerBase
     {
         private DoorWaveManager doorWaveManager;
 

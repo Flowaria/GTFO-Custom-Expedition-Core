@@ -1,8 +1,8 @@
-﻿using CustomObjectives.Messages;
+﻿using CustomExpeditions.Messages;
 using HarmonyLib;
 using LevelGeneration;
 
-namespace CustomObjectives.Inject.Global
+namespace CustomExpeditions.Inject.Global
 {
     [HarmonyPatch(typeof(LG_Factory), "FactoryDone")]
     internal static class Inject_LG_Factory

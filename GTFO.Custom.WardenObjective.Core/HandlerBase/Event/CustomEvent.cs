@@ -1,4 +1,4 @@
-﻿namespace CustomObjectives.HandlerBase.Event
+﻿namespace CustomExpeditions.HandlerBase.Event
 {
     public enum CustomEventType
     {

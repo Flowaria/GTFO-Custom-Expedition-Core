@@ -1,16 +1,16 @@
-﻿using CustomObjectives.Messages;
+﻿using CustomExpeditions.Messages;
 using LevelGeneration;
 using System;
 
-namespace CustomObjectives.HandlerBase
+namespace CustomExpeditions.HandlerBase
 {
     public partial class ObjectiveStatusProxy
     {
-        private readonly CustomObjectiveHandlerBase Base;
+        private readonly CustomExpHandlerBase Base;
         private Action DefaultObjectiveUpdate;
         private Action OnObjectiveStatusChange;
 
-        internal ObjectiveStatusProxy(CustomObjectiveHandlerBase b)
+        internal ObjectiveStatusProxy(CustomExpHandlerBase b)
         {
             Base = b;
             Base.RegisterUpdateEvent(OnUpdateWardenObjective);

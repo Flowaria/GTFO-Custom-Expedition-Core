@@ -1,6 +1,6 @@
-﻿using CustomObjectives;
-using CustomObjectives.Messages;
-using CustomObjectives.SimpleLoader;
+﻿using CustomExpeditions;
+using CustomExpeditions.Messages;
+using CustomExpeditions.SimpleLoader;
 using GTFO_SeedRandomizer_MP;
 using HarmonyLib;
 using LevelGeneration;
@@ -13,10 +13,10 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
-[assembly: CustomObjective(typeof(Entry))]
+[assembly: ExpPlugin(typeof(Entry))]
 namespace GTFO_SeedRandomizer_MP
 {
-    public class Entry : ObjectiveSimpleEntry
+    public class Entry : ExpSimpleEntry
     {
         public static ShuffleSeedReplicator Replicator;
         public override void OnStart()
@@ -94,6 +94,8 @@ namespace GTFO_SeedRandomizer_MP
             Logger.Log(" - Result: Build: {0}, StdMarker: {1}, FucMarker: {2}, Light: {3}", build, std, func, light);
         }
     }
+
+    
 
     [HarmonyPatch(typeof(LG_LevelBuilder), "BuildFloor")]
     public class Patch_Seed

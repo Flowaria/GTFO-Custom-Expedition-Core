@@ -2,7 +2,7 @@
 using LevelGeneration;
 using System.Collections.Generic;
 
-namespace CustomObjectives.GlobalHandlers.FogControlTerminals
+namespace CustomExpeditions.GlobalHandlers.FogControlTerminals
 {
     internal enum FogTerminalType
     {

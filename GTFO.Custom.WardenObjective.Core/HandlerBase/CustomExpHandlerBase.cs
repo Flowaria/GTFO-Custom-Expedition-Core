@@ -1,7 +1,7 @@
 ﻿using AIGraph;
-using CustomObjectives.Extensions;
-using CustomObjectives.Messages;
-using CustomObjectives.Utils;
+using CustomExpeditions.Extensions;
+using CustomExpeditions.Messages;
+using CustomExpeditions.Utils;
 using GameData;
 using LevelGeneration;
 using SNetwork;
@@ -9,9 +9,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace CustomObjectives.HandlerBase
+namespace CustomExpeditions.HandlerBase
 {
-    public abstract class CustomObjectiveHandlerBase
+    public abstract class CustomExpHandlerBase
     {
         internal string HandlerGUID;
 
@@ -214,7 +214,7 @@ namespace CustomObjectives.HandlerBase
 
         public void UnloadSelf()
         {
-            CustomObjectiveManager.UnloadHandler(this);
+            CustomExpHandlerManager.UnloadHandler(this);
         }
 
         //Forwards

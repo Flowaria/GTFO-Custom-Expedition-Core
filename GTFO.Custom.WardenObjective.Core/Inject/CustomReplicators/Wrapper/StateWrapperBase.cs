@@ -1,7 +1,7 @@
 ﻿using LevelGeneration;
 using System;
 
-namespace CustomObjectives.Inject.CustomReplicators
+namespace CustomExpeditions.Inject.CustomReplicators
 {
     public abstract class StateWrapperBase
     {

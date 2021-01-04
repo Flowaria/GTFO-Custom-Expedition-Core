@@ -1,5 +1,5 @@
-﻿using CustomObjectives;
-using CustomObjectives.Inject.CustomReplicators;
+﻿using CustomExpeditions;
+using CustomExpeditions.Inject.CustomReplicators;
 using System;
 using System.Collections.Generic;
 using System.Linq;

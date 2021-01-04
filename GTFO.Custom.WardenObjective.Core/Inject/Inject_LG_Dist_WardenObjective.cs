@@ -2,7 +2,7 @@
 using LevelGeneration;
 using System;
 
-namespace CustomObjectives.Inject
+namespace CustomExpeditions.Inject
 {
     [HarmonyPatch(typeof(LG_Distribute_WardenObjective), "Build")]
     internal static class Inject_LG_Dist_WardenObjective
@@ -19,10 +19,10 @@ namespace CustomObjectives.Inject
             if (!Enum.IsDefined(typeof(eWardenObjectiveType), type))
             {
                 //Custom Handler!
-                CustomObjectiveManager.FireHandler(type, __instance.m_layer, __instance.m_dataBlockData);
+                CustomExpHandlerManager.FireHandler(type, __instance.m_layer, __instance.m_dataBlockData);
             }
 
-            CustomObjectiveManager.FireAllGlobalHandler(__instance.m_layer, __instance.m_dataBlockData);
+            CustomExpHandlerManager.FireAllGlobalHandler(__instance.m_layer, __instance.m_dataBlockData);
         }
     }
 }

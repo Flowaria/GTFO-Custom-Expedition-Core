@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace CustomObjectives.Extensions
+namespace CustomExpeditions.Extensions
 {
     using Il2CppCollection = Il2CppSystem.Collections.Generic;
 

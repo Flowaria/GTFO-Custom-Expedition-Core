@@ -1,8 +1,8 @@
-﻿using CustomObjectives.Messages;
+﻿using CustomExpeditions.Messages;
 using LevelGeneration;
 using System;
 
-namespace CustomObjectives.Utils
+namespace CustomExpeditions.Utils
 {
     public static class TerminalUtil
     {

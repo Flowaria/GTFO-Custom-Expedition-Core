@@ -1,9 +1,9 @@
-﻿using CustomObjectives.Utils;
+﻿using CustomExpeditions.Utils;
 using HarmonyLib;
 using LevelGeneration;
 using UnityEngine;
 
-namespace CustomObjectives.Inject.MarkerItem
+namespace CustomExpeditions.Inject.MarkerItem
 {
     [HarmonyPatch(typeof(LG_FunctionMarkerBuilder), "SetupFunctionGO")]
     internal static class Inject_LG_MarkerBuilder

@@ -1,9 +1,9 @@
-﻿using CustomObjectives.Inject.CustomReplicators;
+﻿using CustomExpeditions.Inject.CustomReplicators;
 using LevelGeneration;
 using System;
 using UnityEngine;
 
-namespace CustomObjectives.Utils.FogLevel
+namespace CustomExpeditions.Utils.FogLevel
 {
     public class FogLevelSetting
     {

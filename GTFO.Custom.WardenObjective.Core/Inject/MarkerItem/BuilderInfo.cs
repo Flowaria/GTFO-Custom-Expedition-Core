@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace CustomObjectives.Inject.MarkerItem
+namespace CustomExpeditions.Inject.MarkerItem
 {
     public class BuilderInfo
     {

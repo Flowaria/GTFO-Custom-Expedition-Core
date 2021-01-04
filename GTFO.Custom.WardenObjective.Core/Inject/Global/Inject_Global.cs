@@ -1,7 +1,7 @@
-﻿using CustomObjectives.Messages;
+﻿using CustomExpeditions.Messages;
 using HarmonyLib;
 
-namespace CustomObjectives.Inject.Global
+namespace CustomExpeditions.Inject.Global
 {
     [HarmonyPatch(typeof(Globals.Global))]
     internal static class Inject_Global

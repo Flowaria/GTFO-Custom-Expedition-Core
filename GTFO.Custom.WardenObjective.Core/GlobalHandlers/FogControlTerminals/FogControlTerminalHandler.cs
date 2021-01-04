@@ -1,10 +1,10 @@
 ﻿
 
-using CustomObjectives.HandlerBase;
+using CustomExpeditions.HandlerBase;
 
-namespace CustomObjectives.GlobalHandlers.FogControlTerminals
+namespace CustomExpeditions.GlobalHandlers.FogControlTerminals
 {
-    internal class FogControlTerminalHandler : CustomObjectiveHandlerBase
+    internal class FogControlTerminalHandler : CustomExpHandlerBase
     {
         public override void OnSetup()
         {

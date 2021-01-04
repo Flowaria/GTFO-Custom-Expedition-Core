@@ -1,7 +1,7 @@
 ﻿using LevelGeneration;
 using System;
 
-namespace CustomObjectives.Extensions
+namespace CustomExpeditions.Extensions
 {
     public static class TerminalExtension
     {

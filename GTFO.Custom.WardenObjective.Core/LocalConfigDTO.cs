@@ -1,4 +1,4 @@
-﻿namespace CustomObjectives
+﻿namespace CustomExpeditions
 {
     internal class LocalConfigDTO
     {

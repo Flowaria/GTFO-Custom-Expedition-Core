@@ -1,7 +1,7 @@
 ﻿using LevelGeneration;
 using System.Collections.Generic;
 
-namespace CustomObjectives.Utils
+namespace CustomExpeditions.Utils
 {
     public enum SeederType
     {

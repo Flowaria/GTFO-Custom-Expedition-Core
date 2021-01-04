@@ -1,7 +1,7 @@
-﻿using CustomObjectives.Messages;
+﻿using CustomExpeditions.Messages;
 using HarmonyLib;
 
-namespace CustomObjectives.Inject.Global
+namespace CustomExpeditions.Inject.Global
 {
     [HarmonyPatch(typeof(GS_ExpeditionSuccess), "Enter")]
     internal static class Inject_GS_Success_Enter

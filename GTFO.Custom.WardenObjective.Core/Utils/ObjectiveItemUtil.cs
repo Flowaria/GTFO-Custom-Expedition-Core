@@ -1,7 +1,7 @@
 ﻿using LevelGeneration;
 using System;
 
-namespace CustomObjectives.Utils
+namespace CustomExpeditions.Utils
 {
     public class ObjectiveItem
     {

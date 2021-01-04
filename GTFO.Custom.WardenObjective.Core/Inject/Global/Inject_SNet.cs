@@ -1,8 +1,8 @@
-﻿using CustomObjectives.Messages;
+﻿using CustomExpeditions.Messages;
 using HarmonyLib;
 using SNetwork;
 
-namespace CustomObjectives.Inject.Global
+namespace CustomExpeditions.Inject.Global
 {
     [HarmonyPatch(typeof(SNet))]
     internal static class Inject_SNet

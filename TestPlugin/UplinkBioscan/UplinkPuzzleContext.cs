@@ -1,4 +1,4 @@
-﻿using CustomObjectives.Utils.ChainedPuzzle;
+﻿using CustomExpeditions.Utils.ChainedPuzzle;
 using LevelGeneration;
 using System;
 using System.Collections.Generic;

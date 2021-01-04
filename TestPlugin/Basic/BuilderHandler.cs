@@ -1,6 +1,6 @@
-﻿using CustomObjectives;
-using CustomObjectives.HandlerBase;
-using CustomObjectives.Utils;
+﻿using CustomExpeditions;
+using CustomExpeditions.HandlerBase;
+using CustomExpeditions.Utils;
 using GameData;
 using LevelGeneration;
 using System;
@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace TestPlugin.Basic
 {
-    class BuilderHandler : CustomObjectiveHandlerBase
+    class BuilderHandler : CustomExpHandlerBase
     {
         //Pre-Build Method
         public override void OnSetup()

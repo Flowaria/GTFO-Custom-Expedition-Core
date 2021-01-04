@@ -1,9 +1,9 @@
 ﻿using ChainedPuzzles;
-using CustomObjectives;
-using CustomObjectives.Extensions;
-using CustomObjectives.HandlerBase;
-using CustomObjectives.Utils;
-using CustomObjectives.Utils.ChainedPuzzle;
+using CustomExpeditions;
+using CustomExpeditions.Extensions;
+using CustomExpeditions.HandlerBase;
+using CustomExpeditions.Utils;
+using CustomExpeditions.Utils.ChainedPuzzle;
 using GameData;
 using LevelGeneration;
 using System;
@@ -21,7 +21,7 @@ namespace TestPlugin.UplinkBioscan
         public bool CommandUsed;
     }
 
-    public class UplinkBioscanHandler : CustomObjectiveHandlerBase
+    public class UplinkBioscanHandler : CustomExpHandlerBase
     {
         public Dictionary<int, UplinkInfo> TerminalInfo;
 

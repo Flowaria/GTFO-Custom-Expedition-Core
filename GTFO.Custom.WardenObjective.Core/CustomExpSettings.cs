@@ -2,7 +2,7 @@
 using LevelGeneration;
 using System;
 
-namespace CustomObjectives
+namespace CustomExpeditions
 {
     [Flags]
     public enum AllowedLayerType
@@ -13,7 +13,7 @@ namespace CustomObjectives
         Third = 0b100
     }
 
-    public class CustomObjectiveSettings
+    public class CustomExpSettings
     {
         public bool IsRequiresAllFilter = false;
         public AllowedLayerType AllowedLayers = AllowedLayerType.All;
@@ -52,17 +52,17 @@ namespace CustomObjectives
             return CustomFilter?.Invoke(objectiveData) ?? originalState;
         }
 
-        public static readonly CustomObjectiveSettings ALL_LAYER = new CustomObjectiveSettings()
+        public static readonly CustomExpSettings ALL_LAYER = new CustomExpSettings()
         {
             AllowedLayers = AllowedLayerType.All
         };
 
-        public static readonly CustomObjectiveSettings MAIN_ONLY = new CustomObjectiveSettings()
+        public static readonly CustomExpSettings MAIN_ONLY = new CustomExpSettings()
         {
             AllowedLayers = AllowedLayerType.Main
         };
 
-        public static readonly CustomObjectiveSettings SUB_ONLY = new CustomObjectiveSettings()
+        public static readonly CustomExpSettings SUB_ONLY = new CustomExpSettings()
         {
             AllowedLayers = AllowedLayerType.Secondary | AllowedLayerType.Third
         };

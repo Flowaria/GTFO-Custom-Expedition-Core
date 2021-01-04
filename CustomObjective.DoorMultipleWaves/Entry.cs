@@ -1,21 +1,20 @@
 ﻿using CustomObjective.DoorMultipleWaves;
-using CustomObjectives;
-using CustomObjectives.SimpleLoader;
-using MelonLoader;
+using CustomExpeditions;
+using CustomExpeditions.SimpleLoader;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-[assembly: CustomObjective(typeof(Entry))]
+[assembly: ExpPlugin(typeof(Entry))]
 namespace CustomObjective.DoorMultipleWaves
 {
-    internal class Entry : ObjectiveSimpleEntry
+    internal class Entry : ExpSimpleEntry
     {
         public override void OnStart()
         {
-            CustomObjectiveManager.AddGlobalHandler<MainHandler>("MultiWaveDoor");
+            CustomExpHandlerManager.AddGlobalHandler<MainHandler>("MultiWaveDoor");
         }
     }
 }

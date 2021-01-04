@@ -1,6 +1,6 @@
 ﻿using LevelGeneration;
 
-namespace CustomObjectives.Inject.CustomReplicators
+namespace CustomExpeditions.Inject.CustomReplicators
 {
     public abstract class InteractionWrapperBase
     {

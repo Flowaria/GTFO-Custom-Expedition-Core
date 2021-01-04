@@ -1,4 +1,4 @@
-﻿namespace CustomObjectives.Utils
+﻿namespace CustomExpeditions.Utils
 {
     public static class GUIUtil
     {

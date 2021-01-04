@@ -1,6 +1,6 @@
 ﻿using UnhollowerBaseLib;
 
-namespace CustomObjectives.Extensions
+namespace CustomExpeditions.Extensions
 {
     public static class Il2CppObjectBaseExtension
     {

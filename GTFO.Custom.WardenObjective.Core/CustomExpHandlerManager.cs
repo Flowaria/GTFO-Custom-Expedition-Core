@@ -1,30 +1,30 @@
-﻿using CustomObjectives.HandlerBase;
-using CustomObjectives.Messages;
+﻿using CustomExpeditions.HandlerBase;
+using CustomExpeditions.Messages;
 using GameData;
 using LevelGeneration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace CustomObjectives
+namespace CustomExpeditions
 {
-    using HandlerList = List<CustomObjectiveHandlerBase>;
+    using HandlerList = List<CustomExpHandlerBase>;
     using HandlerTypeDict = Dictionary<byte, HandlerTypeContainer>;
     using HandlerTypeList = List<HandlerTypeContainer>;
 
     internal class HandlerTypeContainer
     {
         public Type BaseType;
-        public CustomObjectiveSettings Setting;
+        public CustomExpSettings Setting;
         public string GUID;
 
-        public CustomObjectiveHandlerBase CreateInstance()
+        public CustomExpHandlerBase CreateInstance()
         {
-            return Activator.CreateInstance(BaseType) as CustomObjectiveHandlerBase;
+            return Activator.CreateInstance(BaseType) as CustomExpHandlerBase;
         }
     }
 
-    public static class CustomObjectiveManager
+    public static class CustomExpHandlerManager
     {
         private readonly static HandlerList _ActiveHandlers;
 
@@ -33,7 +33,7 @@ namespace CustomObjectives
 
         private static string[] _AllowedGlobalHandlers = new string[0];
 
-        static CustomObjectiveManager()
+        static CustomExpHandlerManager()
         {
             _ActiveHandlers = new HandlerList();
 
@@ -55,9 +55,9 @@ namespace CustomObjectives
         /// Register Global CustomObjective Handler to Manager
         /// </summary>
         /// <typeparam name="T">Type of Handler (derived from CustomObjecitveHandler)</typeparam>
-        public static void AddGlobalHandler<T>(string GUID) where T : CustomObjectiveHandlerBase, new()
+        public static void AddGlobalHandler<T>(string GUID) where T : CustomExpHandlerBase, new()
         {
-            AddGlobalHandler<T>(GUID, CustomObjectiveSettings.ALL_LAYER);
+            AddGlobalHandler<T>(GUID, CustomExpSettings.ALL_LAYER);
         }
 
         /// <summary>
@@ -65,7 +65,7 @@ namespace CustomObjectives
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="settings"></param>
-        public static void AddGlobalHandler<T>(string GUID, CustomObjectiveSettings setting) where T : CustomObjectiveHandlerBase, new()
+        public static void AddGlobalHandler<T>(string GUID, CustomExpSettings setting) where T : CustomExpHandlerBase, new()
         {
             var type = typeof(T);
 
@@ -93,9 +93,9 @@ namespace CustomObjectives
         /// </summary>
         /// <typeparam name="T">Type of Handler (derived from CustomObjecitveHandler)</typeparam>
         /// <param name="typeID">Type ID of Handler</param>
-        public static void AddHandler<T>(byte typeID) where T : CustomObjectiveHandlerBase, new()
+        public static void AddHandler<T>(byte typeID) where T : CustomExpHandlerBase, new()
         {
-            AddHandler<T>(typeID, CustomObjectiveSettings.ALL_LAYER);
+            AddHandler<T>(typeID, CustomExpSettings.ALL_LAYER);
         }
 
         /// <summary>
@@ -104,7 +104,7 @@ namespace CustomObjectives
         /// <typeparam name="T"></typeparam>
         /// <param name="typeID"></param>
         /// <param name="setting"></param>
-        public static void AddHandler<T>(byte typeID, CustomObjectiveSettings setting) where T : CustomObjectiveHandlerBase, new()
+        public static void AddHandler<T>(byte typeID, CustomExpSettings setting) where T : CustomExpHandlerBase, new()
         {
             var type = typeof(T);
 
@@ -162,7 +162,7 @@ namespace CustomObjectives
             return false;
         }
 
-        internal static CustomObjectiveHandlerBase[] FireAllGlobalHandler(LG_Layer layer, WardenObjectiveDataBlock objectiveData)
+        internal static CustomExpHandlerBase[] FireAllGlobalHandler(LG_Layer layer, WardenObjectiveDataBlock objectiveData)
         {
             var handlerList = new HandlerList();
 
@@ -180,7 +180,7 @@ namespace CustomObjectives
             return handlerList.ToArray();
         }
 
-        internal static CustomObjectiveHandlerBase FireHandler(byte typeID, LG_Layer layer, WardenObjectiveDataBlock objectiveData)
+        internal static CustomExpHandlerBase FireHandler(byte typeID, LG_Layer layer, WardenObjectiveDataBlock objectiveData)
         {
             if (_Handlers.TryGetValue(typeID, out var handler))
             {
@@ -192,7 +192,7 @@ namespace CustomObjectives
             }
         }
 
-        private static CustomObjectiveHandlerBase FireHandlerByContainer(HandlerTypeContainer handlerContainer, LG_Layer layer, WardenObjectiveDataBlock objectiveData, bool isGlobalHandler = false)
+        private static CustomExpHandlerBase FireHandlerByContainer(HandlerTypeContainer handlerContainer, LG_Layer layer, WardenObjectiveDataBlock objectiveData, bool isGlobalHandler = false)
         {
             if (handlerContainer.Setting == null)
             {
@@ -223,7 +223,7 @@ namespace CustomObjectives
             _ActiveHandlers.Clear();
         }
 
-        internal static void UnloadHandler(CustomObjectiveHandlerBase handler)
+        internal static void UnloadHandler(CustomExpHandlerBase handler)
         {
             //Direct search is now allowed, we need to find it by GUID
             var index = _ActiveHandlers.FindIndex(x => x.HandlerGUID == handler.HandlerGUID);

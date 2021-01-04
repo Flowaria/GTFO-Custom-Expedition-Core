@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30711.63
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GTFO.Custom.WardenObjective.Core", "GTFO.Custom.WardenObjective.Core\GTFO.Custom.WardenObjective.Core.csproj", "{55634FBC-AD95-4330-A841-20C77EEC253F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GTFO.CustomExpedition.Core", "GTFO.Custom.WardenObjective.Core\GTFO.CustomExpedition.Core.csproj", "{55634FBC-AD95-4330-A841-20C77EEC253F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomObjective.DoorMultipleWaves", "CustomObjective.DoorMultipleWaves\CustomObjective.DoorMultipleWaves.csproj", "{40C44A9D-2DD2-416D-B88D-359702942792}"
 EndProject

@@ -1,4 +1,4 @@
-﻿using CustomObjectives.Inject.CustomReplicators;
+﻿using CustomExpeditions.Inject.CustomReplicators;
 using LevelGeneration;
 using System;
 using System.Collections.Generic;

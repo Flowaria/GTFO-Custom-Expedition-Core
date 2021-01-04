@@ -4,7 +4,7 @@ using System;
 using System.Reflection;
 using UnhollowerBaseLib;
 
-namespace CustomObjectives.Inject.CustomReplicators
+namespace CustomExpeditions.Inject.CustomReplicators
 {
     //[HarmonyPatch(typeof(SNet_Replication))]
     internal static class Inject_Replication

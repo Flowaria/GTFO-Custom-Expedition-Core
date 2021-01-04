@@ -1,12 +1,12 @@
 ﻿using AIGraph;
 using GameData;
-using CustomObjectives.Extensions;
-using CustomObjectives.Utils;
+using CustomExpeditions.Extensions;
+using CustomExpeditions.Utils;
 using LevelGeneration;
 using System;
 using UnityEngine;
 
-namespace CustomObjectives.HandlerBase
+namespace CustomExpeditions.HandlerBase
 {
     using PlacementDataList = Il2CppSystem.Collections.Generic.List<Il2CppSystem.Collections.Generic.List<ZonePlacementData>>;
 
@@ -20,7 +20,7 @@ namespace CustomObjectives.HandlerBase
 
     public class BuilderProxy
     {
-        private readonly CustomObjectiveHandlerBase Base;
+        private readonly CustomExpHandlerBase Base;
 
         private InvalidOperationException LatePlacementException
         {
@@ -32,7 +32,7 @@ namespace CustomObjectives.HandlerBase
             get { return new InvalidOperationException("You cannot call Fetch Functions before Level is fully built!\nUse it after OnBuildDone() called!"); }
         }
 
-        internal BuilderProxy(CustomObjectiveHandlerBase b)
+        internal BuilderProxy(CustomExpHandlerBase b)
         {
             Base = b;
         }

@@ -1,7 +1,7 @@
 ﻿using HarmonyLib;
 using LevelGeneration;
 
-namespace CustomObjectives.Inject.CustomReplicators
+namespace CustomExpeditions.Inject.CustomReplicators
 {
     [HarmonyPatch(typeof(LG_Door_Sync), "OnStateChange")]
     internal static class Inject_LG_Door_Sync

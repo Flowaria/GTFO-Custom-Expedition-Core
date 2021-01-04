@@ -1,5 +1,5 @@
 ﻿using CustomObjective.DoorMultipleWaves.DoorWaves;
-using CustomObjectives.Utils.ChainedPuzzle;
+using CustomExpeditions.Utils.ChainedPuzzle;
 using System;
 using System.Collections.Generic;
 using System.Linq;

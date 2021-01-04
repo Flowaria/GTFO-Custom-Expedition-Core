@@ -1,11 +1,11 @@
 ﻿using ChainedPuzzles;
-using CustomObjectives.Messages;
+using CustomExpeditions.Messages;
 using GameData;
 using LevelGeneration;
 using System;
 using UnityEngine;
 
-namespace CustomObjectives.Utils.ChainedPuzzle
+namespace CustomExpeditions.Utils.ChainedPuzzle
 {
     public static class ChainedPuzzleUtil
     {

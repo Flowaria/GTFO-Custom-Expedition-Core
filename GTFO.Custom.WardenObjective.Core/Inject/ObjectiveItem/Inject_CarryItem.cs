@@ -1,4 +1,4 @@
-﻿namespace CustomObjectives.Inject.ObjectiveItem
+﻿namespace CustomExpeditions.Inject.ObjectiveItem
 {
     //[HarmonyPatch(typeof(CarryItemPickup_Core))]
     internal static class Inject_CarryItem

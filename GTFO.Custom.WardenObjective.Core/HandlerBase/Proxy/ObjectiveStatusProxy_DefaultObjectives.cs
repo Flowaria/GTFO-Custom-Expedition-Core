@@ -1,4 +1,4 @@
-﻿namespace CustomObjectives.HandlerBase
+﻿namespace CustomExpeditions.HandlerBase
 {
     public partial class ObjectiveStatusProxy
     {

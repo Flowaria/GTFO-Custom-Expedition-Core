@@ -1,18 +1,18 @@
 ﻿using BepInEx;
 using BepInEx.Configuration;
 using BepInEx.IL2CPP;
-using CustomObjectives.GlobalHandlers.TimedObjectives;
-using CustomObjectives.Messages;
-using CustomObjectives.SimpleLoader;
-using CustomObjectives.Utils;
+using CustomExpeditions.GlobalHandlers.TimedObjectives;
+using CustomExpeditions.Messages;
+using CustomExpeditions.SimpleLoader;
+using CustomExpeditions.Utils;
 using HarmonyLib;
 using System;
 using System.Linq;
 using UnhollowerRuntimeLib;
 
-namespace CustomObjectives
+namespace CustomExpeditions
 {
-    [BepInPlugin("Custom-WardenObjective-Core", "Custom WardenObjective Core", "1.0.0.0")]
+    [BepInPlugin("Custom.Expedition.Core", "Custom Expedition Core", "1.0.0.0")]
     [BepInDependency("Data-Dumper", BepInDependency.DependencyFlags.SoftDependency)]
     internal class Entry : BasePlugin
     {
@@ -26,11 +26,11 @@ namespace CustomObjectives
             Setup_DefaultGlobalHandlers();
 
             //Setup Harmony Patcher
-            var harmonyInstance = new Harmony("flowaria.CustomWObjective.Core.Harmony");
+            var harmonyInstance = new Harmony("flowaria.CustomExp.Core.Harmony");
             harmonyInstance.PatchAll();
 
             //Setup Simple Loader
-            ObjectiveSimpleLoader.Setup();
+            ExpSimpleLoader.Setup();
 
             AssetShards.AssetShardManager.add_OnStartupAssetsLoaded((Il2CppSystem.Action)OnAssetLoaded);
         }
@@ -59,11 +59,11 @@ namespace CustomObjectives
 
         private void Setup_DefaultGlobalHandlers()
         {
-            CustomObjectiveManager.AddGlobalHandler<TimedObjectiveHandler>("TimedObjective", CustomObjectiveSettings.MAIN_ONLY);
+            CustomExpHandlerManager.AddGlobalHandler<TimedObjectiveHandler>("TimedObjective", CustomExpSettings.MAIN_ONLY);
             //CustomObjectiveManager.AddGlobalHandler<FogControlTerminalHandler>(); later
             //TODO: New Global Handler: Change Light Settings (color / type / or whatever)
-            //TODO: New Global Handler: Change Alarm Settings for existing door
-            //TODO: New Global Handler: Regen Hibernating Enemies on other zone
+            // New Global Handler: Change Alarm Settings for existing door
+            // New Global Handler: Regen Hibernating Enemies on other zone
         }
 
         #endregion ApplicationStart
@@ -108,7 +108,7 @@ namespace CustomObjectives
                 {
                     Logger.Log("Allowed Plugin: {0}", p);
                 }
-                CustomObjectiveManager.SetGlobalHandlerWhitelist(config.EnabledModules);
+                CustomExpHandlerManager.SetGlobalHandlerWhitelist(config.EnabledModules);
             }
         }
 

@@ -1,13 +1,13 @@
-﻿using CustomObjectives.Utils;
+﻿using CustomExpeditions.Utils;
 using UnhollowerBaseLib;
 
-namespace CustomObjectives.HandlerBase
+namespace CustomExpeditions.HandlerBase
 {
     public class WinConditionProxy
     {
-        private readonly CustomObjectiveHandlerBase Base;
+        private readonly CustomExpHandlerBase Base;
 
-        internal WinConditionProxy(CustomObjectiveHandlerBase b)
+        internal WinConditionProxy(CustomExpHandlerBase b)
         {
             Base = b;
         }

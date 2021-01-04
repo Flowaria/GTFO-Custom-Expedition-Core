@@ -8,11 +8,11 @@ using System.Linq;
 using System.Reflection;
 
 //TODO: Fix Json of this shit
-namespace CustomObjectives.Utils
+namespace CustomExpeditions.Utils
 {
     public static class ConfigUtil
     {
-        public const string DATADUMPER_GUID = "Data-Dumper";
+        public const string DATADUMPER_GUID = "com.Dak.Data-Dumper";
 
         public static string GlobalPath { get; private set; }
         public static string LocalPath { get; private set; }
@@ -54,14 +54,26 @@ namespace CustomObjectives.Utils
                     var assemblies = AppDomain.CurrentDomain.GetAssemblies();
                     var ddAsm = assemblies.First(a => a.Location == info.Location);
 
+                    if (ddAsm is null)
+                        throw new Exception("Assembly is Missing!");
+
                     var types = ddAsm.GetTypes();
                     var cfgManagerType = types.First(t => t.Name == "ConfigManager");
 
-                    var dataPathProp = cfgManagerType.GetProperty("GameDataPath", BindingFlags.Public | BindingFlags.Static);
-                    var customPathProp = cfgManagerType.GetProperty("CustomPath", BindingFlags.Public | BindingFlags.Static);
+                    if (cfgManagerType is null)
+                        throw new Exception("Unable to Find ConfigManager Class");
 
-                    var dataPath = dataPathProp.GetValue(null) as string;
-                    var customPath = customPathProp.GetValue(null) as string;
+                    var dataPathField = cfgManagerType.GetField("GameDataPath", BindingFlags.Public | BindingFlags.Static);
+                    var customPathField = cfgManagerType.GetField("CustomPath", BindingFlags.Public | BindingFlags.Static);
+
+                    if (dataPathField is null)
+                        throw new Exception("Unable to Find Field: GameDataPath");
+
+                    if (customPathField is null)
+                        throw new Exception("Unable to Find Field: CustomPath");
+
+                    var dataPath = dataPathField.GetValue(null) as string;
+                    var customPath = customPathField.GetValue(null) as string;
 
                     HasLocalPath = true;
                     LocalPath = customPath;

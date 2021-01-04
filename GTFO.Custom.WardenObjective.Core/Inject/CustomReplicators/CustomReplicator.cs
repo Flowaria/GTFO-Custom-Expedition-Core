@@ -1,11 +1,11 @@
-﻿using CustomObjectives.Messages;
+﻿using CustomExpeditions.Messages;
 using LevelGeneration;
 using SNetwork;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace CustomObjectives.Inject.CustomReplicators
+namespace CustomExpeditions.Inject.CustomReplicators
 {
     using ComplexStateReplicator = SNet_StateReplicator<pDoorState, pDoorInteraction>;
     using ComplexStateReplicatorProvider = iSNet_StateReplicatorProvider<pDoorState, pDoorInteraction>;

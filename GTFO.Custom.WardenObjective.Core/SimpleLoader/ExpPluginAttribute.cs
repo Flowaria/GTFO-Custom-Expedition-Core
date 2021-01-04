@@ -1,13 +1,13 @@
 ﻿using System;
 
-namespace CustomObjectives.SimpleLoader
+namespace CustomExpeditions.SimpleLoader
 {
     [AttributeUsage(AttributeTargets.Assembly, Inherited = false)]
-    public class CustomObjectiveAttribute : Attribute
+    public class ExpPluginAttribute : Attribute
     {
         public Type Entry;
 
-        public CustomObjectiveAttribute(Type entryPoint)
+        public ExpPluginAttribute(Type entryPoint)
         {
             Entry = entryPoint;
         }
