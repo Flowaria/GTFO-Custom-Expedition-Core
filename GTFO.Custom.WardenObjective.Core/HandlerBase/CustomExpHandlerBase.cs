@@ -200,7 +200,7 @@ namespace CustomExpeditions.HandlerBase
         {
             if (SNet.IsMaster)
             {
-                GameStateManager.ChangeState(eGameStateName.ExpeditionSuccess);
+                WardenObjectiveManager.OnWinConditionSolved(LG_LayerType.MainLayer);
             }
         }
 

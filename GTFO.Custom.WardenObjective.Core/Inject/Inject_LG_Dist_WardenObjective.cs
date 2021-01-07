@@ -5,7 +5,7 @@ using System;
 namespace CustomExpeditions.Inject
 {
     [HarmonyPatch(typeof(LG_Distribute_WardenObjective), "Build")]
-    internal static class Inject_LG_Dist_WardenObjective
+    static class Inject_LG_Dist_WardenObjective
     {
         internal static void Postfix(LG_Distribute_WardenObjective __instance)
         {

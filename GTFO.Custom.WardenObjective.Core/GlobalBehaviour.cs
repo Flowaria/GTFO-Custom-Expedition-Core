@@ -15,9 +15,7 @@ namespace CustomExpeditions
         public static Action OnUpdate;
         public static Action OnFixedUpdate;
 
-        public GlobalBehaviour(IntPtr intPtr) : base(intPtr)
-        {
-        }
+        public GlobalBehaviour(IntPtr intPtr) : base(intPtr) {}
 
         protected void Update()
         {

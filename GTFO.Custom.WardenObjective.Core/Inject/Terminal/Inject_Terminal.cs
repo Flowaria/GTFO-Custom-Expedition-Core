@@ -5,7 +5,7 @@ using LevelGeneration;
 namespace CustomExpeditions.Inject.Terminal
 {
     [HarmonyPatch(typeof(LG_ComputerTerminalCommandInterpreter))]
-    internal static class Inject_TerminalCommandInterpreter
+    static class Inject_TerminalCommandInterpreter
     {
         [HarmonyPostfix]
         [HarmonyPatch("ReceiveCommand")]
@@ -24,7 +24,7 @@ namespace CustomExpeditions.Inject.Terminal
     }
 
     [HarmonyPatch(typeof(LG_ComputerTerminal))]
-    internal static class Inject_Terminal
+    static class Inject_Terminal
     {
         [HarmonyPostfix]
         [HarmonyPatch("OnProximityEnter")]

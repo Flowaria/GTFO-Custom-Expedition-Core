@@ -4,7 +4,7 @@ using HarmonyLib;
 namespace CustomExpeditions.Inject.Global
 {
     [HarmonyPatch(typeof(GS_ExpeditionSuccess), "Enter")]
-    internal static class Inject_GS_Success_Enter
+    static class Inject_GS_Success_Enter
     {
         internal static void Postfix()
         {

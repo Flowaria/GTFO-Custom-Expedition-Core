@@ -40,19 +40,43 @@ namespace CustomExpeditions.Utils
             return _ItemBuilderDict.ContainsKey(guid) ? _ItemBuilderDict[guid] : null;
         }
 
-        public static void RegisterItem(LG_DistributeItem item, bool isWardenObj, Action<GameObject> onSpawn)
+        public static void RegisterItem(LG_DistributeItem item, string guid = "", Action<GameObject> onSpawn = null)
+        {
+            ItemUtil.SetGUID(item, guid);
+
+            if(onSpawn != null)
+            {
+                ItemMessage.OnItemSpawned += (itemGuid, gameObject) =>
+                {
+                    if (itemGuid != GetGUID(item))
+                        return;
+
+                    onSpawn?.Invoke(gameObject);
+                };
+            }
+        }
+
+        public static void RegisterItem(LG_DistributeItem item, Action<GameObject> onSpawn)
         {
             var info = FindInfoByItem(item);
             if (info == null)
             {
                 info = new BuilderInfo();
                 info.OnGameObjectSpawned += onSpawn;
-                info.IsWardenObjectiveItem = isWardenObj;
 
                 ItemUtil.SetGUID(item);
 
                 _ItemBuilderDict.Add(ItemUtil.GetGUID(item), info);
             }
+
+            //TODO: Refactor code
+            ItemMessage.OnItemSpawned += (guid, gameObject) =>
+            {
+                if (guid == GetGUID(item))
+                {
+                    onSpawn?.Invoke(gameObject);
+                }
+            };
         }
 
         public static bool HasRegistered(LG_DistributeItem item)

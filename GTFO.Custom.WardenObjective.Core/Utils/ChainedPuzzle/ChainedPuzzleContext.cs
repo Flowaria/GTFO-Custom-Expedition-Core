@@ -6,7 +6,7 @@ namespace CustomExpeditions.Utils.ChainedPuzzle
     public class ChainedPuzzleContext
     {
         public ChainedPuzzleInstance Instance { get; internal set; }
-        public string SolvedMessage { get; set; } = "Security Scan Complete, door unlocked.";
+        public string SolvedMessage { get; set; } = "Security Scan Complete.";
         public float SolvedMessageDuration { get; set; } = 10.0f;
         public ePUIMessageStyle SolvedMessageStyle { get; set; } = ePUIMessageStyle.Bioscan;
 
@@ -29,7 +29,14 @@ namespace CustomExpeditions.Utils.ChainedPuzzle
 
         public void AttemptInteract(eChainedPuzzleInteraction interaction)
         {
-            Instance?.AttemptInteract(interaction);
+            if(Instance != null)
+            {
+                Instance.AttemptInteract(interaction);
+            }
+            else
+            {
+                Logger.Error("ChainedPuzzle Instance was null, Please call AttemptInteract method after OnBuildDone has called!");
+            }
         }
 
         public void Trigger()

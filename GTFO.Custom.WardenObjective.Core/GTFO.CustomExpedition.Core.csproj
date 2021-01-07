@@ -93,11 +93,21 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CustomReplicators\CustomReplicatorManager.cs" />
+    <Compile Include="CustomReplicators\ReplicatorInfo.cs" />
+    <Compile Include="CustomReplicators\Wrapper\ValueWrapper_32.cs" />
     <Compile Include="Extensions\TerminalExtension.cs" />
     <Compile Include="GlobalBehaviour.cs" />
+    <Compile Include="GlobalHandlers\TimedObjectives\TimedObjectiveReplicator.cs" />
     <Compile Include="HandlerBase\Event\CustomEvent.cs" />
     <Compile Include="Inject\CustomReplicators\Inject_Replication.cs" />
     <Compile Include="Inject\Global\Inject_SNet.cs" />
+    <Compile Include="Inject\Checksums\Inject_RundownManager.cs" />
+    <Compile Include="Inject\Global\Inject_SNet_SyncManager.cs" />
+    <Compile Include="Inject\MarkerItem\Inject_LG_GateKeyItemBuilder.cs" />
+    <Compile Include="Inject\MarkerItem\Inject_LG_PickupItemBuilder.cs" />
+    <Compile Include="Inject\MarkerItem\Inject_LG_ResourceContainerBuilder.cs" />
+    <Compile Include="Messages\ItemMessage.cs" />
     <Compile Include="Utils\ChainedPuzzle\ChainedPuzzleContext.cs" />
     <Compile Include="LocalConfigDTO.cs" />
     <Compile Include="CustomExpHandlerManager.cs" />
@@ -112,11 +122,11 @@
     <Compile Include="HandlerBase\Proxy\ObjectiveStatusProxy_DefaultObjectives.cs" />
     <Compile Include="HandlerBase\TargetConfigBase.cs" />
     <Compile Include="HandlerBase\Proxy\WinConditionProxy.cs" />
-    <Compile Include="Inject\CustomReplicators\CustomReplicator.cs" />
+    <Compile Include="CustomReplicators\CustomReplicator.cs" />
     <Compile Include="Inject\CustomReplicators\Inject_LG_Door_Sync.cs" />
-    <Compile Include="Inject\CustomReplicators\Wrapper\InteractionWrapperBase.cs" />
-    <Compile Include="Inject\CustomReplicators\Wrapper\StateWrapperBase.cs" />
-    <Compile Include="Entry.cs" />
+    <Compile Include="CustomReplicators\Wrapper\InteractionWrapper.cs" />
+    <Compile Include="CustomReplicators\Wrapper\StateWrapper.cs" />
+    <Compile Include="EntryPoint.cs" />
     <Compile Include="Extensions\ListExtension.cs" />
     <Compile Include="GlobalHandlers\TimedObjectives\TimedObjectiveHandler.cs" />
     <Compile Include="Inject\MarkerItem\BuilderInfo.cs" />
@@ -128,9 +138,8 @@
     <Compile Include="Inject\Global\Inject_WardenObjectiveManager.cs" />
     <Compile Include="Inject\MarkerItem\Inject_LG_DistItem.cs" />
     <Compile Include="Inject\Inject_LG_Dist_WardenObjective.cs" />
-    <Compile Include="Inject\MarkerItem\Inject_LG_MarkerBuilder.cs" />
+    <Compile Include="Inject\MarkerItem\Inject_LG_FunctionMarkerBuilder.cs" />
     <Compile Include="Inject\Terminal\Inject_Terminal.cs" />
-    <Compile Include="Inject\ObjectiveItem\Inject_CarryItem.cs" />
     <Compile Include="Messages\TerminalMessage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SimpleLoader\ExpPluginAttribute.cs" />

@@ -39,6 +39,16 @@ namespace CustomExpeditions.HandlerBase
 
         #region Layer & Zone Gather
 
+        public LG_Area GetStartingArea()
+        {
+            return Builder.GetElevatorArea();
+        }
+
+        public LG_Zone GetStartingZone()
+        {
+            return Builder.GetElevatorZone();
+        }
+
         public bool TryGetLayer(out LG_Layer layer)
         {
             return TryGetLayer(Base.LayerType, out layer);
@@ -272,7 +282,7 @@ namespace CustomExpeditions.HandlerBase
             if (IsBuildDone())
                 throw LatePlacementException;
 
-            ItemUtil.RegisterItem(distItem, isWardenObjectiveItem, onSpawned);
+            ItemUtil.RegisterItem(distItem, onSpawned);
         }
 
         #endregion Pre-Build Placements

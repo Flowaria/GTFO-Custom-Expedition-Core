@@ -1,4 +1,5 @@
-﻿using CustomExpeditions.Inject.CustomReplicators;
+﻿using CustomExpeditions.CustomReplicators;
+using CustomExpeditions.Inject.CustomReplicators;
 using LevelGeneration;
 using System;
 using UnityEngine;
@@ -11,93 +12,37 @@ namespace CustomExpeditions.Utils.FogLevel
         public float TransitionTime;
     }
 
-    public class FogLevelState : StateWrapperBase
+    public class FogLevelState : StateWrapper
     {
-        public int Level;
-
-        public override void FromOriginal(pDoorState state)
+        public int Level
         {
-            Level = Mathf.RoundToInt(state.animProgress);
+            get => Value1.IntValue;
+            set => Value1.IntValue = value;
         }
 
-        public override pDoorState ToOriginal()
+        public bool UsingFogController
         {
-            return new pDoorState()
-            {
-                animProgress = Level
-            };
+            get => Flag1;
+            set => Flag1 = value;
         }
     }
 
-    public enum FogLevelInteractionType : byte
-    {
-        Raise, Lower
-    }
-
-    public class FogLevelInteraction : InteractionWrapperBase
-    {
-        public FogLevelInteractionType InteractionType;
-
-        public override void FromOriginal(pDoorInteraction interaction)
-        {
-            InteractionType = (FogLevelInteractionType)interaction.type;
-        }
-
-        public override pDoorInteraction ToOriginal()
-        {
-            return new pDoorInteraction()
-            {
-                type = (eDoorInteractionType)InteractionType
-            };
-        }
-    }
-
-    public class FogLevelReplicator : CustomReplicatorProvider<FogLevelState, FogLevelInteraction>
+    public class FogLevelReplicator : CustomReplicatorProvider<FogLevelState>
     {
         public Action<int> OnLevelChanged;
 
-        public override void OnStateChange(FogLevelState oldState, FogLevelState newState, bool isRecall)
+        public void SetLevel(int level)
         {
-            OnLevelChanged?.Invoke(newState.Level);
-        }
-
-        public override bool ShouldInteract(FogLevelInteraction interaction, out FogLevelState state)
-        {
-            if (interaction.InteractionType == FogLevelInteractionType.Raise)
+            if(State.Level != level && CanSendState)
             {
-                state = new FogLevelState()
-                {
-                    Level = FogLevelUtil.CurrentLevel - 1
-                };
-                return true;
+                SendState.Level = level;
+                UpdateState();
             }
-            else if (interaction.InteractionType == FogLevelInteractionType.Lower)
-            {
-                state = new FogLevelState()
-                {
-                    Level = FogLevelUtil.CurrentLevel + 1
-                };
-                return true;
-            }
-
-            state = null;
-            return false;
         }
 
-        public void Raise()
+        public override void OnStateChange()
         {
-            AttemptInteract(new FogLevelInteraction()
-            {
-                InteractionType = FogLevelInteractionType.Raise
-            });
-        }
-
-        public void Lower()
-        {
-            AttemptInteract(new FogLevelInteraction()
-            {
-                InteractionType = FogLevelInteractionType.Raise
-            });
+            OnLevelChanged?.Invoke(State.Level);
         }
     }
 }

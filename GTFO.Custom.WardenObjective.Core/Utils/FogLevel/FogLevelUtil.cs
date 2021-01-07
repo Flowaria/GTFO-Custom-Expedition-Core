@@ -20,7 +20,6 @@ namespace CustomExpeditions.Utils.FogLevel
             _Replicator = new FogLevelReplicator();
             _FogSettings = new List<FogLevelSetting>();
 
-            _Replicator.AllowInteractionByUser = false;
             _Replicator.OnLevelChanged += OnLevelChanged;
 
             GlobalMessage.OnBuildDone += () =>
@@ -78,16 +77,6 @@ namespace CustomExpeditions.Utils.FogLevel
             if (!(0 <= level && level < LevelCount))
             {
                 return;
-            }
-
-            if (level < CurrentLevel)
-            {
-                _Replicator.Lower();
-            }
-
-            if (level > CurrentLevel)
-            {
-                _Replicator.Raise();
             }
         }
     }

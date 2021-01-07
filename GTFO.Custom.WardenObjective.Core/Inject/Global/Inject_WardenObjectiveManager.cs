@@ -4,7 +4,7 @@ using HarmonyLib;
 namespace CustomExpeditions.Inject.Global
 {
     [HarmonyPatch(typeof(WardenObjectiveManager), "OnStateChange")]
-    internal class Inject_WardenObjectiveManager
+    class Inject_WardenObjectiveManager
     {
         internal static void Postfix(pWardenObjectiveState oldState, pWardenObjectiveState newState, bool isRecall)
         {

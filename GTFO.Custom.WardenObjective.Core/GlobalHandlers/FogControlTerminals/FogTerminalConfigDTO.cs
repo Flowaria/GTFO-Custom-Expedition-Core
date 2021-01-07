@@ -21,10 +21,11 @@ namespace CustomExpeditions.GlobalHandlers.FogControlTerminals
 
     internal class FogTerminalPlacementData
     {
-        public LG_LayerType Layer;
-        public eLocalZoneIndex Zone;
+        public LG_LayerType Layer = LG_LayerType.MainLayer;
+        public eLocalZoneIndex Zone = eLocalZoneIndex.Zone_0;
+        public ZonePlacementWeights Weight;
         public FogTerminalType Type = FogTerminalType.Increment;
         public int Level = 1;
-        public int AllowedCount = 0;
+        public int AllowedInteractionCount = 1;
     }
 }

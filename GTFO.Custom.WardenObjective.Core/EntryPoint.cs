@@ -14,7 +14,7 @@ namespace CustomExpeditions
 {
     [BepInPlugin("Custom.Expedition.Core", "Custom Expedition Core", "1.0.0.0")]
     [BepInDependency("Data-Dumper", BepInDependency.DependencyFlags.SoftDependency)]
-    internal class Entry : BasePlugin
+    internal class EntryPoint : BasePlugin
     {
         private const string CONFIG_SECTION = "Global";
 
@@ -54,7 +54,7 @@ namespace CustomExpeditions
 
         private T GetCfgValue<T>(string entry, T defaultValue, string description)
         {
-            return Config.Bind<T>(new ConfigDefinition(CONFIG_SECTION, entry), defaultValue, new ConfigDescription(description)).Value;
+            return Config.Bind(new ConfigDefinition(CONFIG_SECTION, entry), defaultValue, new ConfigDescription(description)).Value;
         }
 
         private void Setup_DefaultGlobalHandlers()
@@ -101,14 +101,14 @@ namespace CustomExpeditions
             if (!ConfigUtil.HasLocalPath)
                 return;
 
-            if (ConfigUtil.TryGetLocalConfig<LocalConfigDTO>("ObjectivePrefs.json", out var config))
+            if (ConfigUtil.TryGetLocalConfig<LocalConfigDTO>("CustomExpPrefs.json", out var config))
             {
                 Logger.Log("=== Global Handler Whitelist ===");
-                foreach (var p in config.EnabledModules)
+                foreach (var p in config.EnabledGlobalHandlers)
                 {
                     Logger.Log("Allowed Plugin: {0}", p);
                 }
-                CustomExpHandlerManager.SetGlobalHandlerWhitelist(config.EnabledModules);
+                CustomExpHandlerManager.SetGlobalHandlerWhitelist(config.EnabledGlobalHandlers.ToArray());
             }
         }
 

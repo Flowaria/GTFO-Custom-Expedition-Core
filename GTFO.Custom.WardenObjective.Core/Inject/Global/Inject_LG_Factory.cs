@@ -5,7 +5,7 @@ using LevelGeneration;
 namespace CustomExpeditions.Inject.Global
 {
     [HarmonyPatch(typeof(LG_Factory), "FactoryDone")]
-    internal static class Inject_LG_Factory
+    static class Inject_LG_Factory
     {
         internal static void Postfix()
         {

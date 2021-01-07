@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SNetwork;
+using System;
 
 namespace CustomExpeditions.Messages
 {
@@ -19,6 +20,9 @@ namespace CustomExpeditions.Messages
         public static Action OnResetSession;
         public static Action OnResetSession_SNet;
         public static Action OnValidateMasterData;
+
+        public static Action<SNet_Player> OnPlayerJoinedSession;
+        public static Action<SNet_Player> OnPlayerLeftSession;
 
         public static Action<pWardenObjectiveState, pWardenObjectiveState, bool> OnObjectiveStateChanged;
     }
