@@ -3,6 +3,7 @@ using CustomExpeditions.HandlerBase;
 using CustomExpeditions.Utils;
 using GameData;
 using LevelGeneration;
+using Player;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +17,8 @@ namespace TestPlugin.Basic
         //Pre-Build Method
         public override void OnSetup()
         {
+            return;
+
             //Get Zone from Builder Context
             Builder.TryGetZone(eLocalZoneIndex.Zone_0, out var zone);
 
@@ -67,12 +70,22 @@ namespace TestPlugin.Basic
             //Builder.PlaceDisinfectStation(zone, weight); : NONO
 
             //Unlock Random 5 Door!
-            var zones = Builder.GetAllZones();
+            var zones = Builder.GetAllZonesInLayer();
             RandomUtil.Shuffle(zones);
 
-            for(int i = 0;i<5;i++)
+            for(int i = 0;i<zones.Length;i++)
             {
-                Builder.GetSpawnedDoorInZone(zones[i])?.AttemptOpenCloseInteraction(true);
+                var door = Builder.GetSpawnedDoorInZone(zones[i]);
+                if(door != null)
+                {
+                    var doorLock = door.m_locks.Cast<LG_SecurityDoor_Locks>();
+                    doorLock.OnChainedPuzzleSolved = null; //This Prevents Door being opened after first puzzle
+                    doorLock.m_intOpenDoor.OnInteractionTriggered = null;
+                    doorLock.m_intOpenDoor.OnInteractionTriggered = new Action<PlayerAgent>((agent) =>
+                    {
+                        door.m_sync.AttemptDoorInteraction(eDoorInteractionType.ActivateChainedPuzzle);
+                    });
+                }
             }
         }
     }

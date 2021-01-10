@@ -112,11 +112,5 @@
     <Compile Include="PuzzleContext\RelayDoorPuzzleContext.cs" />
     <Compile Include="PuzzleContext\TerminalPuzzleContext.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\GTFO.Custom.WardenObjective.Core\GTFO.CustomExpedition.Core.csproj">
-      <Project>{55634fbc-ad95-4330-a841-20c77eec253f}</Project>
-      <Name>GTFO.CustomExpedition.Core</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

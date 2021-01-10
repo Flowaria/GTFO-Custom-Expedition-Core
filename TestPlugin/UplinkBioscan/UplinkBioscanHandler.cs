@@ -3,7 +3,6 @@ using CustomExpeditions;
 using CustomExpeditions.Extensions;
 using CustomExpeditions.HandlerBase;
 using CustomExpeditions.Utils;
-using CustomExpeditions.Utils.ChainedPuzzle;
 using GameData;
 using LevelGeneration;
 using System;
@@ -35,13 +34,10 @@ namespace TestPlugin.UplinkBioscan
 
             foreach(var placement in placements)
             {
-                Logger.Log("{0}", placement.LocalIndex);
                 if(Builder.TryGetZone(placement.LocalIndex, out var zone))
                 {
-                    Logger.Log("{0}", zone.Alias);
                     Builder.FetchTerminal(zone, placement.Weights, out var distItem, out var distNode, (terminal) =>
                     {
-                        Logger.Log("{0}", terminal.m_serialNumber);
                         OnObjectiveTerminalSpawned(terminal);
                     });
                 }

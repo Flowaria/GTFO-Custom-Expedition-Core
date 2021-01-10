@@ -1,6 +1,7 @@
 ﻿using CustomExpeditions;
 using CustomExpeditions.SimpleLoader;
 using HarmonyLib;
+using LevelGeneration;
 using SNetwork;
 using System;
 using System.Collections.Generic;
@@ -9,7 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TestPlugin;
 using TestPlugin.Basic;
-using TestPlugin.ShuffleSeed;
+using TestPlugin.HackWave;
 using TestPlugin.UplinkBioscan;
 using UnityEngine;
 
@@ -25,15 +26,10 @@ namespace TestPlugin
             var harmonyInstance = new Harmony("TestPlugin");
             harmonyInstance.PatchAll();
 
-            //Replicator = new ShuffleSeedReplicator();
-            //Replicator.Setup(eSNetReplicatorLifeTime.NeverDestroyed, SNet_ChannelType.GameOrderCritical);
-
-            //Replicator.State.SeedNumber++;
-            //Replicator.UpdateState();
-
             CustomExpHandlerManager.AddGlobalHandler<OverridesHandler>("OverrideTest", CustomExpSettings.MAIN_ONLY);
-            //CustomObjectiveManager.AddGlobalHandler<BuilderHandler>("BuilderTest", CustomObjectiveSettings.ALL_LAYER);
-            //CustomObjectiveManager.AddHandler<UplinkBioscanHandler>(50/*, CustomObjectiveSettings.ALL_LAYER*/);
+            CustomExpHandlerManager.AddGlobalHandler<HackMissWaveHandler>("HackMissWave", CustomExpSettings.MAIN_ONLY);
+            CustomExpHandlerManager.AddGlobalHandler<BuilderHandler>("BuilderTest", CustomExpSettings.ALL_LAYER);
+            CustomExpHandlerManager.AddHandler<UplinkBioscanHandler>(50, CustomExpSettings.ALL_LAYER);
         }
     }
 }

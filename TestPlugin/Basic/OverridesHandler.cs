@@ -13,15 +13,6 @@ namespace TestPlugin.Basic
     {
         public override void OnSetup()
         {
-            var waveSetting = new GenericEnemyWaveData()
-            {
-                WaveSettings = 1,
-                WavePopulation = 5,
-                TriggerAlarm = true,
-                SpawnDelay = 3.0f
-            };
-            HackFail.OnCalled = (node) => { this.TriggerWave(waveSetting, node); };
-
             Logger.Log("OVERRIDES TEST: OnSetup");
             RegisterUpdateEvent(OnUpdate, OnFixedUpdate); // It will be automatically unloaded when OnUnload called
         }

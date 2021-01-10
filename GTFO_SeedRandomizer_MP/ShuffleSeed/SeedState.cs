@@ -1,4 +1,4 @@
-﻿using CustomExpeditions.Inject.CustomReplicators;
+﻿using CustomExpeditions.CustomReplicators;
 using LevelGeneration;
 using System;
 using System.Collections.Generic;
@@ -8,37 +8,33 @@ using System.Threading.Tasks;
 
 namespace GTFO_SeedRandomizer_MP
 {
-    public class SeedState : StateWrapperBase
+    public class SeedState : StateWrapper
     {
-        public bool UsingSeed = false;
-        public int Seed1;
-        public int Seed2;
-        public int Seed3;
-
+        public bool UsingSeed
+        {
+            get => Flag1;
+            set => Flag1 = value;
+        }
+        public int Seed1
+        {
+            get => Value1.IntValue;
+            set => Value1.IntValue = value;
+        }
+        public int Seed2
+        {
+            get => Value2.IntValue;
+            set => Value2.IntValue = value;
+        }
+        public int Seed3
+        {
+            get => Value3.IntValue;
+            set => Value3.IntValue = value;
+        }
         public void SetSeed(string seed)
         {
             Seed1 = seed.GetHashCode();
             Seed2 = (seed + "newCode").GetHashCode();
             Seed3 = (seed + "nnewCode").GetHashCode();
-        }
-
-        public override void FromOriginal(pDoorState state)
-        {
-            UsingSeed = state.hasBeenOpenedDuringGame;
-            Seed1 = FloatByteToInt(state.animProgress);
-            Seed2 = FloatByteToInt(state.damageTaken);
-            Seed3 = FloatByteToInt(state.glueRel);
-        }
-
-        public override pDoorState ToOriginal()
-        {
-            return new pDoorState()
-            {
-                hasBeenOpenedDuringGame = UsingSeed,
-                animProgress = IntByteToFloat(Seed1),
-                damageTaken = IntByteToFloat(Seed2),
-                glueRel = IntByteToFloat(Seed3)
-            };
         }
     }
 }

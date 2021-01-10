@@ -67,7 +67,7 @@
     <Compile Include="ShuffleSeed\ShuffleSeedReplicator.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\GTFO.Custom.WardenObjective.Core\GTFO.CustomExpedition.Core.csproj">
+    <ProjectReference Include="..\GTFO.Custom.Expedition.Core\GTFO.CustomExpedition.Core.csproj">
       <Project>{55634fbc-ad95-4330-a841-20c77eec253f}</Project>
       <Name>GTFO.CustomExpedition.Core</Name>
     </ProjectReference>

@@ -26,24 +26,32 @@ namespace GTFO_SeedRandomizer_MP
 
             GlobalMessage.OnResetSession += () =>
             {
-                GenerateNewSeed();
+                ResetToDefault();
             };
 
             GlobalMessage.OnGameInit += () =>
             {
                 Replicator = new ShuffleSeedReplicator();
-                Replicator.Setup(eSNetReplicatorLifeTime.NeverDestroyed, SNet_ChannelType.SessionOrderCritical);
+                Replicator.Setup(eSNetReplicatorLifeTime.NeverDestroyed, SNet_ChannelType.GameOrderCritical);
             };
         }
 
         public static void ResetToDefault()
         {
+            if (!Replicator.CanSendState)
+                return;
+
             Replicator.SendState.UsingSeed = false;
             Replicator.UpdateState();
+
+            Logger.Log("Seed has been reset");
         }
 
         public static void GenerateNewSeed()
         {
+            if (!Replicator.CanSendState)
+                return;
+
             var rand = new Random();
             
             Replicator.SendState.UsingSeed = true;
@@ -57,7 +65,11 @@ namespace GTFO_SeedRandomizer_MP
 
         public static void GenerateSeed(string seed)
         {
+            if (!Replicator.CanSendState)
+                return;
+
             Replicator.SendState.SetSeed(seed);
+            Replicator.SendState.UsingSeed = true;
             var seed1 = Replicator.SendState.Seed1;
             var seed2 = Replicator.SendState.Seed2;
             var seed3 = Replicator.SendState.Seed3;
@@ -115,8 +127,6 @@ namespace GTFO_SeedRandomizer_MP
 
             if (string.IsNullOrEmpty(msg))
                 return;
-
-            Logger.Log(msg);
 
             if (msg.Equals("/reset", StringComparison.OrdinalIgnoreCase))
             {

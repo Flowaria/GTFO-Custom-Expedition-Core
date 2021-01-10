@@ -76,18 +76,17 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="HackWave\HackMissWaveHandler.cs" />
     <Compile Include="Basic\OverridesHandler.cs" />
     <Compile Include="Entry.cs" />
-    <Compile Include="HackFail.cs" />
+    <Compile Include="HackWave\Inject_HackFail.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Basic\BuilderHandler.cs" />
-    <Compile Include="ShuffleSeed\SeedState.cs" />
-    <Compile Include="ShuffleSeed\ShuffleSeedReplicator.cs" />
     <Compile Include="UplinkBioscan\UplinkBioscanHandler.cs" />
     <Compile Include="UplinkBioscan\UplinkPuzzleContext.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\GTFO.Custom.WardenObjective.Core\GTFO.CustomExpedition.Core.csproj">
+    <ProjectReference Include="..\GTFO.Custom.Expedition.Core\GTFO.CustomExpedition.Core.csproj">
       <Project>{55634fbc-ad95-4330-a841-20c77eec253f}</Project>
       <Name>GTFO.CustomExpedition.Core</Name>
     </ProjectReference>
