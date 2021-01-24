@@ -7,14 +7,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-[assembly: ExpPlugin(typeof(Entry))]
+[assembly: ExpPlugin(typeof(EntryPoint))]
 namespace CustomObjective.DoorMultipleWaves
 {
-    internal class Entry : ExpSimpleEntry
+    internal class EntryPoint : ExpSimpleEntry
     {
         public override void OnStart()
         {
-            CustomExpHandlerManager.AddGlobalHandler<MainHandler>("MultiWaveDoor");
+            CustomExpHandlerManager.AddGlobalHandler<DoorWaveHandler>("MultiWaveDoor", CustomExpSettings.MAIN_ONLY);
         }
     }
 }

@@ -4,7 +4,7 @@ using HarmonyLib;
 namespace CustomExpeditions.Messages.Inject.Global
 {
     [HarmonyPatch(typeof(GS_StopElevatorRide), "OnElevatorHasArrived")]
-    static class Inject_GS_Elevator
+    internal class Inject_GS_Elevator
     {
         internal static void Postfix()
         {

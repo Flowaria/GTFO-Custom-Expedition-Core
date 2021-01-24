@@ -5,7 +5,7 @@ using SNetwork;
 namespace CustomExpeditions.Messages.Inject.SNets
 {
     [HarmonyPatch(typeof(SNet))]
-    static class Inject_SNet
+    internal class Inject_SNet
     {
         [HarmonyPostfix]
         [HarmonyPatch("ResetSession")]

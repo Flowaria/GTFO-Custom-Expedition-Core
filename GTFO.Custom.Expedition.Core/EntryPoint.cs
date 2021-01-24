@@ -1,16 +1,20 @@
 ﻿using BepInEx;
 using BepInEx.Configuration;
 using BepInEx.IL2CPP;
+using CustomExpeditions.CustomReplicators.Inject;
 using CustomExpeditions.GlobalHandlers.TimedObjectives;
 using CustomExpeditions.GlobalHandlers.TweakedSettings;
-using CustomExpeditions.Inject.CustomReplicators;
 using CustomExpeditions.Messages;
 using CustomExpeditions.SimpleLoader;
+using CustomExpeditions.Utility.Attributes;
 using CustomExpeditions.Utils;
 using HarmonyLib;
 using System;
 using System.Linq;
+using System.Reflection;
+using System.Runtime.CompilerServices;
 using UnhollowerRuntimeLib;
+using UnityEngine;
 
 namespace CustomExpeditions
 {
@@ -20,42 +24,71 @@ namespace CustomExpeditions
     internal class EntryPoint : BasePlugin
     {
         private const string CONFIG_SECTION = "Global";
+        private readonly Harmony HarmonyInstance = new Harmony("flowaria.CustomExp.Core.Harmony");
 
         public override void Load()
         {
-            ClassInjector.RegisterTypeInIl2Cpp<GlobalBehaviour>();
+            Logger.LogInstance = Log;
 
+            Setup_InjectIL2CPPTypes();
+            Setup_HarmonyPatches();
+            Setup_ExecuteAutoConstructor();
             Setup_DefaultConfigs();
             Setup_DefaultGlobalHandlers();
 
-            //Setup Harmony Patcher
-            var harmonyInstance = new Harmony("flowaria.CustomExp.Core.Harmony");
-            harmonyInstance.PatchAll();
-
-            //Patch Harmony Methods Manually
-            Inject_Replication.MakePatch(harmonyInstance);
-
             //Setup Simple Loader
-            ExpSimpleLoader.Setup();
+            ExpSimpleLoader.Load();
 
             AssetShards.AssetShardManager.add_OnStartupAssetsLoaded((Il2CppSystem.Action)OnAssetLoaded);
         }
 
         #region ApplicationStart
 
+        private void Setup_ExecuteAutoConstructor()
+        {
+            var types = Assembly.GetExecutingAssembly().GetTypes();
+            foreach (var type in types)
+            {
+                var attr = type.GetCustomAttribute<StaticConstructorAutorunAttribute>();
+                if(attr != null)
+                {
+                    RuntimeHelpers.RunClassConstructor(type.TypeHandle);
+                }
+            }
+        }
+
+        private void Setup_InjectIL2CPPTypes()
+        {
+            ClassInjector.RegisterTypeInIl2Cpp<GlobalBehaviour>();
+        }
+
+        private void Setup_HarmonyPatches()
+        {
+            //Setup Harmony Patcher
+            HarmonyInstance.PatchAll();
+
+            //Patch Harmony Methods Manually
+            Inject_Replication.MakePatch(HarmonyInstance);
+        }
+
         private void Setup_DefaultConfigs()
         {
-            Logger.LogInstance = this.Log;
             Logger.IsGlobalEnabled = GetCfgValue("UseLogger", true, "Enable Logger?");
 
             var raw = GetCfgValue("UsingLogLevels", "Log, Warning, Error", "Allowed Level for Logger ('Verbose', 'Log', 'Warning' and 'Error')");
+
             var list = raw.Split(',').Select(item => item.Trim());
-            Logger.IsVerboseEnabled = list.Any(x => x.Equals("Verbose", StringComparison.OrdinalIgnoreCase));
-            Logger.IsLogEnabled = list.Any(x => x.Equals("Log", StringComparison.OrdinalIgnoreCase));
-            Logger.IsWarnEnabled = list.Any(x => x.Equals("Warning", StringComparison.OrdinalIgnoreCase));
-            Logger.IsErrorEnabled = list.Any(x => x.Equals("Error", StringComparison.OrdinalIgnoreCase));
+            Logger.IsVerboseEnabled =   list.Any(x => IgnoreCaseEqual(x, "Verbose"));
+            Logger.IsLogEnabled =       list.Any(x => IgnoreCaseEqual(x, "Log"));
+            Logger.IsWarnEnabled =      list.Any(x => IgnoreCaseEqual(x, "Warning"));
+            Logger.IsErrorEnabled =     list.Any(x => IgnoreCaseEqual(x, "Error"));
 
             Config.Save();
+
+            bool IgnoreCaseEqual(string str1, string str2)
+            {
+                return str1.Equals(str2, StringComparison.OrdinalIgnoreCase);
+            }
         }
 
         private T GetCfgValue<T>(string entry, T defaultValue, string description)
@@ -88,20 +121,31 @@ namespace CustomExpeditions
 
         private void OnGameInit_Once()
         {
-            //Setup Global Handler
-            GlobalBehaviour.Setup();
-            GlobalBehaviour.OnUpdate += OnUpdate;
-            GlobalBehaviour.OnFixedUpdate += OnFixedUpdate;
-
-            Setup_LocalConfigs();
-            Setup_DefaultReplicator();
+            PostSetup_GlobalBehaviour();
+            PostSetup_LocalConfigs();
+            PostSetup_DefaultReplicator();
 
             GlobalMessage.OnGameInit?.Invoke();
         }
 
         #region GameInit
 
-        private void Setup_LocalConfigs()
+        private void PostSetup_GlobalBehaviour()
+        {
+            GlobalBehaviour.Setup();
+            GlobalBehaviour.OnUpdate += () =>
+            {
+                GlobalMessage.OnUpdate?.Invoke();
+                GlobalMessage.OnUpdate_Level?.Invoke();
+            };
+            GlobalBehaviour.OnFixedUpdate += () =>
+            {
+                GlobalMessage.OnFixedUpdate?.Invoke();
+                GlobalMessage.OnFixedUpdate_Level?.Invoke();
+            };
+        }
+
+        private void PostSetup_LocalConfigs()
         {
             ConfigUtil.SetupLocalConfig();
 
@@ -119,20 +163,10 @@ namespace CustomExpeditions
             }
         }
 
-        private void Setup_DefaultReplicator()
+        private void PostSetup_DefaultReplicator()
         {
         }
 
         #endregion GameInit
-
-        private void OnUpdate()
-        {
-            GlobalMessage.OnUpdate?.Invoke();
-        }
-
-        private void OnFixedUpdate()
-        {
-            GlobalMessage.OnFixedUpdate?.Invoke();
-        }
     }
 }

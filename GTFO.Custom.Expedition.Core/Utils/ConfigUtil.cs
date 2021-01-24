@@ -6,6 +6,7 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.Serialization;
 
 //TODO: Fix Json of this shit
 namespace CustomExpeditions.Utils
@@ -35,6 +36,8 @@ namespace CustomExpeditions.Utils
             _JSONSetting = new JsonSerializerSettings()
             {
                 Formatting = Formatting.Indented,
+                NullValueHandling = NullValueHandling.Include,
+                DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate,
                 Converters = new JsonConverter[]
                 {
                     new StringEnumConverter()
@@ -52,7 +55,7 @@ namespace CustomExpeditions.Utils
                 try
                 {
                     var assemblies = AppDomain.CurrentDomain.GetAssemblies();
-                    var ddAsm = assemblies.First(a => a.Location == info.Location);
+                    var ddAsm = assemblies.First(a => !a.IsDynamic && a.Location == info.Location);
 
                     if (ddAsm is null)
                         throw new Exception("Assembly is Missing!");
@@ -126,11 +129,16 @@ namespace CustomExpeditions.Utils
         public static void SaveLocalConfig<D>(string name, D obj)
         {
             var path = GetLocalConfigPath(name);
-            if (string.IsNullOrEmpty(path))
+            if (!string.IsNullOrEmpty(path))
             {
                 var json = JsonConvert.SerializeObject(obj, _JSONSetting);
                 File.WriteAllText(path, json);
             }
+        }
+
+        public static void SaveLocalConfig<D>(string name)
+        {
+            SaveLocalConfig(name, Activator.CreateInstance<D>());
         }
 
         public static bool TryGetLocalConfig<D>(string name, out D obj)

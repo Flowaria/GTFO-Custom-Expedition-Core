@@ -1,4 +1,5 @@
 ﻿using CustomExpeditions.CustomReplicators;
+using CustomExpeditions.Utility;
 using HarmonyLib;
 using Il2CppSystem.Runtime.InteropServices;
 using LevelGeneration;
@@ -7,10 +8,9 @@ using System;
 using System.Reflection;
 using UnhollowerBaseLib;
 
-namespace CustomExpeditions.Inject.CustomReplicators
+namespace CustomExpeditions.CustomReplicators.Inject
 {
-    //[HarmonyPatch(typeof(SNet_Replication))]
-    static class Inject_Replication
+    internal class Inject_Replication
     {
         internal static void MakePatch(Harmony harmonyInstance)
         {

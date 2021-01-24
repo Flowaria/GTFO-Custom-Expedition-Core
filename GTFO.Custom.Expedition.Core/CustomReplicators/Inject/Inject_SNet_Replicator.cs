@@ -7,10 +7,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CustomExpeditions.Inject.CustomReplicators
+namespace CustomExpeditions.CustomReplicators.Inject
 {
     [HarmonyPatch(typeof(SNet_Replicator))]
-    class Inject_SNet_Replicator
+    internal class Inject_SNet_Replicator
     {
         [HarmonyPrefix]
         [HarmonyPatch("RevieveBytes")] //Not a Typo, Trust me

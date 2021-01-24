@@ -5,13 +5,13 @@ using LevelGeneration;
 namespace CustomExpeditions.Messages.Inject.Terminal
 {
     [HarmonyPatch(typeof(LG_ComputerTerminalCommandInterpreter))]
-    static class Inject_TerminalCommandInterpreter
+    internal class Inject_TerminalCommandInterpreter
     {
         [HarmonyPostfix]
         [HarmonyPatch("ReceiveCommand")]
         internal static void Post_ReceiveCommand(LG_ComputerTerminalCommandInterpreter __instance, TERM_Command cmd, string inputLine, string param1, string param2)
         {
-            if (cmd == TERM_Command.Override)
+            if ((int)cmd >= 100000)
             {
                 var cmdStr = inputLine.Split(' ')[0].ToLower();
                 TerminalMessage.OnRecievedCustomCmd?.Invoke(__instance.m_terminal, cmdStr, param1, param2);
@@ -24,7 +24,7 @@ namespace CustomExpeditions.Messages.Inject.Terminal
     }
 
     [HarmonyPatch(typeof(LG_ComputerTerminal))]
-    static class Inject_Terminal
+    internal class Inject_Terminal
     {
         [HarmonyPostfix]
         [HarmonyPatch("OnProximityEnter")]

@@ -1,4 +1,5 @@
 ﻿using CustomExpeditions;
+using CustomExpeditions.CustomReplicators;
 using CustomExpeditions.Messages;
 using CustomExpeditions.SimpleLoader;
 using GTFO_SeedRandomizer_MP;
@@ -32,7 +33,7 @@ namespace GTFO_SeedRandomizer_MP
             GlobalMessage.OnGameInit += () =>
             {
                 Replicator = new ShuffleSeedReplicator();
-                Replicator.Setup(eSNetReplicatorLifeTime.NeverDestroyed, SNet_ChannelType.GameOrderCritical);
+                Replicator.Setup(ReplicatorType.Manager, ReplicatorCHType.GameOrderCritical);
             };
         }
 

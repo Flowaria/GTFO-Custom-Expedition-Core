@@ -21,5 +21,10 @@
         {
             GuiManager.InteractionLayer.MessageTimerVisible = visible;
         }
+
+        public static void SetTimedMessage(string message, float duration, ePUIMessageStyle style = ePUIMessageStyle.Default, int priority = -1)
+        {
+            GuiManager.InteractionLayer.SetTimedMessage(message, duration, style, priority);
+        }
     }
 }

@@ -2,10 +2,10 @@
 using HarmonyLib;
 using LevelGeneration;
 
-namespace CustomExpeditions.Inject.CustomReplicators
+namespace CustomExpeditions.CustomReplicators.Inject
 {
     [HarmonyPatch(typeof(LG_Door_Sync), "OnStateChange")]
-    static class Inject_LG_Door_Sync
+    internal class Inject_LG_Door_Sync
     {
         internal static bool Prefix(LG_Door_Sync __instance, pDoorState oldState, pDoorState newState, bool isDropinState)
         {

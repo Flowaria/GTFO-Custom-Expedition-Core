@@ -9,12 +9,12 @@ using System.Threading.Tasks;
 
 namespace CustomExpeditions.CustomReplicators
 {
-    public static class CustomReplicatorManager
+    internal static class CustomReplicatorManager
     {
         public static readonly Dictionary<ushort, ReplicatorInfo> Replicators;
 
-        private const ushort _ManagedIDInitialValue = 10000;
-        private static ushort _ManagerIDBuffer = 100;
+        private const ushort _ManagedIDInitialValue = 15000;
+        private static ushort _ManagerIDBuffer = 1;
         private static ushort _ManagedIDBuffer = _ManagedIDInitialValue;
 
         static CustomReplicatorManager()
@@ -26,15 +26,22 @@ namespace CustomExpeditions.CustomReplicators
             {
                 _ManagedIDBuffer = _ManagedIDInitialValue;
 
+
+                var idsToRemove = new List<ushort>();
                 foreach(var item in Replicators)
                 {
                     var replicator = item.Value.Replicator;
 
                     if(replicator == null)
-                        Replicators.Remove(item.Key);
+                        idsToRemove.Add(item.Key);
 
-                    if(replicator.Type == SNet_ReplicatorType.SelfManaged)
-                        Replicators.Remove(item.Key);
+                    if (replicator.Type == SNet_ReplicatorType.SelfManaged)
+                        idsToRemove.Add(item.Key);
+                }
+
+                foreach (var id in idsToRemove)
+                {
+                    Replicators.Remove(id);
                 }
             };
         }

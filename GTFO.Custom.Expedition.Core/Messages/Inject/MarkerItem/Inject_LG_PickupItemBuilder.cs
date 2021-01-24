@@ -11,7 +11,7 @@ using UnityEngine;
 namespace CustomExpeditions.Messages.Inject.MarkerItem
 {
     [HarmonyPatch(typeof(LG_PickupItemBuilder), "SetupFunctionGO")]
-    class Inject_LG_PickupItemBuilder
+    internal class Inject_LG_PickupItemBuilder
     {
         internal static void Postfix(LG_PickupItemBuilder __instance, LG_LayerType layer, GameObject GO)
         {

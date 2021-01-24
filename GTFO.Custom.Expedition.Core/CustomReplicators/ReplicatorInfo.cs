@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace CustomExpeditions.CustomReplicators
 {
-    public class ReplicatorInfo
+    internal class ReplicatorInfo
     {
         public IReplicator Replicator;
         public string GUID;

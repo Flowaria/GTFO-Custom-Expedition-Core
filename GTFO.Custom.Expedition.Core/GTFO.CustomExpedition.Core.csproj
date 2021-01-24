@@ -79,6 +79,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\GTFO\BepInEx\core\UnhollowerBaseLib.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEngine.AIModule, Version=3.7.1.6, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\GTFO\BepInEx\unhollowed\UnityEngine.AIModule.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine.CoreModule, Version=3.7.1.6, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\GTFO\BepInEx\unhollowed\UnityEngine.CoreModule.dll</HintPath>
@@ -102,8 +106,8 @@
     <Compile Include="GlobalHandlers\TweakedSettings\TweakedSettingHandler.cs" />
     <Compile Include="GlobalHandlers\TimedObjectives\TimedObjectiveReplicator.cs" />
     <Compile Include="HandlerBase\Event\CustomEvent.cs" />
-    <Compile Include="Inject\CustomReplicators\Inject_Replication.cs" />
-    <Compile Include="Inject\CustomReplicators\Inject_SNet_Replicator.cs" />
+    <Compile Include="CustomReplicators\Inject\Inject_Replication.cs" />
+    <Compile Include="CustomReplicators\Inject\Inject_SNet_Replicator.cs" />
     <Compile Include="Messages\Inject\SNets\Inject_GameStateManager.cs" />
     <Compile Include="Messages\Inject\SNets\Inject_SNet.cs" />
     <Compile Include="Inject\Checksums\Inject_RundownManager.cs" />
@@ -113,6 +117,7 @@
     <Compile Include="Messages\Inject\MarkerItem\Inject_LG_ResourceContainerBuilder.cs" />
     <Compile Include="Messages\ItemMessage.cs" />
     <Compile Include="Messages\SNetMessage.cs" />
+    <Compile Include="Utility\Attributes\StaticConstructorAutorunAttribute.cs" />
     <Compile Include="Utils\ChainedPuzzle\ChainedPuzzleContext.cs" />
     <Compile Include="LocalConfigDTO.cs" />
     <Compile Include="CustomExpHandlerManager.cs" />
@@ -128,7 +133,7 @@
     <Compile Include="HandlerBase\TargetConfigBase.cs" />
     <Compile Include="HandlerBase\Proxy\WinConditionProxy.cs" />
     <Compile Include="CustomReplicators\CustomReplicator.cs" />
-    <Compile Include="Inject\CustomReplicators\Inject_LG_Door_Sync.cs" />
+    <Compile Include="CustomReplicators\Inject\Inject_LG_Door_Sync.cs" />
     <Compile Include="CustomReplicators\Wrapper\InteractionWrapper.cs" />
     <Compile Include="CustomReplicators\Wrapper\StateWrapper.cs" />
     <Compile Include="EntryPoint.cs" />
@@ -150,6 +155,7 @@
     <Compile Include="SimpleLoader\ExpPluginAttribute.cs" />
     <Compile Include="SimpleLoader\ExpSimpleEntry.cs" />
     <Compile Include="SimpleLoader\ExpSimpleLoader.cs" />
+    <Compile Include="Utils\ChainedPuzzle\ChainedPuzzleContextReplicator.cs" />
     <Compile Include="Utils\ChainedPuzzle\ChainedPuzzleUtil.cs" />
     <Compile Include="Utils\ConfigUtil.cs" />
     <Compile Include="Utils\FogLevel\FogLevelReplicator.cs" />
@@ -163,6 +169,7 @@
     <Compile Include="Utils\SyncClock\SyncClock.cs" />
     <Compile Include="Utils\SyncClock\SyncClockReplicator.cs" />
     <Compile Include="Utils\TerminalUtil.cs" />
+    <Compile Include="Utils\Timer.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Utility\JsonConverters\" />

@@ -178,11 +178,13 @@ namespace CustomExpeditions.CustomReplicators
             State.FromOriginal(newState);
 
             OnStateChange(_OldStateBuffer, State, isRecall);
+            OnStateChange(_OldStateBuffer, State);
             OnStateChange(isRecall);
             OnStateChange();
         }
 
         public virtual void OnStateChange(S oldState, S newState, bool isRecall) { }
+        public virtual void OnStateChange(S oldState, S newState) { }
         public virtual void OnStateChange(bool isRecall) { }
         public virtual void OnStateChange() { }
     }

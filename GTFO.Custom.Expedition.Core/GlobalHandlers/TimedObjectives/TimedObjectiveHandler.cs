@@ -1,7 +1,9 @@
-﻿using CustomExpeditions.HandlerBase;
+﻿using CustomExpeditions.CustomReplicators;
+using CustomExpeditions.HandlerBase;
 using CustomExpeditions.Messages;
 using CustomExpeditions.Utils;
 using SNetwork;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -24,7 +26,7 @@ namespace CustomExpeditions.GlobalHandlers.TimedObjectives
             SNetMessage.OnPlayerJoinedSession += OnPlayerJoinedSession;
 
             Replicator = new TimedObjectiveReplicator();
-            Replicator.Setup(eSNetReplicatorLifeTime.DestroyedOnLevelReset, SNet_ChannelType.GameOrderCritical);
+            Replicator.Setup(ReplicatorType.LevelInstance, ReplicatorCHType.GameReceiveCritical);
             Replicator.StateChanged += () =>
             {
                 if(CurrentStatus != Replicator.Status || CurrentStep != Replicator.Step)
@@ -41,14 +43,14 @@ namespace CustomExpeditions.GlobalHandlers.TimedObjectives
                 return;
             }
 
-            if(TimerContext.Steps.Count <= 0)
+            if ((TimerContext.Steps?.Length ?? 0) <= 0)
             {
                 Logger.Warning("This Mission doesn't have valid Step Setting for TimedObjective Config");
                 UnloadSelf();
                 return;
             }
 
-            if(TimerContext.Steps.Any(step => step.Duration <= 0.0f))
+            if (TimerContext.Steps.Any(step => step.Duration <= 0.0f))
             {
                 Logger.Warning("This Mission doesn't have valid Duration for Timer Setting: Duration Can't be below Zero");
                 UnloadSelf();
@@ -75,21 +77,19 @@ namespace CustomExpeditions.GlobalHandlers.TimedObjectives
         {
             if (ConfigUtil.TryGetLocalConfig<TimedObjectiveConfigDTO>("TimedObjective.json", out var config))
             {
-                if (config.Definitions?.Count > 0)
+                if (config.Definitions?.Length > 0)
                 {
                     var def = config.Definitions.FirstOrDefault(x => x.TargetObjectiveID == id);
-                    TimerContext = def;
+                    if(def != null)
+                    {
+                        TimerContext = def;
+                        return true;
+                    }
                 }
             }
             else
             {
-                ConfigUtil.SaveLocalConfig("TimedObjective.json", new TimedObjectiveConfigDTO()
-                {
-                    Definitions = new List<TimedObjectiveDefinition>()
-                    {
-                        new TimedObjectiveDefinition(){ }
-                    }
-                });
+                ConfigUtil.SaveLocalConfig<TimedObjectiveConfigDTO>("TimedObjective.json");
             }
 
             return false;
@@ -146,9 +146,9 @@ namespace CustomExpeditions.GlobalHandlers.TimedObjectives
                         Timer = 0.0f;
                         CurrentStatus = TimerStatus.CountingTimer;
 
-                        if(timerData.TriggerWaveData.Count > 0)
+                        if(timerData.TriggerWaveData.Length > 0)
                         {
-                            TriggerWave(timerData.TriggerWaveData, Builder.GetStartingArea().m_courseNode);
+                            TriggerWave(timerData.TriggerWaveData.ToList(), Builder.GetStartingArea().m_courseNode);
                         }
 
                         SyncReplicator();
@@ -211,16 +211,16 @@ namespace CustomExpeditions.GlobalHandlers.TimedObjectives
                         }
 
                         //Execute Done Events
-                        if (timerData.DoneEvents.Count > 0)
+                        if (timerData.DoneEvents.Length > 0)
                         {
                             foreach (var e in timerData.DoneEvents)
                             {
-                                WardenObjectiveManager.ExcecuteEvent(e);
+                                CoroutineManager.StartCoroutine(WardenObjectiveManager.ExcecuteEvent(e));
                             }
                         }
 
                         //Jump to Next Step or Disable whole Timer
-                        if(CurrentStep < TimerContext.Steps.Count - 1)
+                        if(CurrentStep < TimerContext.Steps.Length - 1)
                         {
                             CurrentStep++;
                             CurrentStatus = TimerStatus.CountingDelay;
@@ -228,6 +228,8 @@ namespace CustomExpeditions.GlobalHandlers.TimedObjectives
                         else
                         {
                             CurrentStatus = TimerStatus.Disabled;
+                            GUIUtil.SetMessageVisible(false);
+                            GUIUtil.SetTimerVisible(false);
                         }
                         
                         SyncReplicator();
@@ -235,7 +237,7 @@ namespace CustomExpeditions.GlobalHandlers.TimedObjectives
                     break;
             }
 
-            if (SyncTimer >= 3.0f)
+            if (SyncTimer >= 15.0f)
             {
                 SyncTimer = 0.0f;
                 SyncReplicator();
@@ -254,6 +256,7 @@ namespace CustomExpeditions.GlobalHandlers.TimedObjectives
         private string PercentFormat(float maxTime, float time)
         {
             float percent = time / maxTime;
+            percent *= 100.0f;
 
             return percent.ToString("N2");
         }
@@ -261,6 +264,8 @@ namespace CustomExpeditions.GlobalHandlers.TimedObjectives
         private string InvertPercentFormat(float maxTime, float time)
         {
             float percent = time / maxTime;
+            percent = 1.0f - percent;
+            percent *= 100.0f;
 
             return percent.ToString("N2");
         }

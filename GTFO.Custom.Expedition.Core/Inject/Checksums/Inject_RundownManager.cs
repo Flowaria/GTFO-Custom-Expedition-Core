@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace CustomExpeditions.Inject.Checksums
 {
     [HarmonyPatch(typeof(RundownManager), "GetLocalRundownKey", typeof(uint))]
-    class Inject_RundownManager
+    internal class Inject_RundownManager
     {
         internal static void Postfix(ref string __result)
         {

@@ -1,5 +1,6 @@
 ﻿using CustomExpeditions.Inject.MarkerItem;
 using CustomExpeditions.Messages;
+using CustomExpeditions.Utility.Attributes;
 using GameData;
 using LevelGeneration;
 using System;
@@ -10,6 +11,7 @@ namespace CustomExpeditions.Utils
 {
     using LogList = Il2CppSystem.Collections.Generic.List<TerminalLogFileData>;
 
+    [StaticConstructorAutorun]
     public static class ItemUtil
     {
         private readonly static Dictionary<string, BuilderInfo> _ItemBuilderDict;
@@ -86,6 +88,11 @@ namespace CustomExpeditions.Utils
         public static bool IsWardenObjectiveItem(LG_DistributeItem item)
         {
             return FindInfoByItem(item)?.IsWardenObjectiveItem ?? false;
+        }
+
+        public static bool IsReusableItem(LG_DistributeItem item)
+        {
+            return !IsWardenObjectiveItem(item);
         }
 
         public static void SetGUID(LG_DistributeItem item, string guid = "")

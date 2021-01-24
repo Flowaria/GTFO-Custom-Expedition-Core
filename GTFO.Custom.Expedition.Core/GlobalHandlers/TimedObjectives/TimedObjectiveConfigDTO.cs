@@ -32,7 +32,7 @@ namespace CustomExpeditions.GlobalHandlers.TimedObjectives
 
     internal class TimedObjectiveConfigDTO
     {
-        public List<TimedObjectiveDefinition> Definitions;
+        public TimedObjectiveDefinition[] Definitions = new TimedObjectiveDefinition[] { new TimedObjectiveDefinition() };
     }
 
     internal class TimedObjectiveDefinition
@@ -42,7 +42,7 @@ namespace CustomExpeditions.GlobalHandlers.TimedObjectives
         public StartEventType StartType = StartEventType.ElevatorArrive;
         public EndEventType EndType = EndEventType.OnGotoWin;
 
-        public List<TimerStepData> Steps;
+        public TimerStepData[] Steps = new TimerStepData[] { new TimerStepData() };
     }
 
     internal class TimerStepData
@@ -50,11 +50,12 @@ namespace CustomExpeditions.GlobalHandlers.TimedObjectives
         public float Delay = 0.0f;
         public float Duration = 100.0f;
         public TimerStyle FillStyle = TimerStyle.Percent;
-        public string BaseMessage = "";
+        public string BaseMessage = "Message: [TIMER], [PERCENT]%, [PERCENT_INVERT]%";
+        public string BaseDelayMessage = "";
 
         public DoneEventType DoneType = DoneEventType.None;
         public bool StopAllWaveWhenDone = false;
-        public List<GenericEnemyWaveData> TriggerWaveData;
-        public List<WardenObjectiveEventData> DoneEvents;
+        public GenericEnemyWaveData[] TriggerWaveData = new GenericEnemyWaveData[] { new GenericEnemyWaveData() };
+        public WardenObjectiveEventData[] DoneEvents = new WardenObjectiveEventData[] { new WardenObjectiveEventData() };
     }
 }

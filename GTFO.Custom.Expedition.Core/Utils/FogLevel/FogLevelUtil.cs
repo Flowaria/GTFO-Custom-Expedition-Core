@@ -1,4 +1,5 @@
-﻿using CustomExpeditions.Messages;
+﻿using CustomExpeditions.CustomReplicators;
+using CustomExpeditions.Messages;
 using GameData;
 using SNetwork;
 using System.Collections.Generic;
@@ -22,7 +23,7 @@ namespace CustomExpeditions.Utils
 
             _Replicator.OnLevelChanged += OnLevelChanged;
 
-            GlobalMessage.OnBuildDone += () =>
+            GlobalMessage.OnBuildDoneLate += () =>
             {
                 GlobalMessage.OnUpdate += OnUpdate;
                 _IsInGame = true;
@@ -37,7 +38,7 @@ namespace CustomExpeditions.Utils
 
         public static void Setup() //We need it since Replicator heavily relys on Creation order.
         {
-            _Replicator.Setup(eSNetReplicatorLifeTime.NeverDestroyed, SNet_ChannelType.GameOrderCritical);
+            _Replicator.Setup(ReplicatorType.Manager, ReplicatorCHType.GameOrderCritical);
         }
 
         private static void OnLevelChanged(int level)

@@ -7,7 +7,7 @@ using UnityEngine;
 namespace CustomExpeditions.Messages.Inject.MarkerItem
 {
     [HarmonyPatch(typeof(LG_FunctionMarkerBuilder), "SetupFunctionGO")]
-    internal static class Inject_LG_FunctionMarkerBuilder
+    internal class Inject_LG_FunctionMarkerBuilder
     {
         internal static void Postfix(LG_FunctionMarkerBuilder __instance, LG_LayerType layer, GameObject GO)
         {

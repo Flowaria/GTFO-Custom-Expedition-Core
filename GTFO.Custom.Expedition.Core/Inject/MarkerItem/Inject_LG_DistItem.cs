@@ -5,11 +5,11 @@ using LevelGeneration;
 namespace CustomExpeditions.Inject.MarkerItem
 {
     [HarmonyPatch(typeof(LG_DistributeItem), "AvailableToReuse")]
-    static class Inject_LG_DistItem
+    internal class Inject_LG_DistItem
     {
         internal static void Postfix(LG_DistributeItem __instance, ref bool __result)
         {
-            __result = !ItemUtil.IsWardenObjectiveItem(__instance);
+            __result = ItemUtil.IsReusableItem(__instance);
         }
     }
 }

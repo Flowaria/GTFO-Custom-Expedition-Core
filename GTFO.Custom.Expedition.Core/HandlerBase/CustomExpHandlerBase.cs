@@ -66,20 +66,35 @@ namespace CustomExpeditions.HandlerBase
             WinConditions = new WinConditionProxy(this);
             ObjectiveStatus = new ObjectiveStatusProxy(this);
 
-            GlobalMessage.OnBuildDone += BuildDone;
-            GlobalMessage.OnElevatorArrive += ElevatorArrive;
 
-            GlobalMessage.OnLevelSuccess += OnExpeditionSuccess;
-            GlobalMessage.OnLevelFail += OnExpeditionFail;
+            var buildDone = new Action(BuildDone);
+            var elevatorArrive = new Action(ElevatorArrive);
+            var levelSuccess = new Action(OnExpeditionSuccess);
+            var levelFail = new Action(OnExpeditionFail);
+
+            GlobalMessage.OnBuildDoneLate += buildDone;
+            GlobalMessage.OnElevatorArrive += elevatorArrive;
+
+            GlobalMessage.OnLevelSuccess += levelSuccess;
+            GlobalMessage.OnLevelFail += levelFail;
+
+            OnUnloadEvent += () =>
+            {
+                GlobalMessage.OnBuildDoneLate -= buildDone;
+                GlobalMessage.OnElevatorArrive -= elevatorArrive;
+
+                GlobalMessage.OnLevelSuccess -= levelSuccess;
+                GlobalMessage.OnLevelFail -= levelFail;
+            };
 
             OnSetupEvent?.Invoke();
 
             OnSetup();
 
             //Check WinCondition has been set after Setup
-            if(!IsGlobalHandler && !ObjectiveStatus.Is)
+            if(!IsGlobalHandler && (!IsDefaultObjective && !ObjectiveStatus.Is))
             {
-                Logger.Error("Every Custom Type Handler should set their ObjectiveStatus Update Behaviour Inside OnUpdate! Handler has been Unloaded!\n - typeID: {0}\n - handler {1}", (byte)ObjectiveData.Type, GetType().Name);
+                Logger.Error("Every Custom Type Handler should set their ObjectiveStatus Update Behaviour Inside OnSetup()! Handler has been Unloaded!\n - typeID: {0}\n - handler {1}", (byte)ObjectiveData.Type, GetType().Name);
                 UnloadSelf();
                 return;
             }
@@ -87,12 +102,6 @@ namespace CustomExpeditions.HandlerBase
 
         internal void Unload()
         {
-            GlobalMessage.OnBuildDone -= OnBuildDone;
-            GlobalMessage.OnElevatorArrive -= OnElevatorArrive;
-
-            GlobalMessage.OnLevelSuccess -= OnExpeditionSuccess;
-            GlobalMessage.OnLevelFail -= OnExpeditionFail;
-
             OnUnloadEvent?.Invoke();
 
             OnUnload();
@@ -138,32 +147,41 @@ namespace CustomExpeditions.HandlerBase
         {
             if (update != null)
             {
-                GlobalMessage.OnUpdate += update;
-
-                //It will fire only once
-                void cleanupHandler()
+                GlobalMessage.OnUpdate_Level += update;
+                if (false)
                 {
-                    GlobalMessage.OnUpdate -= update;
-                    GlobalMessage.OnLevelCleanup -= cleanupHandler;
-                }
+                    GlobalMessage.OnUpdate += update;
 
-                GlobalMessage.OnLevelCleanup += cleanupHandler;
-                OnUnloadEvent += cleanupHandler;
+                    //It will fire only once
+                    void cleanupHandler()
+                    {
+                        GlobalMessage.OnUpdate -= update;
+                        OnUnloadEvent -= cleanupHandler;
+                    }
+
+                    OnUnloadEvent += cleanupHandler;
+                }
+                
+                
             }
 
             if (fixedUpdate != null)
             {
-                GlobalMessage.OnFixedUpdate += fixedUpdate;
+                GlobalMessage.OnFixedUpdate_Level += fixedUpdate;
 
-                //It will fire only once
-                void cleanupHandler()
+                if(false)
                 {
-                    GlobalMessage.OnFixedUpdate -= fixedUpdate;
-                    GlobalMessage.OnLevelCleanup -= cleanupHandler;
-                }
+                    GlobalMessage.OnFixedUpdate += fixedUpdate;
 
-                GlobalMessage.OnLevelCleanup += cleanupHandler;
-                OnUnloadEvent += cleanupHandler;
+                    //It will fire only once
+                    void cleanupHandler()
+                    {
+                        GlobalMessage.OnFixedUpdate -= fixedUpdate;
+                        OnUnloadEvent -= cleanupHandler;
+                    }
+
+                    OnUnloadEvent += cleanupHandler;
+                }
             }
         }
 

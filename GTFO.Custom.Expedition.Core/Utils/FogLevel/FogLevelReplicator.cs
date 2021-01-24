@@ -1,5 +1,4 @@
 ﻿using CustomExpeditions.CustomReplicators;
-using CustomExpeditions.Inject.CustomReplicators;
 using LevelGeneration;
 using System;
 using UnityEngine;

@@ -79,12 +79,17 @@ namespace TestPlugin.Basic
                 if(door != null)
                 {
                     var doorLock = door.m_locks.Cast<LG_SecurityDoor_Locks>();
-                    doorLock.OnChainedPuzzleSolved = null; //This Prevents Door being opened after first puzzle
+                    /*
                     doorLock.m_intOpenDoor.OnInteractionTriggered = null;
                     doorLock.m_intOpenDoor.OnInteractionTriggered = new Action<PlayerAgent>((agent) =>
                     {
                         door.m_sync.AttemptDoorInteraction(eDoorInteractionType.ActivateChainedPuzzle);
                     });
+                    */
+                    var puzzle = ChainedPuzzleUtil.SetupDoor<ChainedPuzzleContext>(4, door);
+
+                    doorLock.ChainedPuzzleToSolve = puzzle.Instance;
+                    
                 }
             }
         }

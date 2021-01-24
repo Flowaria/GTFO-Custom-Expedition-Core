@@ -5,17 +5,35 @@ using CustomExpeditions.Utils;
 using LevelGeneration;
 using System;
 using UnityEngine;
+using System.Collections.Generic;
+using System.Linq;
+using UnityEngine.AI;
 
 namespace CustomExpeditions.HandlerBase
 {
     using PlacementDataList = Il2CppSystem.Collections.Generic.List<Il2CppSystem.Collections.Generic.List<ZonePlacementData>>;
 
-    public enum PickMode
+    internal class TerminalPlacementInfo
+    {
+        public LG_ComputerTerminal Terminal;
+        public float DistanceFromZoneGate;
+        public int AreaIndex;
+    }
+
+    public enum BuilderPickMode
     {
         Random,
         First,
         Last,
         StartToEnd
+    }
+
+    public enum BuilderSelectMode
+    {
+        Start,
+        Middle,
+        End,
+        Random
     }
 
     public class BuilderProxy
@@ -213,15 +231,15 @@ namespace CustomExpeditions.HandlerBase
 
         public ZonePlacementData[] PickPlacementsStandard(PlacementDataList datas, int count = 1)
         {
-            return PickPlacements(datas, PickMode.StartToEnd, PickMode.Random, count);
+            return PickPlacements(datas, BuilderPickMode.StartToEnd, BuilderPickMode.Random, count);
         }
 
         public ZonePlacementData[] PickPlacementsStandard(ZonePlacementData[][] datas, int count = 1)
         {
-            return PickPlacements(datas, PickMode.StartToEnd, PickMode.Random, count);
+            return PickPlacements(datas, BuilderPickMode.StartToEnd, BuilderPickMode.Random, count);
         }
 
-        public ZonePlacementData[] PickPlacements(PlacementDataList datas, PickMode mode1D = PickMode.StartToEnd, PickMode mode2D = PickMode.Random, int count = 1)
+        public ZonePlacementData[] PickPlacements(PlacementDataList datas, BuilderPickMode mode1D = BuilderPickMode.StartToEnd, BuilderPickMode mode2D = BuilderPickMode.Random, int count = 1)
         {
             var arr = new ZonePlacementData[datas.Count][];
             for (int i = 0; i < arr.Length; i++)
@@ -236,7 +254,7 @@ namespace CustomExpeditions.HandlerBase
             return PickPlacements(arr, mode1D, mode2D, count);
         }
 
-        public ZonePlacementData[] PickPlacements(ZonePlacementData[][] datas, PickMode mode1D = PickMode.StartToEnd, PickMode mode2D = PickMode.StartToEnd, int count = 1)
+        public ZonePlacementData[] PickPlacements(ZonePlacementData[][] datas, BuilderPickMode mode1D = BuilderPickMode.StartToEnd, BuilderPickMode mode2D = BuilderPickMode.StartToEnd, int count = 1)
         {
             if (datas == null)
                 return null;
@@ -255,20 +273,20 @@ namespace CustomExpeditions.HandlerBase
             return result;
         }
 
-        private int PickItemIndex(PickMode mode, int length, int offset)
+        private int PickItemIndex(BuilderPickMode mode, int length, int offset)
         {
             switch (mode)
             {
-                case PickMode.StartToEnd:
+                case BuilderPickMode.StartToEnd:
                     return offset % length;
 
-                case PickMode.First:
+                case BuilderPickMode.First:
                     return 0;
 
-                case PickMode.Last:
+                case BuilderPickMode.Last:
                     return length - 1;
 
-                case PickMode.Random:
+                case BuilderPickMode.Random:
                 default:
                     return RandomUtil.Range(0, length);
             }
@@ -418,6 +436,73 @@ namespace CustomExpeditions.HandlerBase
             }
 
             return null;
+        }
+
+        public LG_ComputerTerminal GetSpawnedTerminalInZone(LG_Zone zone, BuilderSelectMode mode)
+        {
+            if (!IsBuildDone())
+                throw EarlyFetchException;
+
+            var terminals = GetSpawnedTerminalsInZone(zone);
+            if (terminals == null)
+                return null;
+
+            if (terminals.Length <= 0)
+                return null;
+
+            if (terminals.Length <= 1)
+                return terminals[0];
+
+            if (mode == BuilderSelectMode.Random)
+                return RandomUtil.PickFromArray(terminals);
+
+            var termInfoList = new List<TerminalPlacementInfo>();
+            foreach (var terminal in terminals)
+            {
+                var c = terminal.SpawnNode.m_area.m_navInfo.Suffix.ToCharArray()[0];
+                var areaIndex = (int)c - 65;
+
+                var distance = -1.0f;
+                var meshPath = new NavMeshPath();
+                var from = terminal.SpawnNode.m_zone.m_sourceGate.m_position;
+                var to = terminal.SpawnNode.Position;
+                if (NavMesh.CalculatePath(from, to, -1, meshPath))
+                {
+                    if ((meshPath.status != NavMeshPathStatus.PathInvalid) && (meshPath.corners.Length > 1))
+                    {
+                        distance = 0.0f;
+
+                        for (var i = 1; i < meshPath.corners.Length; ++i)
+                        {
+                            distance += Vector3.Distance(meshPath.corners[i - 1], meshPath.corners[i]);
+                        }
+                    }
+                }
+
+                var termInfo = new TerminalPlacementInfo()
+                {
+                    Terminal = terminal,
+                    AreaIndex = areaIndex,
+                    DistanceFromZoneGate = distance
+                };
+                Logger.Verbose($"Term: {termInfo.Terminal.m_terminalItem.TerminalItemKey}, Area: {termInfo.AreaIndex}, Distance: {termInfo.DistanceFromZoneGate}");
+                termInfoList.Add(termInfo);
+            }
+
+            termInfoList.OrderBy(x=>x.AreaIndex).ThenBy(x=>x.DistanceFromZoneGate);
+            switch(mode)
+            {
+                case BuilderSelectMode.Start:
+                    return termInfoList.First().Terminal;
+
+                case BuilderSelectMode.Middle:
+                    var index = termInfoList.Count / 2;
+                    return termInfoList[index].Terminal;
+
+                default:
+                case BuilderSelectMode.End:
+                    return termInfoList.Last().Terminal;
+            }
         }
 
         public LG_ComputerTerminal[] GetSpawnedTerminalsInZone(LG_Zone zone)

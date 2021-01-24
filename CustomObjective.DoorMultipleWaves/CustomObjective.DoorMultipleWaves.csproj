@@ -31,52 +31,28 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Assets-ASM">
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\GTFO\MelonLoader\Managed\Assets-ASM.dll</HintPath>
-    </Reference>
-    <Reference Include="Il2Cppmscorlib, Version=3.7.1.6, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="CellSound-ASM, Version=3.7.1.6, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\GTFO\MelonLoader\Managed\Il2Cppmscorlib.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\GTFO\BepInEx\unhollowed\CellSound-ASM.dll</HintPath>
     </Reference>
-    <Reference Include="Il2CppSystem, Version=3.7.1.6, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="GlobalFramework-ASM, Version=3.7.1.6, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\GTFO\MelonLoader\Managed\Il2CppSystem.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\GTFO\BepInEx\unhollowed\GlobalFramework-ASM.dll</HintPath>
     </Reference>
-    <Reference Include="Il2CppSystem.Configuration, Version=3.7.1.6, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\GTFO\MelonLoader\Managed\Il2CppSystem.Configuration.dll</HintPath>
-    </Reference>
-    <Reference Include="Il2CppSystem.Core, Version=3.7.1.6, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\GTFO\MelonLoader\Managed\Il2CppSystem.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="Il2CppSystem.Net.Http, Version=3.7.1.6, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\GTFO\MelonLoader\Managed\Il2CppSystem.Net.Http.dll</HintPath>
-    </Reference>
-    <Reference Include="Il2CppSystem.Runtime.Serialization, Version=3.7.1.6, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\GTFO\MelonLoader\Managed\Il2CppSystem.Runtime.Serialization.dll</HintPath>
-    </Reference>
-    <Reference Include="Il2CppSystem.Xml, Version=3.7.1.6, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\GTFO\MelonLoader\Managed\Il2CppSystem.Xml.dll</HintPath>
-    </Reference>
-    <Reference Include="Il2CppSystem.Xml.Linq, Version=3.7.1.6, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\GTFO\MelonLoader\Managed\Il2CppSystem.Xml.Linq.dll</HintPath>
-    </Reference>
-    <Reference Include="MelonLoader.ModHandler">
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\GTFO\MelonLoader\MelonLoader.ModHandler.dll</HintPath>
+    <Reference Include="Il2Cppmscorlib">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\GTFO\BepInEx\unhollowed\Il2Cppmscorlib.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Modules-ASM, Version=3.7.1.6, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\GTFO\MelonLoader\Managed\Modules-ASM.dll</HintPath>
+    <Reference Include="Modules-ASM">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\GTFO\BepInEx\unhollowed\Modules-ASM.dll</HintPath>
     </Reference>
-    <Reference Include="SNet_ASM, Version=3.7.1.6, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="netstandard" />
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\GTFO\MelonLoader\Managed\SNet_ASM.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\GTFO\BepInEx\plugins\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="SNet_ASM">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\GTFO\BepInEx\unhollowed\SNet_ASM.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -85,32 +61,33 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
-    <Reference Include="UnhollowerBaseLib, Version=0.4.9.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\GTFO\MelonLoader\Managed\UnhollowerBaseLib.dll</HintPath>
+    <Reference Include="UnhollowerBaseLib">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\GTFO\BepInEx\core\UnhollowerBaseLib.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine.CoreModule, Version=3.7.1.6, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="UnityEngine.AIModule, Version=3.7.1.6, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\GTFO\MelonLoader\Managed\UnityEngine.CoreModule.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\GTFO\BepInEx\unhollowed\UnityEngine.AIModule.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine.InputLegacyModule, Version=3.7.1.6, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\GTFO\MelonLoader\Managed\UnityEngine.InputLegacyModule.dll</HintPath>
+    <Reference Include="UnityEngine.CoreModule">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\GTFO\BepInEx\unhollowed\UnityEngine.CoreModule.dll</HintPath>
     </Reference>
-    <Reference Include="Utils-ASM, Version=3.7.1.6, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\GTFO\MelonLoader\Managed\Utils-ASM.dll</HintPath>
+    <Reference Include="Utils-ASM">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\GTFO\BepInEx\unhollowed\Utils-ASM.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DoorWaves\DoorWaveData.cs" />
-    <Compile Include="DoorWaves\DoorWaveManager.cs" />
-    <Compile Include="DoorWaves\ReplicatorWrappers.cs" />
-    <Compile Include="Entry.cs" />
-    <Compile Include="MainHandler.cs" />
+    <Compile Include="DoorWaves\DoorWaveDataDTO.cs" />
+    <Compile Include="EntryPoint.cs" />
+    <Compile Include="DoorWaveHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="PuzzleContext\RelayDoorPuzzleContext.cs" />
-    <Compile Include="PuzzleContext\TerminalPuzzleContext.cs" />
+    <Compile Include="Replication\LG_DoorMultiWave.cs" />
+    <Compile Include="Replication\DoorWaveState.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\GTFO.Custom.Expedition.Core\GTFO.CustomExpedition.Core.csproj">
+      <Project>{55634fbc-ad95-4330-a841-20c77eec253f}</Project>
+      <Name>GTFO.CustomExpedition.Core</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

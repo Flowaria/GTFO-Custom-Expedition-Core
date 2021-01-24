@@ -5,12 +5,23 @@ namespace CustomExpeditions.Messages
 {
     public static class GlobalMessage
     {
+        static GlobalMessage()
+        {
+            OnLevelCleanup += () =>
+            {
+                OnUpdate_Level = null;
+                OnFixedUpdate_Level = null;
+            };
+        }
+
         public static Action OnGameInit;
 
-        public static Action OnUpdate;
-        public static Action OnFixedUpdate;
+        public static Action OnUpdate, OnUpdate_Level;
+        public static Action OnFixedUpdate, OnFixedUpdate_Level;
 
         public static Action OnBuildDone;
+        public static Action OnBuildDoneLate;
+
         public static Action OnElevatorArrive;
 
         public static Action OnLevelSuccess;

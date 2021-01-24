@@ -15,7 +15,7 @@ namespace CustomExpeditions.Utils
 
         static SyncClock()
         {
-            Global = new SyncClock(true);
+            //Global = new SyncClock(true);
             GlobalMessage.OnResetSession += () =>
             {
                 //SNet.SessionHub.is
@@ -43,8 +43,8 @@ namespace CustomExpeditions.Utils
 
         private void Initialize()
         {
-            var lifeTime = IsGlobal ? eSNetReplicatorLifeTime.NeverDestroyed : eSNetReplicatorLifeTime.DestroyedOnLevelReset;
-            Replicator.Setup(lifeTime, SNet_ChannelType.GameOrderCritical);
+            var lifeTime = IsGlobal ? ReplicatorType.Manager : ReplicatorType.Manager;
+            Replicator.Setup(lifeTime, ReplicatorCHType.GameReceiveCritical);
 
             GlobalMessage.OnUpdate += Update;
         }

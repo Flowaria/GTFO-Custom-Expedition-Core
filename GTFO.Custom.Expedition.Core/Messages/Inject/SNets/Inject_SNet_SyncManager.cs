@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace CustomExpeditions.Messages.Inject.SNets
 {
     [HarmonyPatch(typeof(SNet_SyncManager))]
-    class Inject_SNet_SyncManager
+    internal class Inject_SNet_SyncManager
     {
         [HarmonyPostfix]
         [HarmonyPatch("OnPlayerJoinedSessionHub")]

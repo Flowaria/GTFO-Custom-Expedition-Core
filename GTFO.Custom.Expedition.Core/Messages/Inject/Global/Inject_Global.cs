@@ -4,7 +4,7 @@ using HarmonyLib;
 namespace CustomExpeditions.Messages.Inject.Global
 {
     [HarmonyPatch(typeof(Globals.Global))]
-    static class Inject_Global
+    internal class Inject_Global
     {
         [HarmonyPostfix]
         [HarmonyPatch("OnLevelCleanup")]

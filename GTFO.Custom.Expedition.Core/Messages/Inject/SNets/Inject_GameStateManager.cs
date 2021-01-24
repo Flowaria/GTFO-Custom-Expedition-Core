@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace CustomExpeditions.Messages.Inject.SNets
 {
     [HarmonyPatch(typeof(GameStateManager))]
-    class Inject_GameStateManager
+    internal class Inject_GameStateManager
     {
         [HarmonyPostfix]
         [HarmonyPatch("OnPlayerGameStateChange")]

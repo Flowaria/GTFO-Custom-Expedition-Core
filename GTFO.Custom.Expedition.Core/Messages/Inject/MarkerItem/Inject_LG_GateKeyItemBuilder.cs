@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace CustomExpeditions.Messages.Inject.MarkerItem
 {
-    class Inject_LG_GateKeyItemBuilder
+    internal class Inject_LG_GateKeyItemBuilder
     {
         internal static void Postfix(LG_GateKeyMarkerBuilder __instance, LG_LayerType layer, GameObject GO)
         {

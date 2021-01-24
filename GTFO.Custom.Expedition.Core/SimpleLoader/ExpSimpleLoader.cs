@@ -7,7 +7,7 @@ namespace CustomExpeditions.SimpleLoader
 {
     internal static class ExpSimpleLoader
     {
-        public static void Setup()
+        public static void Load()
         {
             var lookupPaths = new string[]
             {
