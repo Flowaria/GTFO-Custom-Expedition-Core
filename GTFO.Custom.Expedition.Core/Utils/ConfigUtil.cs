@@ -13,7 +13,7 @@ namespace CustomExpeditions.Utils
 {
     public static class ConfigUtil
     {
-        public const string DATADUMPER_GUID = "com.Dak.Data-Dumper";
+        public const string DATADUMPER_GUID = "com.dak.MTFO";
 
         public static string GlobalPath { get; private set; }
         public static string LocalPath { get; private set; }
