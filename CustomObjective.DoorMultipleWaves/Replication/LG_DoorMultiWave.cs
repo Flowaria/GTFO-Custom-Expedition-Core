@@ -150,16 +150,8 @@ namespace CustomObjective.DoorMultipleWaves.Replication
 
                     _countdownPlayed = MessageData.WaitPuzzlePhaseSound == 0u;
 
-                    if (Timer.IsWorking)
-                    {
-                        Logger.Log("WTF");
-                    }
-
-                    Logger.Log("Timer Trigger");
-
                     Timer.Start(raw.GetTimeUntilBioscan(State.FailedCount), () =>
                     {
-                        Logger.Log("State Change Called");
                         _countdownPlayed = false;
                         SetPhaseStatus(PhaseType.PuzzleStarted);
                     });
@@ -253,6 +245,8 @@ namespace CustomObjective.DoorMultipleWaves.Replication
                 case PhaseType.WaitForPuzzle:
                     if (Timer.IsWorking)
                     {
+                        GUIUtil.SetMessageVisible(true);
+                        GUIUtil.SetTimerVisible(true);
                         GUIUtil.SetTimer(Timer.ProgressPercent);
                         GUIUtil.SetMessage(GetFormattedMessage());
 
@@ -267,6 +261,8 @@ namespace CustomObjective.DoorMultipleWaves.Replication
                 case PhaseType.SkippedSearch:
                     if (Timer.IsWorking)
                     {
+                        GUIUtil.SetMessageVisible(true);
+                        GUIUtil.SetTimerVisible(true);
                         GUIUtil.SetTimer(Timer.ProgressPercent);
                         GUIUtil.SetMessage(GetFormattedMessage(), ePUIMessageStyle.Bioscan);
                     }
@@ -275,6 +271,8 @@ namespace CustomObjective.DoorMultipleWaves.Replication
                 case PhaseType.Searching:
                     if(Timer.IsWorking)
                     {
+                        GUIUtil.SetMessageVisible(true);
+                        GUIUtil.SetTimerVisible(true);
                         GUIUtil.SetTimer(Timer.ProgressPercent);
                         GUIUtil.SetMessage(GetFormattedMessage(), ePUIMessageStyle.Bioscan);
                     }
@@ -283,6 +281,8 @@ namespace CustomObjective.DoorMultipleWaves.Replication
                 case PhaseType.VerifyFailed:
                     if(Timer.IsWorking)
                     {
+                        GUIUtil.SetMessageVisible(true);
+                        GUIUtil.SetTimerVisible(true);
                         GUIUtil.SetTimer(Timer.ProgressPercent);
                         GUIUtil.SetMessage(GetFormattedMessage(), ePUIMessageStyle.Default);
                     }
