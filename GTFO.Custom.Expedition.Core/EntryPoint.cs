@@ -19,6 +19,8 @@ using UnityEngine;
 namespace CustomExpeditions
 {
     [BepInPlugin("Custom.Expedition.Core", "Custom Expedition Core", "1.0.0.0")]
+    [BepInDependency("com.Dak.Data-Dumper", BepInDependency.DependencyFlags.SoftDependency)]
+    [BepInDependency("com.dak.MTFO", BepInDependency.DependencyFlags.SoftDependency)]
     [BepInProcess("GTFO.exe")]
     internal class EntryPoint : BasePlugin
     {
